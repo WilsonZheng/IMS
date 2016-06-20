@@ -29,5 +29,35 @@ namespace IMS.Models
         {
             return new ApplicationDbContext();
         }
+
+
+        static ApplicationDbContext()
+        {
+            // Set the database intializer which is run once during application start
+            // This seeds the database with admin user credentials and admin role
+           // Database.SetInitializer<ApplicationDbContext>(null);
+            Database.SetInitializer<ApplicationDbContext>(new ApplicationDbInitializer());
+        }
+
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Configurations.Add(new ApplicantConfiguration());
+            modelBuilder.Configurations.Add(new RecruitmentConfiguration());
+
+        }
+
+        public DbSet<Applicant> Applicants { get; set; }
+        public  DbSet<Recruitment> Recruitements { get; set; }
+
     }
+    
+
+    public class ApplicationDbInitializer : DropCreateDatabaseAlways<ApplicationDbContext>
+    {
+             
+       
+    }
+
 }
