@@ -5,9 +5,8 @@ using System.Web;
 
 namespace IMS.Models
 {
-    public class Recruitment
+    public class GenerateViewModel
     {
-        public int Id { get; set; }
-        public String name { get; set; }
+        public string Name { get; set; }
     }
 }

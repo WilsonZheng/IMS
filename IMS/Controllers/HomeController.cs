@@ -1,9 +1,4 @@
-﻿using IMS.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 namespace IMS.Controllers
 {
@@ -11,12 +6,7 @@ namespace IMS.Controllers
     {
         public ActionResult Index()
         {
-            using (var db = new ApplicationDbContext())
-            {
-               // var result = db.Applicants.ToList();
-               // var result1 = db.Recruitements.ToList();
-            }
-                return View();
+            return View();
         }
 
         public ActionResult About()
@@ -32,5 +22,7 @@ namespace IMS.Controllers
 
             return View();
         }
+
+        
     }
 }
