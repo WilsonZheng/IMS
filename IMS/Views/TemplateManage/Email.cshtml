@@ -1,0 +1,38 @@
+﻿@model List<IMS.Models.Template>
+
+<table>
+    <thead>
+        <tr><th>ss</th></tr>
+        </thead>
+    <tbody>
+        @foreach (var templete in Model)
+        {
+            <tr>
+                <td></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@Html.ActionLink("New", "NewEmail", null,new{@class="btn btn-default"})
+
+
+
+@section Scripts
+{
+    <script>
+        jQuery(function () {
+            $.get("/TemplateManage/GetEmails").done(function (response) {
+                if (response.Error) return;
+            });
+
+
+            $("#btnNew").click(function () {
+                
+            });
+        });
+    </script>
+
+}
+
+
