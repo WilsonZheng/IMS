@@ -228,9 +228,14 @@
     <Compile Include="Models\CustomUserRoleConfiguration.cs" />
     <Compile Include="Models\CustomUserStore.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Lookup.cs" />
+    <Compile Include="Models\LookupConfiguration.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Org.cs" />
+    <Compile Include="Models\OrgConfiguration.cs" />
     <Compile Include="Models\Recruitment.cs" />
     <Compile Include="Models\RecruitmentConfiguration.cs" />
+    <Compile Include="Models\RecruitStatusType.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

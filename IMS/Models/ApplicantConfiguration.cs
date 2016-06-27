@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity.ModelConfiguration;
-using System.Linq;
-using System.Web;
+﻿using System.Data.Entity.ModelConfiguration;
 
 namespace IMS.Models
 {
@@ -10,7 +6,12 @@ namespace IMS.Models
     {
         public ApplicantConfiguration()
         {
-
+            this.HasKey(x => x.Id);
+            this.HasRequired(x => x.Org).WithMany().HasForeignKey(x=>x.OrgId).WillCascadeOnDelete(false);
+            this.HasOptional(x => x.User).WithMany().WillCascadeOnDelete(false);
+            this.HasRequired(x => x.UpdatedBy).WithMany().WillCascadeOnDelete(false);
+            this.HasRequired(x => x.CreatedBy).WithMany().WillCascadeOnDelete(false);
+            this.HasRequired(x => x.RecruitStatusType).WithMany().HasForeignKey(x => x.RecruitStatusTypeId).WillCascadeOnDelete(false);
         }
     }
 }

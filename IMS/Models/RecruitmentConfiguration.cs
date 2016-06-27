@@ -8,7 +8,6 @@ namespace IMS.Models
 {
     public class RecruitmentConfiguration : EntityTypeConfiguration<Recruitment>
     {
-
         public RecruitmentConfiguration()
         {
 
