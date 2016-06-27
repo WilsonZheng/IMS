@@ -9,6 +9,7 @@ namespace IMS.Models
             this.HasKey(x => x.Id).ToTable("IdentityUser");
             this.HasMany(x => x.Roles).WithRequired().HasForeignKey(x => x.UserId);
             this.HasMany(x => x.Claims).WithRequired().HasForeignKey(x => x.UserId);
+            this.HasRequired(x => x.Org).WithMany().HasForeignKey(x => x.OrgId).WillCascadeOnDelete(false);
         }
     }
 }

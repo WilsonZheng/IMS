@@ -5,9 +5,11 @@ using System.Web;
 
 namespace IMS.Models
 {
-    public class Recruitment
+    public class Org
     {
         public int Id { get; set; }
-        public String name { get; set; }
+        public string Name { get; set; }
+        public bool IsActive { get; set; }
+       
     }
 }

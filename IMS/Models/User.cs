@@ -10,6 +10,8 @@ namespace IMS.Models
 {
     public partial class User : IdentityUser<int, CustomUserLogin, CustomUserRole, CustomUserClaim>
     {
+        public Org Org { get; set; }
+        public int OrgId { get; set;}
        
         [Timestamp]
         public byte[] RowVersion { get; set; }

@@ -17,7 +17,20 @@ namespace IMS.Models
         public string MedicalCondition { get; set; }
         public string Company { get; set; }
         public string InvitationCode { get; set; }
+        public string InvitationContent { get; set; }
+        public DateTime InvitationDt { get; set; }
+        public RecruitStatusType RecruitStatusType { get; set; }
+        public int RecruitStatusTypeId { get; set; }   
+        public DateTime ApplicationDt { get; set; }
         public int SignatureId { get; set; }
         public int MediaId { get; set; }
+        public Org Org { get; set; }
+        public int OrgId { get; set;}
+        public User User { get; set; }
+        public User UpdatedBy { get; set; }
+        public DateTime UpdatedAt { get; set; }
+        public User CreatedBy { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public bool IsActive { get; set; }
     }
 }

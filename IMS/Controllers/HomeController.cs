@@ -13,8 +13,8 @@ namespace IMS.Controllers
         {
             using (var db = new ApplicationDbContext())
             {
-                var result = db.Applicants.ToList();
-                var result1 = db.Recruitements.ToList();
+               // var result = db.Applicants.ToList();
+               // var result1 = db.Recruitements.ToList();
             }
                 return View();
         }
