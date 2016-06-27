@@ -27,8 +27,8 @@ namespace IMS.Models
         {
             // Set the database intializer which is run once during application start
             // This seeds the database with admin user credentials and admin role
-            //Database.SetInitializer<ApplicationDbContext>(null);//to use current db tables(faster)
-            Database.SetInitializer<ApplicationDbContext>(new ApplicationDbInitializer());//to generate db tables automatically
+            Database.SetInitializer<ApplicationDbContext>(null);//to use current db tables(faster)
+            //Database.SetInitializer<ApplicationDbContext>(new ApplicationDbInitializer());//to generate db tables automatically
         }
 
 
@@ -36,11 +36,11 @@ namespace IMS.Models
         {
             //base.OnModelCreating(modelBuilder);
             modelBuilder.Configurations.Add(new ApplicantConfiguration());
-            modelBuilder.Configurations.Add(new RecruitmentConfiguration());
             modelBuilder.Configurations.Add(new UserConfiguration());
 
             modelBuilder.Configurations.Add(new OrgConfiguration());
             modelBuilder.Configurations.Add(new LookupConfiguration());
+            modelBuilder.Configurations.Add(new TemplateConfiguration());
 
             modelBuilder.Configurations.Add(new CustomUserRoleConfiguration());
             modelBuilder.Configurations.Add(new CustomUserClaimConfiguration());
@@ -49,10 +49,11 @@ namespace IMS.Models
         }
 
         public DbSet<Applicant> Applicants { get; set; }
-        public DbSet<Recruitment> Recruitements { get; set; }
+ 
         public DbSet<Org> Orgs { get; set; }
         public DbSet<RecruitStatusType> RecruitStatusType { get; set;}
-
+        public DbSet<TemplateType> TemplateTypes { get; set; }
+        public DbSet<Template> Templates { get; set; }
     }
     
     public class ApplicationDbInitializer : DropCreateDatabaseAlways<ApplicationDbContext>
@@ -95,11 +96,12 @@ namespace IMS.Models
             {
                 var result = userManager.AddToRole(user.Id, role.Name);
             }
-            context.RecruitStatusType.Add(new RecruitStatusType { Code = "0", Description = "Invitation draft",CreatedBy=user,UpdatedBy=user,CreatedAt=DateTime.UtcNow,UpdatedAt=DateTime.UtcNow });
-            context.RecruitStatusType.Add(new RecruitStatusType { Code = "1", Description = "Invitation sent", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
-            context.RecruitStatusType.Add(new RecruitStatusType { Code = "2", Description = "contract received", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
-            context.RecruitStatusType.Add(new RecruitStatusType { Code = "3", Description = "application accepted", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow });
-
+            context.RecruitStatusType.Add(new RecruitStatusType { Code = "D", Description = "Invitation draft",CreatedBy=user,UpdatedBy=user,CreatedAt=DateTime.UtcNow,UpdatedAt=DateTime.UtcNow,IsActive=true });
+            context.RecruitStatusType.Add(new RecruitStatusType { Code = "S", Description = "Invitation sent", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
+            context.RecruitStatusType.Add(new RecruitStatusType { Code = "R", Description = "contract received", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
+            context.RecruitStatusType.Add(new RecruitStatusType { Code = "A", Description = "application accepted", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
+            context.TemplateTypes.Add(new TemplateType { Code = "CT", Description = "contract template", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
+            context.TemplateTypes.Add(new TemplateType { Code = "ET", Description = "email template", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
         }
     }
 
