@@ -268,6 +268,7 @@
     <Compile Include="Models\Lookup.cs" />
     <Compile Include="Models\LookupConfiguration.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\NewEmailTemplateViewModel.cs" />
     <Compile Include="Models\Org.cs" />
     <Compile Include="Models\OrgConfiguration.cs" />
     <Compile Include="Models\Template.cs" />
@@ -342,7 +343,8 @@
     <Content Include="Views\Registration\Index.cshtml" />
     <Content Include="Views\TemplateManage\Index.cshtml" />
     <Content Include="Views\TemplateManage\Email.cshtml" />
-    <Content Include="Views\TemplateManage\TempContract.cshtml" />
+    <Content Include="Views\TemplateManage\Contract.cshtml" />
+    <Content Include="Views\TemplateManage\NewEmail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
