@@ -29,7 +29,7 @@ namespace IMS.Controllers
             return View();
         }
 
-        public ActionResult Contract() {
+        public ActionResult TempContract() {
             return View();
         }
 

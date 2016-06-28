@@ -342,7 +342,7 @@
     <Content Include="Views\Registration\Index.cshtml" />
     <Content Include="Views\TemplateManage\Index.cshtml" />
     <Content Include="Views\TemplateManage\Email.cshtml" />
-    <Content Include="Views\TemplateManage\Contract.cshtml" />
+    <Content Include="Views\TemplateManage\TempContract.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
