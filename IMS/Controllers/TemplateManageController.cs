@@ -24,13 +24,22 @@ namespace IMS.Controllers
         }
 
         public ActionResult NewEmail() {
-
-
-
-
             return View(new NewEmailTemplateViewModel());
         }
 
+        public ActionResult EditEmail(int id)
+        {
+            using(var db=new ApplicationDbContext())
+            {
+                var template=db.Templates.Where(x => x.Id == id).Single();
+                return View(new NewEmailTemplateViewModel() {
+                     Name=template.Name,
+                     Id=template.Id,
+                     Code = template.TemplateType.Code,
+                     Content  = Encoding.UTF8.GetString(template.Content)
+                });
+            }
+        }
 
         [HttpPost]
         public ActionResult NewEmail(NewEmailTemplateViewModel model)

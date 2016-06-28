@@ -8,7 +8,7 @@
         @foreach (var templete in Model)
         {
             <tr>
-                <td>@templete.Name</td>
+                <td tmpId="@(templete.Id)">@templete.Name</td>
             </tr>
         }
     </tbody>
