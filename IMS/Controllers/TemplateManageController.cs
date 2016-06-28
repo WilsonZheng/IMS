@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
+using System.Data.Entity;
 
 namespace IMS.Controllers
 {
@@ -31,8 +32,8 @@ namespace IMS.Controllers
         {
             using(var db=new ApplicationDbContext())
             {
-                var template=db.Templates.Where(x => x.Id == id).Single();
-                return View(new NewEmailTemplateViewModel() {
+                var template=db.Templates.Include(x=>x.TemplateType).Where(x => x.Id == id).Single();
+                return View("NewEmail",new NewEmailTemplateViewModel() {
                      Name=template.Name,
                      Id=template.Id,
                      Code = template.TemplateType.Code,
@@ -42,6 +43,7 @@ namespace IMS.Controllers
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult NewEmail(NewEmailTemplateViewModel model)
         {
             if (ModelState.IsValid)

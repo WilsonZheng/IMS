@@ -4,11 +4,11 @@
     <thead>
         <tr><th>Name</th></tr>
     </thead>
-    <tbody>
+    <tbody  id="template-list">
         @foreach (var templete in Model)
         {
-            <tr>
-                <td tmpId="@(templete.Id)">@templete.Name</td>
+            <tr tmpId="@(templete.Id)">
+                <td>@templete.Name</td>
             </tr>
         }
     </tbody>
@@ -22,7 +22,9 @@
 {
     <script>
         jQuery(function () {
-           
+            $("#template-list tr").click(function () {
+                location.href = "/TemplateManage/EditEmail?id="+$(this).attr("tmpId");
+            });
         });
     </script>
 
