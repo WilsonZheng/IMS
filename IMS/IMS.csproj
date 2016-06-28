@@ -342,9 +342,9 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Registration\Index.cshtml" />
     <Content Include="Views\TemplateManage\Index.cshtml" />
-    <Content Include="Views\TemplateManage\Email.cshtml" />
-    <Content Include="Views\TemplateManage\NewEmail.cshtml" />
+    <Content Include="Views\TemplateManage\NewOrModify.cshtml" />
     <Content Include="Views\TemplateManage\ContractTemp.cshtml" />
+    <Content Include="Views\TemplateManage\_TemplateList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

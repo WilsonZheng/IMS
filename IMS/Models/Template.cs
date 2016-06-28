@@ -8,6 +8,7 @@ namespace IMS.Models
         public String Name { get; set; }
         public TemplateType TemplateType { get; set; }
         public int TemplateTypeId { get; set; }
+        public bool IsActive { get; set; }
         public byte[] Content { get; set;}
     }
 }

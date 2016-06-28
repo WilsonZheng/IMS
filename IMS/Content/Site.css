@@ -20,5 +20,17 @@
 input,
 select,
 textarea {
-    max-width: 280px;
+    
+}
+
+textarea {
+    resize: none;
+}
+
+th{
+    text-align:center;
+}
+
+.clickable{
+    cursor: pointer;
 }
