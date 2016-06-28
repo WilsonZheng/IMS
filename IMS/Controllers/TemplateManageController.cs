@@ -56,7 +56,7 @@ namespace IMS.Controllers
         }
 
 
-        public ActionResult TempContract() {
+        public ActionResult ContractTemp() {
             return View();
         }
 
