@@ -60,6 +60,10 @@
       <HintPath>..\packages\itextsharp.pdfa.5.5.8\lib\itextsharp.pdfa.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="itextsharp.xmlworker, Version=5.5.9.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\itextsharp.xmlworker.5.5.9\lib\itextsharp.xmlworker.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="itextsharp.xtra, Version=5.5.8.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>..\packages\itextsharp.xtra.5.5.8\lib\itextsharp.xtra.dll</HintPath>
       <Private>True</Private>
@@ -239,6 +243,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\JayTestController.cs" />
     <Compile Include="Controllers\RegistrationController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -345,6 +350,7 @@
     <Content Include="Views\TemplateManage\NewOrModify.cshtml" />
     <Content Include="Views\TemplateManage\ContractTemp.cshtml" />
     <Content Include="Views\TemplateManage\_TemplateList.cshtml" />
+    <Content Include="Views\JayTest\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

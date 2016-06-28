@@ -1,13 +1,7 @@
-﻿using System.IO;
-
-
-/*
-using (var stream = new StreamReader(Server.MapPath("~/Views/Home/Generate1.cshtml")))
-{
-    var html = Media.DocGenerator.Html(Convert.ToString(stream.ReadToEnd()), new GenerateViewModel { Name = "Home" });
-    Media.DocGenerator.Pdf(html, "C:\\Users\\jeong\\testtest.pdf");
-}
-*/
+﻿using iTextSharp.text;
+using iTextSharp.text.pdf;
+using iTextSharp.tool.xml;
+using System.IO;
 
 namespace IMS.Media
 {
@@ -19,21 +13,13 @@ namespace IMS.Media
             return razor.Render(model);
         }
         
-        public static void Pdf(string htmlDocument,string pdfPath)
+        public static void Pdf(string pHTML,string pdfPath)
         {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                var pdf = TheArtOfDev.HtmlRenderer.PdfSharp.PdfGenerator.GeneratePdf(htmlDocument,PdfSharp.PageSize.A4);
-                pdf.Save(ms);
-                using (FileStream stream = new FileStream(pdfPath, FileMode.Create))
-                {
-                    using (BinaryWriter writer = new BinaryWriter(stream))
-                    {
-                        writer.Write(ms.ToArray());
-                        writer.Close();
-                    }
-                }
-            }
+            Document document = new Document();
+            PdfWriter writer = PdfWriter.GetInstance(document,new  FileStream(pdfPath,FileMode.Create));
+            document.Open();
+            XMLWorkerHelper.GetInstance().ParseXHtml(writer, document, new StringReader(pHTML));
+            document.Close();
         }
     }
 }
