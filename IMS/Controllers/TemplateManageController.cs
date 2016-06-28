@@ -1,8 +1,6 @@
 ﻿using IMS.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Text;
 using System.Web.Mvc;
 
 namespace IMS.Controllers
@@ -26,8 +24,37 @@ namespace IMS.Controllers
         }
 
         public ActionResult NewEmail() {
-            return View();
+
+
+
+
+            return View(new NewEmailTemplateViewModel());
         }
+
+
+        [HttpPost]
+        public ActionResult NewEmail(NewEmailTemplateViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                using(var db=new ApplicationDbContext())
+                {
+                    var templateType = db.TemplateTypes.Where(x => x.Code.Equals(model.Code)).Single();
+                    var template = new Template
+                    {
+                        Name = model.Name,
+                        Content = Encoding.UTF8.GetBytes(model.Content),
+                        TemplateType=templateType
+                    };
+                    db.Templates.Add(template);
+                    db.SaveChanges();
+                    return RedirectToAction("Email");
+                }
+            }
+            //ModelState.AddModelError("","dkdkdkdk" );
+            return View(model);
+        }
+
 
         public ActionResult Contract() {
             return View();

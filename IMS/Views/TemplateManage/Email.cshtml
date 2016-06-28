@@ -1,14 +1,14 @@
 ﻿@model List<IMS.Models.Template>
 
-<table>
+<table class="table table-condensed table-striped">
     <thead>
-        <tr><th>ss</th></tr>
-        </thead>
+        <tr><th>Name</th></tr>
+    </thead>
     <tbody>
         @foreach (var templete in Model)
         {
             <tr>
-                <td></td>
+                <td>@templete.Name</td>
             </tr>
         }
     </tbody>
@@ -22,14 +22,7 @@
 {
     <script>
         jQuery(function () {
-            $.get("/TemplateManage/GetEmails").done(function (response) {
-                if (response.Error) return;
-            });
-
-
-            $("#btnNew").click(function () {
-                
-            });
+           
         });
     </script>
 
