@@ -6,6 +6,8 @@ using System.Data.Entity;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Web;
+using System.Security.Claims;
+using IMS.Common;
 
 namespace IMS.Controllers
 {
@@ -23,12 +25,11 @@ namespace IMS.Controllers
         {
             using (var db = new ApplicationDbContext())
             {
-                var userid = User.Identity.GetUserId<int>();
-                var user = db.Users.Find(userid);
+                var orgId = Convert.ToInt32((User as ClaimsPrincipal).Claims.Where(x => x.Type.Equals(IMSContants.OrgId)).Select(x => x.Value).Single());
                 var result = db.Templates
                     .Include(x => x.TemplateType)
                     .Include(x=>x.CreatedBy)
-                    .Where(x=>x.Org.Id==user.OrgId).ToList();
+                    .Where(x=>x.Org.Id==orgId).ToList();
                 return PartialView("_TemplateList",result);
             }
         }
@@ -46,12 +47,11 @@ namespace IMS.Controllers
         {
             using(var db=new ApplicationDbContext())
             {
-                var userid = User.Identity.GetUserId<int>();
-                var user = db.Users.Find(userid);
+                var orgId = Convert.ToInt32((User as ClaimsPrincipal).Claims.Where(x => x.Type.Equals(IMSContants.OrgId)).Select(x => x.Value).Single());
                 var template=db.Templates
                     .Include(x=>x.CreatedBy)
                     .Include(x=>x.TemplateType)
-                    .Where(x => x.Id == id && x.OrgId==user.OrgId).Single();
+                    .Where(x => x.Id == id && x.OrgId==orgId).Single();
                 var options = db.TemplateTypes.Where(x=>x.IsActive).Select(x => new SelectListItem() { Text = x.Description, Value = x.Code, Selected = x.Code.Equals(template.TemplateType.Code) , Disabled = false }).ToList();
                 return View("NewOrModify",new NewEmailTemplateViewModel() {
                      Name=template.Name,
@@ -70,8 +70,10 @@ namespace IMS.Controllers
             {
                 using (var db = new ApplicationDbContext())
                 {
+                    var orgId= Convert.ToInt32((User as ClaimsPrincipal).Claims.Where(x => x.Type.Equals(IMSContants.OrgId)).Select(x => x.Value).Single());
+                    var userid = User.Identity.GetUserId<int>();
                     var templateType = db.TemplateTypes.Where(x => x.Code.Equals(model.Code)).Single();
-                    var existing = db.Templates.Where(x => x.Id == model.Id).Single();
+                    var existing = db.Templates.Where(x => x.Id == model.Id && x.OrgId==orgId).Single();
                     existing.Content = Encoding.UTF8.GetBytes(model.Content);
                     existing.Name = model.Name;
                     db.SaveChanges();
@@ -90,9 +92,8 @@ namespace IMS.Controllers
             {
                 using (var db = new ApplicationDbContext())
                 {
-                    var userid = User.Identity.GetUserId<int>();
-                    var user = db.Users.Find(userid);
-                    var result = db.Templates.Where(x => x.Id == id && x.OrgId==user.OrgId).Single();
+                    var orgId = Convert.ToInt32((User as ClaimsPrincipal).Claims.Where(x => x.Type.Equals(IMSContants.OrgId)).Select(x => x.Value).Single());
+                    var result = db.Templates.Where(x => x.Id == id && x.OrgId==orgId).Single();
                     result.IsActive = !result.IsActive;
                     db.SaveChanges();
                     return Json(new{result="OK"});

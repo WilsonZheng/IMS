@@ -4,7 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System;
 using System.ComponentModel.DataAnnotations;
-
+using IMS.Common;
 
 namespace IMS.Models
 {
@@ -15,20 +15,15 @@ namespace IMS.Models
        
         [Timestamp]
         public byte[] RowVersion { get; set; }
-
-        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<User, int> manager, string authenticationType)
-        {
-            // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
-            var userIdentity = await manager.CreateIdentityAsync(this, authenticationType);
-            // Add custom user claims here
-            return userIdentity;
-        }
+              
     
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<User, int> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
             // Add custom user claims here
+            //OrgId
+            userIdentity.AddClaim(new Claim(IMSContants.OrgId,Convert.ToString(this.OrgId)));
             return userIdentity;
         }
 

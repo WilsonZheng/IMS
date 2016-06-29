@@ -242,8 +242,10 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Common\IMSContants.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\JayTestController.cs" />
+    <Compile Include="Controllers\RecruitController.cs" />
     <Compile Include="Controllers\RegistrationController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -359,6 +361,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Recruit\" />
     <Folder Include="Views\wilsonTest\" />
   </ItemGroup>
   <ItemGroup>
