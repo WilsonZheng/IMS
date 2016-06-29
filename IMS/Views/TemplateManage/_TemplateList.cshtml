@@ -6,6 +6,7 @@
             <th>Name</th>
             <th>Code</th>
             <th>Description</th>
+            <th>Active</th>
             <th></th>
         </tr>
     </thead>
@@ -17,7 +18,8 @@
                 <td>@templete.Name</td>
                 <td class="text-center">@templete.TemplateType.Code</td>
                 <td>@templete.TemplateType.Description</td>
-                <td><span tmpId="@(templete.Id)" class="glyphicon glyphicon-remove clickable ims-remove"></span>&nbsp;&nbsp;&nbsp;&nbsp;<span tmpId="@(templete.Id)" class="glyphicon glyphicon-pencil clickable ims-edit"></span></td>
+                <td>@templete.IsActive</td>
+                <td><span tmpId="@(templete.Id)" class="glyphicon glyphicon-refresh clickable ims-remove"></span>&nbsp;&nbsp;&nbsp;&nbsp;<span tmpId="@(templete.Id)" class="glyphicon glyphicon-pencil clickable ims-edit"></span></td>
             </tr>
         }
     </tbody>
