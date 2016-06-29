@@ -3,9 +3,13 @@ using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using System.Data.Entity;
+using Microsoft.AspNet.Identity;
+using System;
+using System.Web;
 
 namespace IMS.Controllers
 {
+    [Authorize(Roles ="admin")]
     public class TemplateManageController : Controller
     {
         // GET: TemplateManage
@@ -19,7 +23,12 @@ namespace IMS.Controllers
         {
             using (var db = new ApplicationDbContext())
             {
-                var result = db.Templates.Include(x => x.TemplateType).Where(x => x.IsActive).OrderByDescending(x => x.Id).ToList();
+                var userid = User.Identity.GetUserId<int>();
+                var user = db.Users.Find(userid);
+                var result = db.Templates
+                    .Include(x => x.TemplateType)
+                    .Include(x=>x.CreatedBy)
+                    .Where(x=>x.Org.Id==user.OrgId).ToList();
                 return PartialView("_TemplateList",result);
             }
         }
@@ -37,8 +46,13 @@ namespace IMS.Controllers
         {
             using(var db=new ApplicationDbContext())
             {
-                var template=db.Templates.Include(x=>x.TemplateType).Where(x => x.Id == id).Single();
-                var options = db.TemplateTypes.Select(x => new SelectListItem() { Text = x.Description, Value = x.Code, Selected = x.Code.Equals(template.TemplateType.Code) , Disabled = false }).ToList();
+                var userid = User.Identity.GetUserId<int>();
+                var user = db.Users.Find(userid);
+                var template=db.Templates
+                    .Include(x=>x.CreatedBy)
+                    .Include(x=>x.TemplateType)
+                    .Where(x => x.Id == id && x.OrgId==user.OrgId).Single();
+                var options = db.TemplateTypes.Where(x=>x.IsActive).Select(x => new SelectListItem() { Text = x.Description, Value = x.Code, Selected = x.Code.Equals(template.TemplateType.Code) , Disabled = false }).ToList();
                 return View("NewOrModify",new NewEmailTemplateViewModel() {
                      Name=template.Name,
                      Id=template.Id,
@@ -60,27 +74,26 @@ namespace IMS.Controllers
                     var existing = db.Templates.Where(x => x.Id == model.Id).Single();
                     existing.Content = Encoding.UTF8.GetBytes(model.Content);
                     existing.Name = model.Name;
-                    existing.TemplateTypeId = templateType.Id;
-                    existing.TemplateType = templateType;
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
             }
-            //ModelState.AddModelError("","dkdkdkdk" );
             return View(model);
         }
 
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult Delete(int id)
+        public ActionResult ToggleIsActive(int id)
         {
             try
             {
                 using (var db = new ApplicationDbContext())
                 {
-                    var result = db.Templates.Where(x => x.Id == id).Single();
-                    result.IsActive = false;
+                    var userid = User.Identity.GetUserId<int>();
+                    var user = db.Users.Find(userid);
+                    var result = db.Templates.Where(x => x.Id == id && x.OrgId==user.OrgId).Single();
+                    result.IsActive = !result.IsActive;
                     db.SaveChanges();
                     return Json(new{result="OK"});
                 }
@@ -96,22 +109,34 @@ namespace IMS.Controllers
         {
             if (ModelState.IsValid)
             {
-                using(var db=new ApplicationDbContext())
-                {
-                    var templateType = db.TemplateTypes.Where(x => x.Code.Equals(model.Code)).Single();
-                    var template = new Template
+                try {
+
+                    using (var db = new ApplicationDbContext())
                     {
-                        IsActive=true,
-                        Name = model.Name,
-                        Content = Encoding.UTF8.GetBytes(model.Content),
-                        TemplateType=templateType
-                    };
-                    db.Templates.Add(template);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
+                        var userid = User.Identity.GetUserId<int>();
+                        var user = db.Users.Find(userid);
+                        var org = db.Orgs.Find(user.OrgId);
+                        var templateType = db.TemplateTypes.Where(x => x.Code.Equals(model.Code)).Single();
+                        var template = new Template
+                        {
+                            IsActive = true,
+                            Name = model.Name,
+                            Content = Encoding.UTF8.GetBytes(model.Content),
+                            TemplateType = templateType,
+                            Org = org,
+                            CreatedBy = user,
+                            CreatedAt = DateTime.UtcNow
+                        };
+                        db.Templates.Add(template);
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
+
+                } catch {
+                    ModelState.AddModelError("","Request can not be processed" );
                 }
+                
             }
-            //ModelState.AddModelError("","dkdkdkdk" );
             return View("NewOrModify",model);
         }
 

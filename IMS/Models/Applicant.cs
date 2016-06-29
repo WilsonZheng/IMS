@@ -17,7 +17,7 @@ namespace IMS.Models
         public string MedicalCondition { get; set; }
         public string Company { get; set; }
         public string InvitationCode { get; set; }
-        public string InvitationContent { get; set; }
+        public string InvitationContent {get; set;}
         public DateTime InvitationDt { get; set; }
         public RecruitStatusType RecruitStatusType { get; set; }
         public int RecruitStatusTypeId { get; set; }   
