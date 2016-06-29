@@ -6,6 +6,8 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using IMS.ViewModels;
+using Microsoft.AspNet.Identity;
+
 namespace IMS.Controllers
 {
     public class RegistrationController : Controller
@@ -24,6 +26,8 @@ namespace IMS.Controllers
 
             using (var db = new ApplicationDbContext())
             {
+                
+
                 db.Applicants.Add(new Applicant
                 {
                     Firstname = model.firstname,
@@ -35,8 +39,13 @@ namespace IMS.Controllers
                     VisaStatus = model.visaStatus,
                     IsActive = true,
                     CreatedAt = DateTime.Now,
-                    
-                    
+                    UpdatedAt = DateTime.Now,
+                    ApplicationDt = DateTime.Now,
+                    CreatedById = User.Identity.GetUserId<int>(),
+                    UpdatedById = User.Identity.GetUserId<int>(),
+                    OrgId = 1,
+                    RecruitStatusTypeId=db.RecruitStatusType.Where(x => x.Code.Equals("D")).Single().Id
+
 
                 });
                 db.SaveChanges();
