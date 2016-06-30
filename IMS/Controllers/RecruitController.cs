@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace IMS.Controllers
 {
+    [Authorize(Roles ="admin")]
     public class RecruitController : Controller
     {
         // GET: Recruit
@@ -16,6 +17,10 @@ namespace IMS.Controllers
 
 
 
+        public ActionResult List()
+        {
+            return PartialView("_List");
+        }
 
 
 
