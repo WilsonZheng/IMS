@@ -6,6 +6,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System.Web;
 using Microsoft.AspNet.Identity.Owin;
 using System;
+using IMS.Common;
 
 namespace IMS.Models
 {
@@ -86,7 +87,10 @@ namespace IMS.Models
                 UserName = "intern@test.com",
                 Email = "intern@test.com",
                 Org = org
-            }, password);
+            });
+
+            
+
 
             var user = userManager.FindByName("leader@test.com");
             userManager.AddToRole(user.Id, "leader");
@@ -95,12 +99,12 @@ namespace IMS.Models
             userManager.AddToRole(user.Id,"admin");
                        
                                     
-            context.RecruitStatusType.Add(new RecruitStatusType { Code = "D", Description = "Invitation draft",CreatedBy=user,UpdatedBy=user,CreatedAt=DateTime.UtcNow,UpdatedAt=DateTime.UtcNow,IsActive=true });
-            context.RecruitStatusType.Add(new RecruitStatusType { Code = "S", Description = "Invitation sent", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
-            context.RecruitStatusType.Add(new RecruitStatusType { Code = "R", Description = "contract received", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
-            context.RecruitStatusType.Add(new RecruitStatusType { Code = "A", Description = "application accepted", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
-            context.TemplateTypes.Add(new TemplateType { Code = "CT", Description = "Contract", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
-            context.TemplateTypes.Add(new TemplateType { Code = "ET", Description = "Email", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
+            context.RecruitStatusType.Add(new RecruitStatusType { Code = (int)RecruitStatusCode.InvitationCreated, Description = "Created Invitation",CreatedBy=user,UpdatedBy=user,CreatedAt=DateTime.UtcNow,UpdatedAt=DateTime.UtcNow,IsActive=true });
+            context.RecruitStatusType.Add(new RecruitStatusType { Code = (int)RecruitStatusCode.InvitationSent,Description="Sent Invitation", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
+            context.RecruitStatusType.Add(new RecruitStatusType { Code = (int)RecruitStatusCode.ContractReceived,Description="Received Contract", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
+            context.RecruitStatusType.Add(new RecruitStatusType { Code = (int)RecruitStatusCode.Approved,Description="Approved", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
+            context.TemplateTypes.Add(new TemplateType { Code =(int)TemplateTypeCode.Email, Description = "Email", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
+            context.TemplateTypes.Add(new TemplateType { Code =(int)TemplateTypeCode.Contract, Description = "Contract", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
         }
     }
 

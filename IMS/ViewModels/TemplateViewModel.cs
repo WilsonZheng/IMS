@@ -1,31 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
-namespace IMS.Models
+namespace IMS.ViewModels
 {
-    public class NewEmailTemplateViewModel
+    public class TemplateViewModel
     {
-        public NewEmailTemplateViewModel() {
-            IsNew = false;
-        }
-        static NewEmailTemplateViewModel() {
-            using(var db=new ApplicationDbContext())
+       
+        static TemplateViewModel() {
+            using(var db=new IMS.Models.ApplicationDbContext())
             {
-                _TemplateTypeOptions = db.TemplateTypes.Select(x => new SelectListItem() { Text = x.Description, Value = x.Code, Selected =false,Disabled=false}).ToList();
+                _TemplateTypeOptions = db.TemplateTypes.Where(x=>x.IsActive).Select(x => new SelectListItem() { Text = x.Description, Value = x.Code.ToString(), Selected =false,Disabled=false}).ToList();
             }
         }
-
-        public bool IsNew { get; set; }
-
-        public int Id { get; set; }
-        [Required]
-        [Display(Name = "Title")]
-        public string Name { get; set; }
-
+        
+        public int? Id { get; set; }
+    
         [Required]
         [AllowHtml]
         [Display(Name = "Template Content")]
@@ -33,7 +24,7 @@ namespace IMS.Models
 
         [Required]
         [Display(Name = "Template Type")]
-        public string Code { get; set; }
+        public int Code { get; set; }
 
         private static List<SelectListItem> _TemplateTypeOptions;
         
@@ -45,7 +36,7 @@ namespace IMS.Models
                         Text =item.Text,
                         Value =item.Value,
                         Disabled =item.Disabled,
-                        Selected =item.Value.Equals(this.Code) });
+                        Selected =item.Value.Equals(this.Code.ToString())});
                 }
                 return options; }
             }

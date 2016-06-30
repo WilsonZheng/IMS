@@ -21,7 +21,7 @@ namespace IMS.Models
         public DateTime? InvitationDt { get; set; }
         public RecruitStatusType RecruitStatusType { get; set; }
         public int RecruitStatusTypeId { get; set; }   
-        public DateTime ApplicationDt { get; set; }
+        public DateTime? ApplicationDt { get; set; }
 
         public Org Org { get; set; }
         public int OrgId { get; set;}

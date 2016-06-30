@@ -242,7 +242,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Common\TemplateTypeCode.cs" />
     <Compile Include="Common\IMSContants.cs" />
+    <Compile Include="Common\IMSUserUtil.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\JayTestController.cs" />
     <Compile Include="Controllers\RecruitController.cs" />
@@ -273,10 +275,13 @@
     <Compile Include="Models\CustomUserStore.cs" />
     <Compile Include="Models\GenerateViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Common\RecruitStatusCode.cs" />
+    <Compile Include="ViewModels\InvitationViewModel.cs" />
     <Compile Include="Models\Lookup.cs" />
     <Compile Include="Models\LookupConfiguration.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\NewEmailTemplateViewModel.cs" />
+    <Compile Include="ViewModels\TemplateListViewModel.cs" />
+    <Compile Include="ViewModels\TemplateViewModel.cs" />
     <Compile Include="Models\Org.cs" />
     <Compile Include="Models\OrgConfiguration.cs" />
     <Compile Include="Models\Template.cs" />
@@ -353,13 +358,14 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Registration\Index.cshtml" />
     <Content Include="Views\TemplateManage\Index.cshtml" />
-    <Content Include="Views\TemplateManage\NewOrModify.cshtml" />
+    <Content Include="Views\TemplateManage\_NewOrModify.cshtml" />
     <Content Include="Views\TemplateManage\ContractTemp.cshtml" />
     <Content Include="Views\TemplateManage\_TemplateList.cshtml" />
     <Content Include="Views\JayTest\Index.cshtml" />
     <Content Include="Views\Registration\AddApplicant.cshtml" />
     <Content Include="Views\Recruit\Index.cshtml" />
     <Content Include="Views\Recruit\_List.cshtml" />
+    <Content Include="Views\Recruit\NewOrModify.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

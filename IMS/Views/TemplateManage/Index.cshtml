@@ -1,17 +1,13 @@
 ﻿<div id="template-list">
 @{Html.RenderAction("List");}
 </div>
-
-
-
-
-
+<div id="tmpl-edit"></div>
 @section Scripts
 {
     <script>
         jQuery(function () {
             $("#template-list").on('click','*.ims-edit', function () {
-                location.href = "/TemplateManage/Edit?id=" + $(this).attr("tmpId");
+                $("#tmpl-edit").load("/TemplateManage/Edit?id=" + $(this).attr("tmpId"));
             });
 
             $("#template-list").on('click','*.ims-remove', function () {
@@ -19,6 +15,21 @@
                 $.post("/TemplateManage/ToggleIsActive?id=" + $(this).attr('tmpId')).then(function () {
                     $("#template-list").load("/TemplateManage/List");
                 });
+            });
+
+            $("#tmpl-edit").on('click', '#btnSave', function () {
+                var $form=$("#tmpl-edit form");
+                $.post($form.attr("action"), $form.serializeArray())
+                .then(function (response) {
+                    $("#tmpl-edit").html("");
+                })
+                .fail(function (response) {
+                    $("#tmpl-edit").html(response.responseText);
+                });
+            });
+
+            $("#tmpl-edit").on('click', '#btnCancel', function () {
+                    $("#tmpl-edit").html("");
             });
         });
     </script>

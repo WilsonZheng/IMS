@@ -4,7 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Web.Mvc;
-
+using System.Web.Security;
 
 namespace IMS.Controllers
 {
@@ -13,19 +13,20 @@ namespace IMS.Controllers
         // GET: JayTest
         public ActionResult Index()
         {
-            using (var db = new ApplicationDbContext())
-            {
-                var userid = User.Identity.GetUserId<int>();
+           
+            //using (var db = new ApplicationDbContext())
+            //{
+            //    var userid = User.Identity.GetUserId<int>();
 
-                ClaimsPrincipal cp = User as ClaimsPrincipal;
+            //    ClaimsPrincipal cp = User as ClaimsPrincipal;
                 
-                var orgId=cp.Claims.Where(x => x.Type.Equals("OrgId")).Select(x => x.Value).FirstOrDefault();
+            //    var orgId=cp.Claims.Where(x => x.Type.Equals("OrgId")).Select(x => x.Value).FirstOrDefault();
 
-                var user = db.Users.Find(userid);
+            //    var user = db.Users.Find(userid);
                 
-                var u = User.Identity;
+            //    var u = User.Identity;
                 
-            }
+            //}
         
 
             //var m = new
