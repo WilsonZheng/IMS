@@ -8,7 +8,7 @@ namespace IMS.Controllers
 {
     public class wilsonTestController : Controller
     {
-        // GET: JayTest
+       
         public ActionResult Index()
         {
             var m = new
