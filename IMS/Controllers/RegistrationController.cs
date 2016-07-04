@@ -52,7 +52,7 @@ namespace IMS.Controllers
 
                 db.SaveChanges();
       
-                var template = db.Templates.Where(x => x.TemplateType.Code.Equals("CT") && x.IsActive).OrderByDescending(x => x.Id).First();
+                var template = db.Templates.Where(x => x.TemplateType.Code == (int)TemplateTypeCode.Contract && x.IsActive).OrderByDescending(x => x.Id).First();
                 var content = Encoding.UTF8.GetString(template.Content);
                 var html = IMS.Media.DocGenerator.Html(content, m);
                 IMS.Media.DocGenerator.Pdf(html, @"d:\test.pdf");
