@@ -1,6 +1,7 @@
 ﻿using IMS.Common;
 using IMS.Models;
 using IMS.ViewModels;
+using LinqKit;
 using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Linq;
@@ -12,6 +13,16 @@ namespace IMS.Controllers
     [Authorize(Roles ="admin")]
     public class RecruitController : Controller
     {
+        private IOptionProvider _optionProvider;
+        private IOptionProvider OptionProvider { get { return this._optionProvider; } }
+
+        public RecruitController() { }
+
+        public RecruitController(IOptionProvider optionProvider)
+        {
+            _optionProvider = optionProvider;
+        }
+
         private IMSUserUtil IMSUserUtil
         {
             get
@@ -29,15 +40,30 @@ namespace IMS.Controllers
         // GET: Recruit
         public ActionResult Index()
         {
-            return View();
+            var model = new RecruitIndexViewModel
+            {
+                RecruitStatusOptions = OptionProvider.QueryOptions<RecruitStatusType>()
+            };
+            return View(model);
+            
         }
         
-        public ActionResult List()
+        public ActionResult List(ApplicantSearchViewModel model)
         {
             using(var db=new ApplicationDbContext())
             {
-                var result = db.Applicants
-                    .Where(x => x.IsActive && x.OrgId == IMSUserUtil.OrgId)
+                var predicate = PredicateBuilder.True<Applicant>();
+                var prdCodes = PredicateBuilder.False<Applicant>();
+                if (model.RecruitStatusCodes != null)
+                {
+                    foreach (int code in model.RecruitStatusCodes)
+                    {
+                        prdCodes = prdCodes.Or(p => p.RecruitStatusTypeId == code);
+                    }
+                }
+                predicate = predicate.And(prdCodes);
+                predicate = predicate.And(p => p.IsActive && p.OrgId == IMSUserUtil.OrgId);
+                var result = db.Applicants.AsExpandable().Where(predicate)
                     .Select(x=> new InvitationViewModel { Id=x.Id, Email=x.Email})
                     .ToList();
                 return PartialView("_List", result);

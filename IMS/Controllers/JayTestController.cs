@@ -1,4 +1,5 @@
 ﻿using IMS.Models;
+using IMS.ViewModels;
 using Microsoft.AspNet.Identity;
 using System.Linq;
 using System.Security.Claims;
@@ -10,6 +11,8 @@ namespace IMS.Controllers
 {
     public class JayTestController : Controller
     {
+        public JayTestController() : base() { }
+
         // GET: JayTest
         public ActionResult Index()
         {
