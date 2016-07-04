@@ -64,9 +64,7 @@ namespace IMS.Controllers
             }
         }
 
-        public ActionResult New() {
-                return View("NewOrModify", new TemplateViewModel());
-        }
+   
 
         public ActionResult Edit(int id)
         {
@@ -79,6 +77,7 @@ namespace IMS.Controllers
                     .Select(x=>new TemplateViewModel {
                         Id = x.Id,
                         Code = x.TemplateType.Code,
+                        Description=x.TemplateType.Description,
                         Content = x.Content!=null?Encoding.UTF8.GetString(x.Content):""
                     }).Single();
                 return PartialView("_NewOrModify",model);

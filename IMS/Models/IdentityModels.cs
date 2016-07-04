@@ -1,6 +1,4 @@
 ﻿using System.Data.Entity;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Web;
@@ -10,7 +8,7 @@ using IMS.Common;
 
 namespace IMS.Models
 {
- 
+
     public class ApplicationDbContext : IdentityDbContext<User, CustomRole, int, CustomUserLogin, CustomUserRole, CustomUserClaim>
     {
         public ApplicationDbContext()
@@ -52,9 +50,11 @@ namespace IMS.Models
         public DbSet<Applicant> Applicants { get; set; }
  
         public DbSet<Org> Orgs { get; set; }
+        public DbSet<Lookup> Lookups { get; set; }
         public DbSet<RecruitStatusType> RecruitStatusType { get; set;}
         public DbSet<TemplateType> TemplateTypes { get; set; }
         public DbSet<Template> Templates { get; set; }
+        
     }
     
     public class ApplicationDbInitializer : DropCreateDatabaseAlways<ApplicationDbContext>

@@ -1,8 +1,23 @@
-﻿
+﻿@model IMS.ViewModels.RecruitIndexViewModel
 @{
     ViewBag.Title = "Index";
 }
-
+<form id="searchCondition">
+    @Html.ListBox("RecruitStatusCodes", Model.RecruitStatusOptions)
+</form>
+<button class="btn btn-default" id="btnSearch">Search</button>
 <div id="template-list">
     @{Html.RenderAction("List");}
 </div>
+
+
+@section Scripts{
+    <script>
+        $(function () {
+            $("#btnSearch").click(function () {
+                $.get("/Recruit/List", $("#searchCondition").serializeArray());
+            });
+        });
+    </script>
+  
+}
