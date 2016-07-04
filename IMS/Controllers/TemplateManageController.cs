@@ -1,17 +1,34 @@
 ﻿using IMS.Models;
+using IMS.ViewModels;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using System.Data.Entity;
-using Microsoft.AspNet.Identity;
 using System;
 using System.Web;
+using IMS.Common;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace IMS.Controllers
 {
     [Authorize(Roles ="admin")]
     public class TemplateManageController : Controller
     {
+
+        private IMSUserUtil IMSUserUtil
+        {
+            get
+            {
+                if (_imsUserUtil == null)
+                {
+                    this._imsUserUtil = new IMSUserUtil(this.User, HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>());
+                }
+                return _imsUserUtil;
+            }
+        }
+        private IMSUserUtil _imsUserUtil;
+
+
         // GET: TemplateManage
         public ActionResult Index()
         {
@@ -19,66 +36,76 @@ namespace IMS.Controllers
         }
 
         
+        
         public ActionResult List()
         {
             using (var db = new ApplicationDbContext())
             {
-                var userid = User.Identity.GetUserId<int>();
-                var user = db.Users.Find(userid);
+                if (db.Templates.Where(x => x.Org.Id == IMSUserUtil.OrgId).Count() == 0)
+                {
+                    foreach(var tmpType in db.TemplateTypes.Where(x => x.IsActive).ToList())
+                    {
+                        db.Templates.Add(new Template
+                        {
+                            IsActive = false,
+                            Content = Encoding.UTF8.GetBytes("<html></html>"),
+                            TemplateType = tmpType,
+                            OrgId = IMSUserUtil.OrgId,
+                            CreatedBy =IMSUserUtil.AttachedUser(db),
+                            CreatedAt = DateTime.UtcNow
+                        });
+                    }
+                    db.SaveChanges();
+                }
                 var result = db.Templates
-                    .Include(x => x.TemplateType)
-                    .Include(x=>x.CreatedBy)
-                    .Where(x=>x.Org.Id==user.OrgId).ToList();
+                    .Where(x => x.OrgId == IMSUserUtil.OrgId)
+                    .Select(x => new TemplateListViewModel { Id = x.Id, Description = x.TemplateType.Description, IsActive = x.IsActive }).ToList();
                 return PartialView("_TemplateList",result);
             }
         }
 
         public ActionResult New() {
-            using(var db=new ApplicationDbContext())
-            {
-                var options = db.TemplateTypes.Select(x => new SelectListItem() { Text = x.Description, Value = x.Code, Selected = false, Disabled=false }).ToList();
-                var template = new NewEmailTemplateViewModel() { IsNew=true };
-                return View("NewOrModify", template);
-            }
+                return View("NewOrModify", new TemplateViewModel());
         }
 
         public ActionResult Edit(int id)
         {
             using(var db=new ApplicationDbContext())
             {
-                var userid = User.Identity.GetUserId<int>();
-                var user = db.Users.Find(userid);
-                var template=db.Templates
-                    .Include(x=>x.CreatedBy)
+                var model=db.Templates
                     .Include(x=>x.TemplateType)
-                    .Where(x => x.Id == id && x.OrgId==user.OrgId).Single();
-                var options = db.TemplateTypes.Where(x=>x.IsActive).Select(x => new SelectListItem() { Text = x.Description, Value = x.Code, Selected = x.Code.Equals(template.TemplateType.Code) , Disabled = false }).ToList();
-                return View("NewOrModify",new NewEmailTemplateViewModel() {
-                     Name=template.Name,
-                     Id=template.Id,
-                     Code = template.TemplateType.Code,
-                     Content  = Encoding.UTF8.GetString(template.Content)
-                });
+                    .Where(x => x.Id == id && x.OrgId== IMSUserUtil.OrgId)
+                    .ToList()
+                    .Select(x=>new TemplateViewModel {
+                        Id = x.Id,
+                        Code = x.TemplateType.Code,
+                        Content = x.Content!=null?Encoding.UTF8.GetString(x.Content):""
+                    }).Single();
+                return PartialView("_NewOrModify",model);
             }
         }
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult Update(NewEmailTemplateViewModel model)
+        public ActionResult Update(TemplateViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                using (var db = new ApplicationDbContext())
+            try {
+                if (ModelState.IsValid)
                 {
-                    var templateType = db.TemplateTypes.Where(x => x.Code.Equals(model.Code)).Single();
-                    var existing = db.Templates.Where(x => x.Id == model.Id).Single();
-                    existing.Content = Encoding.UTF8.GetBytes(model.Content);
-                    existing.Name = model.Name;
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
+                    using (var db = new ApplicationDbContext())
+                    {
+                        var existing = db.Templates.Where(x => x.Id == model.Id && x.OrgId == IMSUserUtil.OrgId).Single();
+                        existing.Content = Encoding.UTF8.GetBytes(model.Content);
+                        db.SaveChanges();
+                        return Json(new { });
+                    }
                 }
+            } catch
+            {
+                ModelState.AddModelError("", "Request can not be processed!");
             }
-            return View(model);
+            Response.StatusCode = 400;
+            return PartialView("_NewOrModify",model);
         }
 
 
@@ -90,9 +117,7 @@ namespace IMS.Controllers
             {
                 using (var db = new ApplicationDbContext())
                 {
-                    var userid = User.Identity.GetUserId<int>();
-                    var user = db.Users.Find(userid);
-                    var result = db.Templates.Where(x => x.Id == id && x.OrgId==user.OrgId).Single();
+                    var result = db.Templates.Where(x => x.Id == id && x.OrgId== IMSUserUtil.OrgId).Single();
                     result.IsActive = !result.IsActive;
                     db.SaveChanges();
                     return Json(new{result="OK"});
@@ -105,7 +130,7 @@ namespace IMS.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult New(NewEmailTemplateViewModel model)
+        public ActionResult Create(TemplateViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -113,17 +138,17 @@ namespace IMS.Controllers
 
                     using (var db = new ApplicationDbContext())
                     {
-                        var userid = User.Identity.GetUserId<int>();
-                        var user = db.Users.Find(userid);
-                        var org = db.Orgs.Find(user.OrgId);
-                        var templateType = db.TemplateTypes.Where(x => x.Code.Equals(model.Code)).Single();
+                        var userid  = IMSUserUtil.Id;
+                        var orgId   = IMSUserUtil.OrgId;
+                        var user    = IMSUserUtil.AttachedUser(db);
+                      
+                        var templateType = db.TemplateTypes.Where(x => x.Code.Equals(model.Code)&& x.IsActive).Single();
                         var template = new Template
                         {
                             IsActive = true,
-                            Name = model.Name,
                             Content = Encoding.UTF8.GetBytes(model.Content),
                             TemplateType = templateType,
-                            Org = org,
+                            OrgId = orgId,
                             CreatedBy = user,
                             CreatedAt = DateTime.UtcNow
                         };

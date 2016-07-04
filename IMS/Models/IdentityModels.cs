@@ -6,6 +6,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System.Web;
 using Microsoft.AspNet.Identity.Owin;
 using System;
+using IMS.Common;
 
 namespace IMS.Models
 {
@@ -62,46 +63,48 @@ namespace IMS.Models
         {
             var org = new Org { Name = "CSS", IsActive = true };
             context.Orgs.Add(org);
-
-
+            
             var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var roleManager = HttpContext.Current.GetOwinContext().Get<ApplicationRoleManager>();
-            const string name = "admin@test.com";
+            roleManager.Create(new CustomRole("admin"));
+            roleManager.Create(new CustomRole("leader"));
             const string password = "111111";
-            const string roleName = "admin";
 
-            //Create Role admin if it does not exist
-            var role = roleManager.FindByName(roleName);
-            if (role == null)
+            userManager.Create(new User {
+                UserName = "admin@test.com",
+                Email = "admin@test.com",
+                Org = org
+            }, password);
+            userManager.Create(new User
             {
-                role = new CustomRole(roleName);
-                var roleresult = roleManager.Create(role);
-            }
+                UserName = "leader@test.com",
+                Email = "leader@test.com",
+                Org = org
+            }, password);
 
-            var user = userManager.FindByName(name);
-            if (user == null)
+            userManager.Create(new User
             {
-                user = new User
-                {
-                    UserName = name,
-                    Email = name,
-                    Org=org
-                };
-                var result = userManager.Create(user, password);
-                result = userManager.SetLockoutEnabled(user.Id, false);
-            }
-            // Add user admin to Role Admin if not already added
-            var rolesForUser = userManager.GetRoles(user.Id);
-            if (!rolesForUser.Contains(role.Name))
-            {
-                var result = userManager.AddToRole(user.Id, role.Name);
-            }
-            context.RecruitStatusType.Add(new RecruitStatusType { Code = "D", Description = "Invitation draft",CreatedBy=user,UpdatedBy=user,CreatedAt=DateTime.UtcNow,UpdatedAt=DateTime.UtcNow,IsActive=true });
-            context.RecruitStatusType.Add(new RecruitStatusType { Code = "S", Description = "Invitation sent", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
-            context.RecruitStatusType.Add(new RecruitStatusType { Code = "R", Description = "contract received", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
-            context.RecruitStatusType.Add(new RecruitStatusType { Code = "A", Description = "application accepted", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
-            context.TemplateTypes.Add(new TemplateType { Code = "CT", Description = "contract template", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
-            context.TemplateTypes.Add(new TemplateType { Code = "ET", Description = "email template", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
+                UserName = "intern@test.com",
+                Email = "intern@test.com",
+                Org = org
+            });
+
+            
+
+
+            var user = userManager.FindByName("leader@test.com");
+            userManager.AddToRole(user.Id, "leader");
+
+            user = userManager.FindByName("admin@test.com");
+            userManager.AddToRole(user.Id,"admin");
+                       
+                                    
+            context.RecruitStatusType.Add(new RecruitStatusType { Code = (int)RecruitStatusCode.InvitationCreated, Description = "Created Invitation",CreatedBy=user,UpdatedBy=user,CreatedAt=DateTime.UtcNow,UpdatedAt=DateTime.UtcNow,IsActive=true });
+            context.RecruitStatusType.Add(new RecruitStatusType { Code = (int)RecruitStatusCode.InvitationSent,Description="Sent Invitation", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
+            context.RecruitStatusType.Add(new RecruitStatusType { Code = (int)RecruitStatusCode.ContractReceived,Description="Received Contract", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
+            context.RecruitStatusType.Add(new RecruitStatusType { Code = (int)RecruitStatusCode.Approved,Description="Approved", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
+            context.TemplateTypes.Add(new TemplateType { Code =(int)TemplateTypeCode.Email, Description = "Email", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
+            context.TemplateTypes.Add(new TemplateType { Code =(int)TemplateTypeCode.Contract, Description = "Contract", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
         }
     }
 

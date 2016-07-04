@@ -34,3 +34,11 @@ th{
 .clickable{
     cursor: pointer;
 }
+
+.ctrl-panel input[type=button]{
+    margin-left:10px;
+}
+
+.ctrl-panel input[type=button]:first-child{
+    margin-left:0px;
+}

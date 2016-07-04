@@ -1,31 +1,22 @@
-﻿@model List<IMS.Models.Template>
-<table class="table table-condensed table-striped table-hover">
+﻿@model List<IMS.ViewModels.TemplateListViewModel>
+<table class="table table-condensed table-striped table-bordered table-hover">
     <thead>
         <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Code</th>
             <th>Description</th>
             <th>Active</th>
-            <th></th>
+            <th>Toggle</th>
+            <th>Edit</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var templete in Model)
         {
             <tr>
-                <td class="text-center">@templete.Id</td>
-                <td>@templete.Name</td>
-                <td class="text-center">@templete.TemplateType.Code</td>
-                <td>@templete.TemplateType.Description</td>
-                <td>@templete.IsActive</td>
-                <td><span tmpId="@(templete.Id)" class="glyphicon glyphicon-refresh clickable ims-remove"></span>&nbsp;&nbsp;&nbsp;&nbsp;<span tmpId="@(templete.Id)" class="glyphicon glyphicon-pencil clickable ims-edit"></span></td>
+                <td>@templete.Description</td>
+                <td class="text-center">@(templete.IsActive)</td>
+                <td class="text-center"><span tmpId="@(templete.Id)" class="glyphicon glyphicon-refresh clickable ims-remove"></span></td>
+                <td class="text-center"><span tmpId="@(templete.Id)" class="glyphicon glyphicon-pencil clickable ims-edit"></span></td>
             </tr>
         }
     </tbody>
-   
 </table>
-@if (Model.Count() == 0)
-{
-    <div class="alert alert-info text-center" role="alert">No data</div>
-}
