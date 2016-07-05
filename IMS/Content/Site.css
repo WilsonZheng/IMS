@@ -42,3 +42,13 @@ th{
 .ctrl-panel input[type=button]:first-child{
     margin-left:0px;
 }
+
+
+
+.search-panel form > * {
+    height:35px;
+}
+
+.search-panel form{
+    text-align:right;
+}

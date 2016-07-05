@@ -272,6 +272,9 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Common\ImsGmailProvider.cs" />
+    <Compile Include="Common\IEmailProvider.cs" />
+    <Compile Include="Common\IMSEnvProperties.cs" />
     <Compile Include="Common\IOptionProvider.cs" />
     <Compile Include="Common\OptionProvider.cs" />
     <Compile Include="Common\TemplateTypeCode.cs" />
@@ -314,6 +317,7 @@
     <Compile Include="Models\LookupConfiguration.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="ViewModels\RecruitIndexViewModel.cs" />
+    <Compile Include="ViewModels\SendEmailViewModel.cs" />
     <Compile Include="ViewModels\TemplateListViewModel.cs" />
     <Compile Include="ViewModels\TemplateViewModel.cs" />
     <Compile Include="Models\Org.cs" />
@@ -354,7 +358,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -400,6 +406,7 @@
     <Content Include="Views\Recruit\Index.cshtml" />
     <Content Include="Views\Recruit\_List.cshtml" />
     <Content Include="Views\Recruit\NewOrModify.cshtml" />
+    <Content Include="Views\Recruit\InvitationTemplate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

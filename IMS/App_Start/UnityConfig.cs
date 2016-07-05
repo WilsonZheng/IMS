@@ -39,6 +39,7 @@ namespace IMS.App_Start
 
             // TODO: Register your types here
             container.RegisterType<IOptionProvider,OptionProvider>();
+            container.RegisterType<IEmailProvider, ImsGmailProvider>();
         }
     }
 }

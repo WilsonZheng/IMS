@@ -2,20 +2,79 @@
 @{
     ViewBag.Title = "Index";
 }
-<form id="searchCondition">
-    @Html.ListBox("RecruitStatusCodes", Model.RecruitStatusOptions)
-</form>
-<button class="btn btn-default" id="btnSearch">Search</button>
-<div id="template-list">
-    @{Html.RenderAction("List");}
+<div class="search-panel">
+    <form id="searchCondition">
+        @Html.DropDownList("RecruitStatusCodes", Model.RecruitStatusOptions, "---Status---")
+        <button type="button" class="btn btn-default" id="btnSearch">Search</button>
+    </form>
+</div>
+<div id="template-list"></div>
+<div>
+    @Html.ActionLink("Create Invitation", "NewOrModify", null, new { @class = "btn btn-default" })
+    <button type="button" class="btn btn-default" id="btnSendInvitation">Send Invitation</button>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="modalAlert" tabindex="-1" role="dialog" aria-labelledby="modalAlertLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="modalAlertLabel">Alert</h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalConfirm" tabindex="-1" role="dialog" aria-labelledby="modalConfirmLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="modalConfirmLabel">Confirm</h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default cfm-yes" data-dismiss="modal">Yes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts{
     <script>
         $(function () {
+            
             $("#btnSearch").click(function () {
-                $.get("/Recruit/List", $("#searchCondition").serializeArray());
+                $.get("/Recruit/List", $("#searchCondition").serializeArray())
+                    .then(function (response) {
+                        $("#template-list").html(response);
+                    });
+            });
+
+            $("#btnSendInvitation").click(function () {
+                $("#modalConfirm div.modal-body").html("Do you want to proceed?");
+                $("#modalConfirm").modal('show');
+                var df = $.Deferred();
+                $("#modalConfirm button.cfm-yes").off('click');
+                $("#modalConfirm button.cfm-yes").one('click',function () {
+                    df.resolve();
+                });
+                df.then(function (){
+                    $.post("/Recruit/SendInvitation").then(function (response) {
+                        if (response.Error){
+                            $("#modalAlert div.modal-body").html(response.Error);
+                            $('#modalAlert').modal('show');
+                        }
+                    });
+                });
+                
             });
         });
     </script>
