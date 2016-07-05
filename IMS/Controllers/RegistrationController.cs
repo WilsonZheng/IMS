@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using IMS.ViewModels;
 using Microsoft.AspNet.Identity;
+using IMS.Common;
 
 namespace IMS.Controllers
 {
@@ -26,9 +27,8 @@ namespace IMS.Controllers
 
             using (var db = new ApplicationDbContext())
             {
-                
 
-                db.Applicants.Add(new Applicant
+                var m = new Applicant
                 {
                     Firstname = model.firstname,
                     Lastname = model.lastname,
@@ -44,11 +44,19 @@ namespace IMS.Controllers
                     CreatedById = User.Identity.GetUserId<int>(),
                     UpdatedById = User.Identity.GetUserId<int>(),
                     OrgId = 1,
-                    RecruitStatusTypeId=db.RecruitStatusType.Where(x => x.Code.Equals("D")).Single().Id
+                    RecruitStatusTypeId = db.RecruitStatusType.Where(x => x.Code == (int)RecruitStatusCode.InvitationCreated).Single().Id
 
 
-                });
+                };
+                db.Applicants.Add(m);
+
                 db.SaveChanges();
+      
+                var template = db.Templates.Where(x => x.TemplateType.Code == (int)TemplateTypeCode.Contract && x.IsActive).OrderByDescending(x => x.Id).First();
+                var content = Encoding.UTF8.GetString(template.Content);
+                var html = IMS.Media.DocGenerator.Html(content, m);
+                IMS.Media.DocGenerator.Pdf(html, @"d:\test.pdf");
+                
                 return View(model);
             }
 
