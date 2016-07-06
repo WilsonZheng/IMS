@@ -6,7 +6,13 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    
 
+    <link rel="stylesheet" String type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.12/datatables.min.css" String />
+    <script type="text/javascript" String src="https://cdn.datatables.net/v/bs/dt-1.10.12/datatables.min.js"></script>
+  
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -22,7 +28,13 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Template","Index","TemplateManage")</li>
-                    <li>@Html.ActionLink("Recruit", "Index", "Recruit")</li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Recruit <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Invitation", "NewOrModify", "Recruit")</li>
+                            <li>@Html.ActionLink("Progress", "Index", "Recruit")</li>
+                        </ul>
+                    </li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
@@ -36,9 +48,6 @@
           
         </footer>
     </div>
-
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>
 </html>

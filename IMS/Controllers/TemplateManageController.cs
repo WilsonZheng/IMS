@@ -76,7 +76,6 @@ namespace IMS.Controllers
                     .ToList()
                     .Select(x=>new TemplateViewModel {
                         Id = x.Id,
-                        Code = x.TemplateType.Code,
                         Description=x.TemplateType.Description,
                         Content = x.Content!=null?Encoding.UTF8.GetString(x.Content):""
                     }).Single();
@@ -126,55 +125,11 @@ namespace IMS.Controllers
                 return Json(new {Error="Exception"});
             }
         }
-
-        [HttpPost]
-        [ValidateInput(false)]
-        public ActionResult Create(TemplateViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                try {
-
-                    using (var db = new ApplicationDbContext())
-                    {
-                        var userid  = IMSUserUtil.Id;
-                        var orgId   = IMSUserUtil.OrgId;
-                        var user    = IMSUserUtil.AttachedUser(db);
-                      
-                        var templateType = db.TemplateTypes.Where(x => x.Code.Equals(model.Code)&& x.IsActive).Single();
-                        var template = new Template
-                        {
-                            IsActive = true,
-                            Content = Encoding.UTF8.GetBytes(model.Content),
-                            TemplateType = templateType,
-                            OrgId = orgId,
-                            CreatedBy = user,
-                            CreatedAt = DateTime.UtcNow
-                        };
-                        db.Templates.Add(template);
-                        db.SaveChanges();
-                        return RedirectToAction("Index");
-                    }
-
-                } catch {
-                    ModelState.AddModelError("","Request can not be processed" );
-                }
-                
-            }
-            return View("NewOrModify",model);
-        }
-
-
+        
         public ActionResult ContractTemp() {
             return View();
         }
-
-
-
-       
-
-
-      
+     
 
     }
 }

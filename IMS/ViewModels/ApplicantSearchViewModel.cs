@@ -8,15 +8,15 @@ namespace IMS.ViewModels
 {
     public class ApplicantSearchViewModel
     {
-        public List<int> RecruitStatusCodes { get; set; }
-        public Expression<Func<Applicant,bool>> RecruitStatusCodesPredicate{
+        public List<int> RecruitStatusTypeIds { get; set; }
+        public Expression<Func<Applicant,bool>> RecruitStatusTypeIdsPredicate{
             get{
                 var prdCodes = PredicateBuilder.False<Applicant>();
-                if (RecruitStatusCodes != null)
+                if (RecruitStatusTypeIds != null)
                 {
-                    foreach (int code in RecruitStatusCodes)
+                    foreach (int id in RecruitStatusTypeIds)
                     {
-                        prdCodes = prdCodes.Or(p => p.RecruitStatusTypeId == code);
+                        prdCodes = prdCodes.Or(p => p.RecruitStatusTypeId == id);
                     }
                 }
                 return prdCodes;

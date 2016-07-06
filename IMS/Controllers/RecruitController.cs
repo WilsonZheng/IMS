@@ -46,7 +46,7 @@ namespace IMS.Controllers
         {
             var model = new RecruitIndexViewModel
             {
-                RecruitStatusOptions = OptionProvider.QueryOptions<RecruitStatusType>()
+                RecruitStatusOptions = OptionProvider.QueryOptions<RecruitStatusType>((int)RecruitStatusCode.InvitationCreated)
             };
             return View(model);
             
@@ -57,11 +57,11 @@ namespace IMS.Controllers
             using(var db=new ApplicationDbContext())
             {
                 var predicate = PredicateBuilder.True<Applicant>().And(p => p.IsActive && p.OrgId == IMSUserUtil.OrgId);
-                predicate = predicate.And(model.RecruitStatusCodesPredicate);
+                predicate = predicate.And(model.RecruitStatusTypeIdsPredicate);
                 var result = db.Applicants.AsExpandable().Where(predicate)
                     .Select(x=> new InvitationViewModel { Id=x.Id, Email=x.Email})
                     .ToList();
-                return PartialView("_List", result);
+                return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
   

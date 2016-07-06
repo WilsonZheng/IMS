@@ -4,14 +4,20 @@
 }
 <div class="search-panel">
     <form id="searchCondition">
-        @Html.DropDownList("RecruitStatusCodes", Model.RecruitStatusOptions, "---Status---")
-        <button type="button" class="btn btn-default" id="btnSearch">Search</button>
+        @Html.DropDownList("RecruitStatusTypeIds", Model.RecruitStatusOptions)
     </form>
 </div>
-<div id="template-list"></div>
+<table id="applicant-list" class="display table table-condensed table-hover table-bordered" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Email</th>
+            <th>Dum</th>
+        </tr>
+    </thead>
+</table>
 <div>
-    @Html.ActionLink("Create Invitation", "NewOrModify", null, new { @class = "btn btn-default" })
-    <button type="button" class="btn btn-default" id="btnSendInvitation">Send Invitation</button>
+     <button type="button" class="btn btn-default" id="btnSendInvitation">Send Invitation</button>
 </div>
 
 <!-- Modal -->
@@ -50,12 +56,30 @@
 @section Scripts{
     <script>
         $(function () {
+            var dt=$('#applicant-list').DataTable({
+                "ajax":{url:"/Recruit/List?RecruitStatusTypeIds=2", dataSrc:""},
+                "columns": [
+                    { "data": "Id" },
+                    { "data": "Email" }
+                ],
+                "columnDefs": [
+                    {
+                        "render": function (data, type, row) {
+                            return "<button class='btn btn-default'>ok</button>";
+                        },
+                        "targets": 2
+                    }
+                ]
+               
+            });
             
-            $("#btnSearch").click(function () {
-                $.get("/Recruit/List", $("#searchCondition").serializeArray())
-                    .then(function (response) {
-                        $("#template-list").html(response);
-                    });
+            function reload() {
+                dt.ajax.url("/Recruit/List?" + $("#searchCondition").serialize()).load();
+            }
+      
+
+            $("#RecruitStatusTypeIds").on('change', function () {
+                reload();
             });
 
             $("#btnSendInvitation").click(function () {
