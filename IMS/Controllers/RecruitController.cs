@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using System.Data.Entity;
 
 namespace IMS.Controllers
 {
@@ -42,11 +43,11 @@ namespace IMS.Controllers
         private IMSUserUtil _imsUserUtil;
 
         // GET: Recruit
-        public ActionResult Index()
+        public ActionResult Index(RecruitStatusCode? code)
         {
             var model = new RecruitIndexViewModel
             {
-                RecruitStatusOptions = OptionProvider.QueryOptions<RecruitStatusType>((int)RecruitStatusCode.InvitationCreated)
+                RecruitStatusOptions = OptionProvider.QueryOptions<RecruitStatusType>(code.HasValue && (code >= RecruitStatusCode.InvitationCreated && code <= RecruitStatusCode.Approved)? (int)code:(int)RecruitStatusCode.InvitationCreated)
             };
             return View(model);
             
@@ -58,7 +59,7 @@ namespace IMS.Controllers
             {
                 var predicate = PredicateBuilder.True<Applicant>().And(p => p.IsActive && p.OrgId == IMSUserUtil.OrgId);
                 predicate = predicate.And(model.RecruitStatusTypeIdsPredicate);
-                var result = db.Applicants.AsExpandable().Where(predicate)
+                var result = db.Applicants.AsExpandable().Where(predicate).OrderByDescending(x=>x.Id)
                     .Select(x=> new InvitationViewModel { Id=x.Id, Email=x.Email})
                     .ToList();
                 return Json(result, JsonRequestBehavior.AllowGet);
@@ -114,10 +115,14 @@ namespace IMS.Controllers
                         db.Applicants.Add(applicant);
                         db.SaveChanges();
                     }
-                    return RedirectToAction("Index");
+                    
                 }
-            } catch {ModelState.AddModelError("", "Request can not be processed");}
-            return View("NewOrModify", model);
+                else
+                {
+                    throw new Exception("Input value is not valid!");
+                }
+            } catch(Exception e){ return Json(new { Error = e.Message });}
+            return Json(new { });
         }
 
         [HttpPost]
@@ -160,7 +165,7 @@ namespace IMS.Controllers
         }
         
         [HttpPost]
-        public ActionResult SendInvitation(SendEmailViewModel model)
+        public ActionResult SendBatchInvitation()
         {
             using (var db = new ApplicationDbContext())
             {
@@ -171,7 +176,12 @@ namespace IMS.Controllers
                             if (template == null) throw new Exception("No Template Found!");
                             var content = Encoding.UTF8.GetString(template.Content);
                             var applicants = db.Applicants.Where(x => x.OrgId == IMSUserUtil.OrgId && x.IsActive && x.RecruitStatusType.Code==(int)RecruitStatusCode.InvitationCreated).ToList();
+                            if (applicants.Count() == 0) throw new Exception("No Available Invitation Found!");
+
                             var newRecruitStatusType = db.RecruitStatusType.Where(x => x.Code == (int)RecruitStatusCode.InvitationSent).Single();
+
+                            
+
                             foreach (var applicant in applicants)
                             {
                                 try
@@ -198,6 +208,44 @@ namespace IMS.Controllers
                     {
                          db.SaveChanges();
                     }
+            }
+        }
+        [HttpPost]
+        public ActionResult SendInvitation(int id)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                try
+                {
+                    var template = db.Templates.Where(x => x.TemplateType.Code == (int)TemplateTypeCode.Email
+                                                          && x.IsActive
+                                                          && x.OrgId == IMSUserUtil.OrgId).SingleOrDefault();
+                    if (template == null) throw new Exception("No Template Found!");
+                    var content = Encoding.UTF8.GetString(template.Content);
+                    var applicant = db.Applicants.Include(x=>x.RecruitStatusType).Where(x => x.OrgId == IMSUserUtil.OrgId && x.IsActive && x.Id==id).Single();
+                    var newRecruitStatusType = db.RecruitStatusType.Where(x => x.Code == (int)RecruitStatusCode.InvitationSent).Single();
+                    try
+                    {
+                        var link = string.Format("{0}?invitationCode={1}&id={2}", IMSEnvProperties.ContractEndPoint, applicant.InvitationCode, applicant.Id);
+                        var html = DocGenerator.Html(content, new { Link = link });
+                        EmailProvider.Send("Notice", applicant.Email, html, IMSEnvProperties.GmailAccount, IMSEnvProperties.GmailAppPassword);
+                        applicant.InvitationContent = html;
+                        if(applicant.RecruitStatusType.Code<newRecruitStatusType.Code)applicant.RecruitStatusType = newRecruitStatusType;
+                        applicant.InvitationDt = DateTime.UtcNow;
+                        db.SaveChanges();
+                        return Json(new { Error = "", RecruitStatusTypeCode= applicant.RecruitStatusType.Code});
+                    }
+                    catch
+                    {
+                        throw new Exception("Processing template and Smtp job Failed!");
+                    }
+                   
+                }
+                catch (Exception e)
+                {
+                    return Json(new { Error = e.Message });
+                }
+               
             }
         }
     }

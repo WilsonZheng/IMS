@@ -16,7 +16,7 @@ namespace IMS.ViewModels
                 {
                     foreach (int id in RecruitStatusTypeIds)
                     {
-                        prdCodes = prdCodes.Or(p => p.RecruitStatusTypeId == id);
+                        prdCodes = prdCodes.Or(p => p.RecruitStatusType.Code == id);
                     }
                 }
                 return prdCodes;

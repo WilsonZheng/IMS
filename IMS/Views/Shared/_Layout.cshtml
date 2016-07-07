@@ -8,13 +8,67 @@
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    
-
-    <link rel="stylesheet" String type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.12/datatables.min.css" String />
-    <script type="text/javascript" String src="https://cdn.datatables.net/v/bs/dt-1.10.12/datatables.min.js"></script>
-  
+    <link rel="stylesheet"  type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.12/datatables.min.css" String />
+    <script type="text/javascript"  src="https://cdn.datatables.net/v/bs/dt-1.10.12/datatables.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/app.js"></script>
 </head>
 <body>
+
+    <!-- Alert Modal -->
+    <div class="modal" id="modalAlert" tabindex="-1" role="dialog" aria-labelledby="modalAlertLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <!--
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modalAlertLabel">Alert</h4>
+                </div>
+                    -->
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div class="modal" id="modalConfirm" tabindex="-1" role="dialog" aria-labelledby="modalConfirmLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <!--
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modalConfirmLabel">Confirm</h4>
+                </div>
+-->
+                <div class="modal-body"><span class="ims-message"></span></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default cfm-yes" data-dismiss="modal">Yes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inform Modal -->
+    <div class="modal" id="modalInform" tabindex="-1" role="dialog" aria-labelledby="modalInformLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <!--
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modalInformLabel">Information</h4>
+                </div>
+                    -->
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -43,10 +97,7 @@
     </div>
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <footer>
-          
-        </footer>
+       
     </div>
     @RenderSection("scripts", required: false)
 </body>

@@ -317,7 +317,6 @@
     <Compile Include="Models\LookupConfiguration.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="ViewModels\RecruitIndexViewModel.cs" />
-    <Compile Include="ViewModels\SendEmailViewModel.cs" />
     <Compile Include="ViewModels\TemplateListViewModel.cs" />
     <Compile Include="ViewModels\TemplateViewModel.cs" />
     <Compile Include="Models\Org.cs" />
@@ -341,6 +340,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
+    <Content Include="Scripts\app.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">

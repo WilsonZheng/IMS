@@ -43,12 +43,39 @@ th{
     margin-left:0px;
 }
 
-
-
-.search-panel form > * {
-    height:35px;
+td [class*="cm-"] {
+  margin-left:10px;  
 }
 
-.search-panel form{
-    text-align:right;
+td [class*="cm-"]:first-child{
+    margin-left:0px;
+}
+
+div.search-panel{
+    margin-bottom:5px;
+}
+
+.modal-body{
+    padding:10px 0 0 10px;
+}
+.modal-footer{
+    padding:4px;
+}
+
+.ims-title-bar{
+    font-size:1.3em;
+    font-weight:200;
+    background-color:lightgray;
+    padding:5px;
+    margin-bottom:10px;
+    border:1px solid;
+
+}
+
+.cm-delete-applicant,.cm-resend-invitation{
+    display:none;
+}
+
+.ims-del .cm-delete-applicant,.ims-email .cm-resend-invitation{
+    display:inline-block;
 }
