@@ -1,12 +1,12 @@
-﻿
-(function (global) {
+﻿(function (global) {
 
     // map tells the System loader where to look for things
     var map = {
-        'app': 'agview', // 'dist',
-        'rxjs': 'node_modules/rxjs',
-        'angular2-in-memory-web-api': 'node_modules/angular2-in-memory-web-api',
-        '@angular': 'node_modules/@angular'
+        'app': '/agview', // 'dist',
+        'rxjs': '/node_modules/rxjs',
+        'angular2-in-memory-web-api': '/node_modules/angular2-in-memory-web-api',
+        '@angular': '/node_modules/@angular',
+        'primeng': '/node_modules/primeng'
     };
 
     // packages tells the System loader how to load when no filename and/or no extension
@@ -14,6 +14,7 @@
         'app': { main: 'boot.js', defaultExtension: 'js' },
         'rxjs': { defaultExtension: 'js' },
         'angular2-in-memory-web-api': { defaultExtension: 'js' },
+        'primeng': { defaultExtension: 'js' }
     };
 
     var packageNames = [
@@ -24,9 +25,9 @@
       '@angular/platform-browser',
       '@angular/platform-browser-dynamic',
       '@angular/router',
-      '@angular/router-deprecated',
       '@angular/testing',
       '@angular/upgrade',
+      '@angular/forms'
     ];
 
     // add package entries for angular packages in the form '@angular/common': { main: 'index.js', defaultExtension: 'js' }
