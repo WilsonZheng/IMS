@@ -89,7 +89,13 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Template","Index","TemplateManage")</li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Settings<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Template", "Index", "TemplateManage")</li>
+                            <li>@Html.ActionLink("Smtp", "Smtp", "Configuration")</li>
+                        </ul>
+                    </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Recruit <span class="caret"></span></a>
                         <ul class="dropdown-menu">
@@ -97,7 +103,7 @@
                             <li>@Html.ActionLink("Progress", "Index", "Recruit")</li>
                         </ul>
                     </li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                   
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

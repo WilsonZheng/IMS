@@ -45,16 +45,17 @@ namespace IMS.Models
             modelBuilder.Configurations.Add(new CustomUserClaimConfiguration());
             modelBuilder.Configurations.Add(new CustomUserLoginConfiguration());
             modelBuilder.Configurations.Add(new CustomRoleConfiguration());
+            modelBuilder.Configurations.Add(new ConfigurationConfiguration());
         }
 
         public DbSet<Applicant> Applicants { get; set; }
- 
         public DbSet<Org> Orgs { get; set; }
         public DbSet<Lookup> Lookups { get; set; }
         public DbSet<RecruitStatusType> RecruitStatusType { get; set;}
         public DbSet<TemplateType> TemplateTypes { get; set; }
+        public DbSet<ConfigurationType> ConfigurationTypes { get; set; }
         public DbSet<Template> Templates { get; set; }
-        
+        public DbSet<Configuration> Configurations { get; set; }
     }
     
     public class ApplicationDbInitializer : DropCreateDatabaseAlways<ApplicationDbContext>
@@ -88,17 +89,14 @@ namespace IMS.Models
                 Email = "intern@test.com",
                 Org = org
             });
-
             
-
-
             var user = userManager.FindByName("leader@test.com");
             userManager.AddToRole(user.Id, "leader");
 
             user = userManager.FindByName("admin@test.com");
             userManager.AddToRole(user.Id,"admin");
-                       
-                                    
+
+            context.ConfigurationTypes.Add(new ConfigurationType { Code = (int)ConfigurationTypeCode.Smtp, Description = "Smtp", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });                   
             context.RecruitStatusType.Add(new RecruitStatusType { Code = (int)RecruitStatusCode.InvitationCreated, Description = "Created Invitation",CreatedBy=user,UpdatedBy=user,CreatedAt=DateTime.UtcNow,UpdatedAt=DateTime.UtcNow,IsActive=true });
             context.RecruitStatusType.Add(new RecruitStatusType { Code = (int)RecruitStatusCode.InvitationSent,Description="Sent Invitation", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
             context.RecruitStatusType.Add(new RecruitStatusType { Code = (int)RecruitStatusCode.ContractReceived,Description="Received Contract", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });

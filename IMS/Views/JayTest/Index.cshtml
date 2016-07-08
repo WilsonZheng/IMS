@@ -1,7 +1,27 @@
-﻿
-@{
-    ViewBag.Title = "Index";
+﻿@{
+    ViewBag.Title = "MySchedule V1.0";
+    Layout = null;
 }
+<html>
+<head>
+    <base href="/">
+    <meta charset="utf-8" />
+    <title>MYSchedule V1.0</title>
+    <!-- 1. Load libraries -->
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <script src="/node_modules/es6-shim/es6-shim.min.js"></script>
+    <script src="/node_modules/zone.js/dist/zone.js"></script>
+    <script src="/node_modules/reflect-metadata/Reflect.js"></script>
+    <script src="/node_modules/systemjs/dist/system.src.js"></script>
 
-<h2>Index</h2>
-
+    <!-- 2. Configure SystemJS -->
+    <script src="~/app/systemjs.config.js"></script>
+    <script>
+        System.import('agview/boot').then(null, console.error.bind(console));
+    </script>
+</head>
+<body>
+    <app></app>
+</body>
+</html>

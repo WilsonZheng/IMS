@@ -2,5 +2,6 @@
 {
     public class TemplateType:Lookup
     {
+
     }
 }

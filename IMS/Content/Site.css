@@ -79,3 +79,13 @@ div.search-panel{
 .ims-del .cm-delete-applicant,.ims-email .cm-resend-invitation{
     display:inline-block;
 }
+
+#ims-section-smtp-config .ims-vs-editting
+{
+    display:none;
+}
+
+
+#ims-section-smtp-config.ims-editting .cm-edit{
+    display:none;
+}
