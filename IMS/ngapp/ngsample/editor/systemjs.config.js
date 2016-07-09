@@ -2,7 +2,7 @@
 
     // map tells the System loader where to look for things
     var map = {
-        'app': '/agview', // 'dist',
+        'app': '/ngbin', // 'dist',
         'rxjs': '/node_modules/rxjs',
         'angular2-in-memory-web-api': '/node_modules/angular2-in-memory-web-api',
         '@angular': '/node_modules/@angular',
@@ -11,7 +11,7 @@
 
     // packages tells the System loader how to load when no filename and/or no extension
     var packages = {
-        'app': { main: 'boot.js', defaultExtension: 'js' },
+        'app': { main: 'ngsample/editor/boot.js', defaultExtension: 'js' },
         'rxjs': { defaultExtension: 'js' },
         'angular2-in-memory-web-api': { defaultExtension: 'js' },
         'primeng': { defaultExtension: 'js' }

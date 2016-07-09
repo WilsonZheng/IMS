@@ -6,7 +6,7 @@
     "module": "commonjs",
     "noEmitOnError": true,
     "noImplicitAny": false,
-    "outDir": "./agview",
+    "outDir": "./ngbin",
     "removeComments": false,
     "sourceMap": true,
     "target": "es5",

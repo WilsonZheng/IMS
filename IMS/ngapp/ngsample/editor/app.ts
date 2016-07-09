@@ -17,5 +17,5 @@ import {MyLogger} from './mylogger.svc';
 })
 @Injectable()
 export class AppComponent {
-    Address = "aaaaaaaaaaaaaaaaaaaaaaaaaaGod!";
+    Address = "2-way binding...";
 }
