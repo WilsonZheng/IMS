@@ -10,6 +10,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
+using Newtonsoft.Json;
 
 namespace IMS.Controllers
 {
@@ -140,7 +141,7 @@ namespace IMS.Controllers
                                                           && x.IsActive
                                                           && x.OrgId == IMSUserUtil.OrgId).SingleOrDefault();
                     if (template == null) throw new Exception("No Template Found!");
-                    var content = Encoding.UTF8.GetString(template.Content);
+                    var content =JsonConvert.DeserializeObject<InvitationTemplateContentViewModel>(Encoding.UTF8.GetString(template.Content));
                     var invitations = db.Invitations.Where(x => x.EmailTemplate.OrgId == IMSUserUtil.OrgId  && x.RecruitStatusType.Code == (int)RecruitStatusCode.InvitationCreated).ToList();
                     if (invitations.Count() == 0) throw new Exception("No Available Invitation Found!");
 
@@ -151,8 +152,8 @@ namespace IMS.Controllers
                         try
                         {
                             var link = string.Format("{0}?invitationCode={1}", IMSEnvProperties.ContractEndPoint,invitation.InvitationCode);
-                            var html = DocGenerator.Html(content, new { Link = link });
-                            EmailProvider.Send("Notice", invitation.Email, html, IMSEnvProperties.GmailAccount, IMSEnvProperties.GmailAppPassword);
+                            var html = DocGenerator.Html(content.DefaultContent, new { Link = link });
+                            EmailProvider.Send(content.DefaultSubject, invitation.Email, html, IMSEnvProperties.GmailAccount, IMSEnvProperties.GmailAppPassword);
                             invitation.Content = html;
                             invitation.RecruitStatusType = newRecruitStatusType;
                             invitation.SentAt = DateTime.UtcNow;
@@ -186,14 +187,14 @@ namespace IMS.Controllers
                                                           && x.IsActive
                                                           && x.OrgId == IMSUserUtil.OrgId).SingleOrDefault();
                     if (template == null) throw new Exception("No Template Found!");
-                    var content = Encoding.UTF8.GetString(template.Content);
+                    var content =  JsonConvert.DeserializeObject<InvitationTemplateContentViewModel>(Encoding.UTF8.GetString(template.Content));
                     var invitation = db.Invitations.Include(x => x.RecruitStatusType).Where(x => x.EmailTemplate.OrgId == IMSUserUtil.OrgId && x.TemplateId==model.TemplateId && x.Email==model.Email).Single();
                     var newRecruitStatusType = db.RecruitStatusType.Where(x => x.Code == (int)RecruitStatusCode.InvitationSent).Single();
                     try
                     {
                         var link = string.Format("{0}?invitationCode={1}", IMSEnvProperties.ContractEndPoint, invitation.InvitationCode);
-                        var html = DocGenerator.Html(content, new { Link = link });
-                        EmailProvider.Send("Notice", invitation.Email, html, IMSEnvProperties.GmailAccount, IMSEnvProperties.GmailAppPassword);
+                        var html = DocGenerator.Html(content.DefaultContent, new { Link = link });
+                        EmailProvider.Send(content.DefaultSubject, invitation.Email, html, IMSEnvProperties.GmailAccount, IMSEnvProperties.GmailAppPassword);
                         invitation.Content = html;
                         if (invitation.RecruitStatusType.Code < newRecruitStatusType.Code) invitation.RecruitStatusType = newRecruitStatusType;
                         invitation.SentAt = DateTime.UtcNow;

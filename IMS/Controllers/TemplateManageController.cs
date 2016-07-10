@@ -50,7 +50,7 @@ namespace IMS.Controllers
                         db.Templates.Add(new Template
                         {
                             IsActive = false,
-                            Content = Encoding.UTF8.GetBytes(tmpType.Code == (int)TemplateTypeCode.Email?"":JsonConvert.SerializeObject(new InvitationTemplateContentViewModel { DefaultSubject="Notice", DefaultContent="Hi"})),
+                            Content = Encoding.UTF8.GetBytes(tmpType.Code != (int)TemplateTypeCode.Email?"":JsonConvert.SerializeObject(new InvitationTemplateContentViewModel { DefaultSubject="Notice", DefaultContent="Hi"})),
                             TemplateType = tmpType,
                             OrgId = IMSUserUtil.OrgId,
                             CreatedBy =IMSUserUtil.AttachedUser(db),
@@ -61,7 +61,7 @@ namespace IMS.Controllers
                 }
                 var result = db.Templates
                     .Where(x => x.OrgId == IMSUserUtil.OrgId)
-                    .Select(x => new TemplateListViewModel { Id = x.Id, Description = x.TemplateType.Description, IsActive = x.IsActive }).ToList();
+                    .Select(x => new TemplateListViewModel { Id = x.Id, Description = x.TemplateType.Description, IsActive = x.IsActive , TemplateTypeCode=(int)x.TemplateType.Code }).ToList();
                 return PartialView("_TemplateList",result);
             }
         }

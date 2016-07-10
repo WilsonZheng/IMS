@@ -1,4 +1,5 @@
-﻿<div class="ims-title-bar">Templates</div>
+﻿@using IMS.Common
+<div class="ims-title-bar">Templates</div>
 <div id="template-list">
 @{Html.RenderAction("List");}
 </div>
@@ -23,8 +24,15 @@
 {
     <script>
         jQuery(function () {
-            $("#template-list").on('click','*.ims-edit', function () {
-                $("#tmpl-edit").load("/TemplateManage/Edit?id=" + $(this).attr("tmpId"));
+            $("#template-list").on('click', '*.ims-edit', function () {
+                var templateTypeCode = $(this).attr('data-template-type-code');
+                var emailCode = '@((int)TemplateTypeCode.Email)';
+                if (templateTypeCode == emailCode) {
+                    $("#tmpl-edit").load("/TemplateManage/EditEmailTemplate?id=" + $(this).attr("tmpId"));
+                }
+                else {
+                    $("#tmpl-edit").load("/TemplateManage/Edit?id=" + $(this).attr("tmpId"));
+                }
             });
 
             $("#template-list").on('click','*.ims-remove', function () {

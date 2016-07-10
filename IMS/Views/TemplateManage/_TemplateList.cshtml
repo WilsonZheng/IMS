@@ -11,11 +11,11 @@
     <tbody>
         @foreach (var templete in Model)
         {
-            <tr class="text-center">
+           <tr class="text-center">
                 <td>@templete.Description</td>
                 <td>@(templete.IsActive)</td>
                 <td><span tmpId="@(templete.Id)" class="glyphicon glyphicon-refresh clickable ims-remove"></span></td>
-                <td><span tmpId="@(templete.Id)" class="glyphicon glyphicon-pencil clickable ims-edit"></span></td>
+                <td><span data-template-type-code="@(templete.TemplateTypeCode)" tmpId="@(templete.Id)" class="glyphicon glyphicon-pencil clickable ims-edit"></span></td>
             </tr>
         }
     </tbody>
