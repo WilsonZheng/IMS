@@ -285,6 +285,7 @@
     <Compile Include="Common\IMSUserUtil.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ConfigurationController.cs" />
+    <Compile Include="Controllers\InvitationController.cs" />
     <Compile Include="Controllers\JayTestController.cs" />
     <Compile Include="Controllers\RecruitController.cs" />
     <Compile Include="Controllers\RegistrationController.cs" />
@@ -321,6 +322,9 @@
     <Compile Include="Models\Invitation.cs" />
     <Compile Include="Models\InvitationConfiguration.cs" />
     <Compile Include="ViewModels\ApplicantSearchViewModel.cs" />
+    <Compile Include="ViewModels\EmailTemplateViewModel.cs" />
+    <Compile Include="ViewModels\InvitationSearchViewModel.cs" />
+    <Compile Include="ViewModels\InvitationTemplateContentViewModel.cs" />
     <Compile Include="ViewModels\InvitationViewModel.cs" />
     <Compile Include="Models\Lookup.cs" />
     <Compile Include="Models\LookupConfiguration.cs" />
@@ -436,6 +440,8 @@
     <Content Include="Views\Configuration\Smtp.cshtml" />
     <Content Include="tsconfig.json" />
     <Content Include="typings.json" />
+    <Content Include="Views\Invitation\Index.cshtml" />
+    <Content Include="Views\TemplateManage\_NewOrModifyEmail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\shared\" />

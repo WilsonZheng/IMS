@@ -8,6 +8,7 @@ using System;
 using System.Web;
 using IMS.Common;
 using Microsoft.AspNet.Identity.Owin;
+using Newtonsoft.Json;
 
 namespace IMS.Controllers
 {
@@ -45,10 +46,11 @@ namespace IMS.Controllers
                 {
                     foreach(var tmpType in db.TemplateTypes.Where(x => x.IsActive).ToList())
                     {
+                        
                         db.Templates.Add(new Template
                         {
                             IsActive = false,
-                            Content = Encoding.UTF8.GetBytes("<html></html>"),
+                            Content = Encoding.UTF8.GetBytes(tmpType.Code == (int)TemplateTypeCode.Email?"":JsonConvert.SerializeObject(new InvitationTemplateContentViewModel { DefaultSubject="Notice", DefaultContent="Hi"})),
                             TemplateType = tmpType,
                             OrgId = IMSUserUtil.OrgId,
                             CreatedBy =IMSUserUtil.AttachedUser(db),
@@ -83,6 +85,25 @@ namespace IMS.Controllers
             }
         }
 
+        public ActionResult EditEmailTemplate(int id)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                var model = db.Templates
+                    .Include(x => x.TemplateType)
+                    .Where(x => x.Id == id && x.OrgId == IMSUserUtil.OrgId)
+                    .ToList()
+                    .Select(x => new EmailTemplateViewModel
+                    {
+                        Id = x.Id,
+                        Name=x.Name,
+                        Content =  JsonConvert.DeserializeObject<InvitationTemplateContentViewModel>(Encoding.UTF8.GetString(x.Content))
+                    }).Single();
+                return PartialView("_NewOrModifyEmail", model);
+            }
+        }
+        
+
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult Update(TemplateViewModel model)
@@ -105,6 +126,34 @@ namespace IMS.Controllers
             Response.StatusCode = 400;
             return PartialView("_NewOrModify",model);
         }
+
+
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult UpdateEmailTemplate(EmailTemplateViewModel model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    using (var db = new ApplicationDbContext())
+                    {
+                        var existing = db.Templates.Where(x => x.Id == model.Id && x.OrgId == IMSUserUtil.OrgId).Single();
+                        existing.Name = model.Name;
+                        existing.Content = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(model.Content));
+                        db.SaveChanges();
+                        return Json(new { });
+                    }
+                }
+            }
+            catch
+            {
+                ModelState.AddModelError("", "Request can not be processed!");
+            }
+            Response.StatusCode = 400;
+            return PartialView("_NewOrModify", model);
+        }
+
 
 
         [HttpPost]

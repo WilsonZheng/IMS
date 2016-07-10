@@ -1,0 +1,20 @@
+﻿@model IMS.ViewModels.EmailTemplateViewModel
+<div>
+    @using (Html.BeginForm(Model.Id.HasValue ? "Update" : "Create", "TemplateManage", null, FormMethod.Post, new { @class = "form", name = "form" }))
+    {
+        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m=>m.Description)
+        <h3>@string.Format("{0} Template",Model.Description)</h3>
+        <div class="form-group">
+            @Html.TextAreaFor(m => m.Content, new { @class = "form-control", style = "height:30em;", placeholder = "Content" })<br />
+            @Html.ValidationMessageFor(m => m.Content)
+        </div>
+        <div class="ctrl-panel">
+        <input type="button" value="Save" class="btn btn-default" id="btnSave"/><input type="button"  value="Cancel" class="btn btn-default" id="btnCancel" />
+        </div>
+        <div class="footer">
+            @Html.ValidationSummary(true)
+        </div>
+    }
+</div>
+<div class="clearfix"></div>

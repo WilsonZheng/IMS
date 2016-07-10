@@ -53,14 +53,14 @@ namespace IMS.Controllers
             
         }
         
-        public ActionResult List(ApplicantSearchViewModel model)
+        public ActionResult List(InvitationSearchViewModel model)
         {
             using(var db=new ApplicationDbContext())
             {
-                var predicate = PredicateBuilder.True<Applicant>().And(p => p.IsActive && p.OrgId == IMSUserUtil.OrgId);
+                var predicate = PredicateBuilder.True<Invitation>().And(p => p.EmailTemplate.OrgId == IMSUserUtil.OrgId);
                 predicate = predicate.And(model.RecruitStatusTypeIdsPredicate);
-                var result = db.Applicants.AsExpandable().Where(predicate).OrderByDescending(x=>x.Id)
-                    .Select(x=> new InvitationViewModel { Id=x.Id, Email=x.Email})
+                var result = db.Invitations.AsExpandable().Where(predicate).OrderByDescending(x=>x.CreatedAt)
+                    .Select(x=> new InvitationViewModel { TemplateId=x.TemplateId,Email=x.Email})
                     .ToList();
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
@@ -68,25 +68,25 @@ namespace IMS.Controllers
   
         [HttpGet]
         public ActionResult NewOrModify(int? id) {
-            InvitationViewModel model;
-            if (id.HasValue)
-            {
-                using (var db = new ApplicationDbContext())
-                {
-                    model = db.Applicants.Where(x => x.Id == id)
-                          .Select(x => new InvitationViewModel
-                          {
-                              Id = x.Id,
-                              Email = x.Email
-                          })
-                          .Single();
-                }
+            InvitationViewModel model = new InvitationViewModel();
+            //if (id.HasValue)
+            //{
+            //    //using (var db = new ApplicationDbContext())
+                //{
+                //    model = db.Applicants.Where(x => x.Id == id)
+                //          .Select(x => new InvitationViewModel
+                //          {
+                //              Id = x.Id,
+                //              Email = x.Email
+                //          })
+                //          .Single();
+                //}
                
-            }
-            else
-            {
-                model = new InvitationViewModel();
-            }
+            //}
+            //else
+            //{
+            //    model = new InvitationViewModel();
+            //}
             
             return View(model);
         }
@@ -100,19 +100,20 @@ namespace IMS.Controllers
                     using(var db=new ApplicationDbContext())
                     {
                         var status = db.RecruitStatusType.Where(x => x.Code == (int)RecruitStatusCode.InvitationCreated).Single();
-                        var applicant = new Applicant
+                        var user = IMSUserUtil.AttachedUser(db);
+                        var invitation = new Invitation
                         {
+                            EmailTemplate = db.Templates.Where(x => x.OrgId == IMSUserUtil.OrgId && x.IsActive && x.TemplateType.Code == (int)TemplateTypeCode.Email).Single(),
                             Email = model.Email,
-                            CreatedById=IMSUserUtil.Id,
+                            RecruitStatusType = status,
                             CreatedAt=DateTime.UtcNow,
-                            UpdatedById=IMSUserUtil.Id,
                             UpdatedAt=DateTime.UtcNow,
-                            OrgId=IMSUserUtil.OrgId,
-                            IsActive=true
-                            //RecruitStatusType=status,
-                            //InvitationCode= Convert.ToBase64String(Encoding.UTF8.GetBytes(Guid.NewGuid().ToString()))
+                            IsSent=false,
+                            CreatedBy=user,
+                            UpdatedBy=user,
+                            InvitationCode = Convert.ToBase64String(Encoding.UTF8.GetBytes(Guid.NewGuid().ToString()))
                         };
-                        db.Applicants.Add(applicant);
+                        db.Invitations.Add(invitation);
                         db.SaveChanges();
                     }
                     
@@ -125,128 +126,92 @@ namespace IMS.Controllers
             return Json(new { });
         }
 
+
+
+
         [HttpPost]
-        public ActionResult Delete(int id) {
-            try
+        public ActionResult SendBatchInvitation()
+        {
+            using (var db = new ApplicationDbContext())
             {
-                using (var db = new ApplicationDbContext())
+                try
                 {
-                    var applicant = db.Applicants.Where(x => x.Id == id && x.IsActive && x.OrgId == IMSUserUtil.OrgId).Single();
-                    applicant.IsActive = false;
+                    var template = db.Templates.Where(x => x.TemplateType.Code == (int)TemplateTypeCode.Email
+                                                          && x.IsActive
+                                                          && x.OrgId == IMSUserUtil.OrgId).SingleOrDefault();
+                    if (template == null) throw new Exception("No Template Found!");
+                    var content = Encoding.UTF8.GetString(template.Content);
+                    var invitations = db.Invitations.Where(x => x.EmailTemplate.OrgId == IMSUserUtil.OrgId  && x.RecruitStatusType.Code == (int)RecruitStatusCode.InvitationCreated).ToList();
+                    if (invitations.Count() == 0) throw new Exception("No Available Invitation Found!");
+
+                    var newRecruitStatusType = db.RecruitStatusType.Where(x => x.Code == (int)RecruitStatusCode.InvitationSent).Single();
+                    
+                    foreach (var invitation in invitations)
+                    {
+                        try
+                        {
+                            var link = string.Format("{0}?invitationCode={1}", IMSEnvProperties.ContractEndPoint,invitation.InvitationCode);
+                            var html = DocGenerator.Html(content, new { Link = link });
+                            EmailProvider.Send("Notice", invitation.Email, html, IMSEnvProperties.GmailAccount, IMSEnvProperties.GmailAppPassword);
+                            invitation.Content = html;
+                            invitation.RecruitStatusType = newRecruitStatusType;
+                            invitation.SentAt = DateTime.UtcNow;
+                            invitation.Subject = "Notice";
+                        }
+                        catch
+                        {
+                            throw new Exception("Processing template and Smtp job Failed!");
+                        }
+                    }
+                    return Json(new { });
+                }
+                catch (Exception e)
+                {
+                    return Json(new { Error = e.Message });
+                }
+                finally
+                {
                     db.SaveChanges();
                 }
-                return Json(new { });
             }
-            catch
-            {
-                return Json(new { Error = "Request can not be processed!" });
-            }
-
         }
-
-
         [HttpPost]
-        public ActionResult Update(InvitationViewModel model) {
-            try
+        public ActionResult SendInvitation(InvitationViewModel model)
+        {
+            using (var db = new ApplicationDbContext())
             {
-                if (ModelState.IsValid)
+                try
                 {
-                    using (var db = new ApplicationDbContext())
+                    var template = db.Templates.Where(x => x.TemplateType.Code == (int)TemplateTypeCode.Email
+                                                          && x.IsActive
+                                                          && x.OrgId == IMSUserUtil.OrgId).SingleOrDefault();
+                    if (template == null) throw new Exception("No Template Found!");
+                    var content = Encoding.UTF8.GetString(template.Content);
+                    var invitation = db.Invitations.Include(x => x.RecruitStatusType).Where(x => x.EmailTemplate.OrgId == IMSUserUtil.OrgId && x.TemplateId==model.TemplateId && x.Email==model.Email).Single();
+                    var newRecruitStatusType = db.RecruitStatusType.Where(x => x.Code == (int)RecruitStatusCode.InvitationSent).Single();
+                    try
                     {
-                        var applicant = db.Applicants.Where(x => x.Id == model.Id && x.IsActive && x.OrgId == IMSUserUtil.OrgId).Single();
-                        applicant.Email = model.Email;
+                        var link = string.Format("{0}?invitationCode={1}", IMSEnvProperties.ContractEndPoint, invitation.InvitationCode);
+                        var html = DocGenerator.Html(content, new { Link = link });
+                        EmailProvider.Send("Notice", invitation.Email, html, IMSEnvProperties.GmailAccount, IMSEnvProperties.GmailAppPassword);
+                        invitation.Content = html;
+                        if (invitation.RecruitStatusType.Code < newRecruitStatusType.Code) invitation.RecruitStatusType = newRecruitStatusType;
+                        invitation.SentAt = DateTime.UtcNow;
                         db.SaveChanges();
-                        return RedirectToAction("Index");
+                        return Json(new { Error = "", RecruitStatusTypeCode = invitation.RecruitStatusType.Code });
                     }
+                    catch
+                    {
+                        throw new Exception("Processing template and Smtp job Failed!");
+                    }
+
                 }
+                catch (Exception e)
+                {
+                    return Json(new { Error = e.Message });
+                }
+
             }
-            catch{ModelState.AddModelError("", "Request can not be processed");}
-            return View("NewOrModify", model);
         }
-        
-        //[HttpPost]
-        //public ActionResult SendBatchInvitation()
-        //{
-        //    using (var db = new ApplicationDbContext())
-        //    {
-        //        try { 
-        //                    var template = db.Templates.Where(x => x.TemplateType.Code == (int)TemplateTypeCode.Email
-        //                                                          && x.IsActive
-        //                                                          && x.OrgId == IMSUserUtil.OrgId).SingleOrDefault();
-        //                    if (template == null) throw new Exception("No Template Found!");
-        //                    var content = Encoding.UTF8.GetString(template.Content);
-        //                    var applicants = db.Applicants.Where(x => x.OrgId == IMSUserUtil.OrgId && x.IsActive && x.RecruitStatusType.Code==(int)RecruitStatusCode.InvitationCreated).ToList();
-        //                    if (applicants.Count() == 0) throw new Exception("No Available Invitation Found!");
-
-        //                    var newRecruitStatusType = db.RecruitStatusType.Where(x => x.Code == (int)RecruitStatusCode.InvitationSent).Single();
-
-                            
-
-        //                    foreach (var applicant in applicants)
-        //                    {
-        //                        try
-        //                        {
-        //                            var link = string.Format("{0}?invitationCode={1}&id={2}", IMSEnvProperties.ContractEndPoint, applicant.InvitationCode, applicant.Id);
-        //                            var html = DocGenerator.Html(content, new { Link = link });
-        //                            EmailProvider.Send("Notice", applicant.Email, html, IMSEnvProperties.GmailAccount, IMSEnvProperties.GmailAppPassword);
-        //                            applicant.InvitationContent = html;
-        //                            applicant.RecruitStatusType = newRecruitStatusType;
-        //                            applicant.InvitationDt = DateTime.UtcNow;
-        //                        }
-        //                        catch
-        //                        {
-        //                            throw new Exception("Processing template and Smtp job Failed!");
-        //                        }
-        //                    }
-        //                    return Json(new {});
-        //            }
-        //            catch (Exception e)
-        //            {
-        //                return Json(new { Error = e.Message });
-        //            }
-        //            finally
-        //            {
-        //                 db.SaveChanges();
-        //            }
-        //    }
-        //}
-       // [HttpPost]
-        //public ActionResult SendInvitation(int id)
-        //{
-        //    using (var db = new ApplicationDbContext())
-        //    {
-        //        try
-        //        {
-        //            var template = db.Templates.Where(x => x.TemplateType.Code == (int)TemplateTypeCode.Email
-        //                                                  && x.IsActive
-        //                                                  && x.OrgId == IMSUserUtil.OrgId).SingleOrDefault();
-        //            if (template == null) throw new Exception("No Template Found!");
-        //            var content = Encoding.UTF8.GetString(template.Content);
-        //            var applicant = db.Applicants.Include(x=>x.RecruitStatusType).Where(x => x.OrgId == IMSUserUtil.OrgId && x.IsActive && x.Id==id).Single();
-        //            var newRecruitStatusType = db.RecruitStatusType.Where(x => x.Code == (int)RecruitStatusCode.InvitationSent).Single();
-        //            try
-        //            {
-        //                var link = string.Format("{0}?invitationCode={1}&id={2}", IMSEnvProperties.ContractEndPoint, applicant.InvitationCode, applicant.Id);
-        //                var html = DocGenerator.Html(content, new { Link = link });
-        //                EmailProvider.Send("Notice", applicant.Email, html, IMSEnvProperties.GmailAccount, IMSEnvProperties.GmailAppPassword);
-        //                applicant.InvitationContent = html;
-        //                if(applicant.RecruitStatusType.Code<newRecruitStatusType.Code)applicant.RecruitStatusType = newRecruitStatusType;
-        //                applicant.InvitationDt = DateTime.UtcNow;
-        //                db.SaveChanges();
-        //                return Json(new { Error = "", RecruitStatusTypeCode= applicant.RecruitStatusType.Code});
-        //            }
-        //            catch
-        //            {
-        //                throw new Exception("Processing template and Smtp job Failed!");
-        //            }
-                   
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            return Json(new { Error = e.Message });
-        //        }
-               
-        //   }
-       // }
     }
 }

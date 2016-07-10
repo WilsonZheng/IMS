@@ -43,15 +43,15 @@
                 "deferLoading":57,
                 "ajax": { url: "/Recruit/List?RecruitStatusTypeIds=" + $("#searchCondition label.active input[type='radio']").val(), dataSrc: "" },
                 "columns": [
-                    { "data": "Id" },
+                    { "data": "TemplateId" },
                     { "data": "Email" }
                 ],
                 "columnDefs": [
                     {
                         "render": function (data, type, row) {
                             var temp = "<div class='text-center'>";
-                            temp += "<span data-id=" + row['Id'] + " class='cm-resend-invitation glyphicon glyphicon-envelope clickable' data-toggle='tooltip' data-placement='top' title='Resend Invitation'></span>";
-                            temp += "<span data-id=" + row['Id'] + " class='cm-delete-applicant glyphicon glyphicon-trash clickable' data-toggle='tooltip' data-placement='top' title='Delete'></span>";
+                            temp += "<span data-email='"+row['Email']+"' data-id=" + row['TemplateId'] + " class='cm-resend-invitation glyphicon glyphicon-envelope clickable' data-toggle='tooltip' data-placement='top' title='Resend Invitation'></span>";
+                            temp += "<span data-email='"+row['Email']+"' data-id=" + row['TemplateId'] + " class='cm-delete-applicant glyphicon glyphicon-trash clickable' data-toggle='tooltip' data-placement='top' title='Delete'></span>";
                             temp += "</div>";
                             return temp;
                         },
@@ -75,9 +75,10 @@
 
             $("#applicant-list").on('click', '.cm-resend-invitation', function () {
                 var id = $(this).attr('data-id');
+                var email = $(this).attr('data-email');
                 Ims.confirm("Do you want to resend invitation?");
                 Ims.waitObj.then(function () {
-                    $.post("/Recruit/SendInvitation", { id:id}).then(function (response) {
+                    $.post("/Recruit/SendInvitation", { TemplateId:id,Email:email}).then(function (response) {
                         if (response.Error) {
                             Ims.alert(response.Error);
                         } else {
