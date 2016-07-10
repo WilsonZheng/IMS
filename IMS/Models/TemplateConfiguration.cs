@@ -6,7 +6,7 @@ namespace IMS.Models
     public class TemplateConfiguration: EntityTypeConfiguration<Template>
     {
         public TemplateConfiguration() {
-            this.HasKey(x => new { x.OrgId, x.TemplateTypeId });
+            this.HasKey(x => x.Id);
             this.HasRequired(x => x.TemplateType).WithMany().HasForeignKey(x => x.TemplateTypeId).WillCascadeOnDelete(false);
             this.HasRequired(x => x.CreatedBy).WithMany().HasForeignKey(x => x.CreatedById).WillCascadeOnDelete(false);
             this.HasRequired(x => x.Org).WithMany().HasForeignKey(x => x.OrgId).WillCascadeOnDelete(false);

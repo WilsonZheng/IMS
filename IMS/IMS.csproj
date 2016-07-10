@@ -318,6 +318,8 @@
     <Compile Include="Models\GenerateViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Common\RecruitStatusCode.cs" />
+    <Compile Include="Models\Invitation.cs" />
+    <Compile Include="Models\InvitationConfiguration.cs" />
     <Compile Include="ViewModels\ApplicantSearchViewModel.cs" />
     <Compile Include="ViewModels\InvitationViewModel.cs" />
     <Compile Include="Models\Lookup.cs" />
@@ -339,14 +341,16 @@
     <Compile Include="ViewModels\ApplicantInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ngapp\ngsample\editor\systemjs.config.js" />
+    <Content Include="app\ngsample\editor\systemjs.config.js" />
+    <Content Include="app\ngsample\forms\systemjs.config.js" />
+    <Content Include="app\ngsample\router\systemjs.config.js" />
     <Content Include="ngbin\app.tabs.html" />
     <Content Include="ngbin\tabcontent.tp.html" />
     <Content Include="ngbin\tabs.tp.html" />
     <Content Include="ngbin\tabtitle.tp.html" />
-    <Content Include="ngapp\systemjs.config.js" />
-    <Content Include="ngapp\tooltip\overlay.js" />
-    <Content Include="ngapp\tooltip\tooltip.js" />
+    <Content Include="app\systemjs.config.js" />
+    <Content Include="app\tooltip\overlay.js" />
+    <Content Include="app\tooltip\tooltip.js" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\font-awesome.min.css" />
@@ -355,6 +359,9 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="ngsample\editor\index.html" />
+    <Content Include="ngsample\forms\index.html" />
+    <Content Include="app\ngsample\forms\hero-form.component.html" />
+    <Content Include="ngsample\router\index.html" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="Scripts\app.js" />
@@ -364,8 +371,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="package.json" />
-    <Content Include="ngapp\tooltip\overlay.js.map" />
-    <Content Include="ngapp\tooltip\tooltip.js.map" />
+    <Content Include="app\tooltip\overlay.js.map" />
+    <Content Include="app\tooltip\tooltip.js.map" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -431,8 +438,8 @@
     <Content Include="typings.json" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="app\shared\" />
     <Folder Include="App_Data\" />
-    <Folder Include="ngview\" />
     <Folder Include="Views\wilsonTest\" />
   </ItemGroup>
   <ItemGroup>
@@ -444,22 +451,34 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="ngapp\app.ts" />
-    <TypeScriptCompile Include="ngapp\boot.ts" />
-    <TypeScriptCompile Include="ngapp\fancybutton.component.ts" />
-    <TypeScriptCompile Include="ngapp\multi.component.ts" />
-    <TypeScriptCompile Include="ngapp\panel.component.ts" />
-    <TypeScriptCompile Include="ngapp\ngsample\editor\app.ts" />
-    <TypeScriptCompile Include="ngapp\ngsample\editor\boot.ts" />
-    <TypeScriptCompile Include="ngapp\ngsample\editor\message.comp.ts" />
-    <TypeScriptCompile Include="ngapp\ngsample\editor\mylogger.svc.ts" />
-    <TypeScriptCompile Include="ngapp\tabcontent.component.ts" />
-    <TypeScriptCompile Include="ngapp\tabs.component.ts" />
-    <TypeScriptCompile Include="ngapp\tabtitle.component.ts" />
-    <TypeScriptCompile Include="ngapp\textinput.component.ts" />
-    <TypeScriptCompile Include="ngapp\todolist.component.ts" />
-    <TypeScriptCompile Include="ngapp\tooltip\overlay.ts" />
-    <TypeScriptCompile Include="ngapp\tooltip\tooltip.ts" />
+    <TypeScriptCompile Include="app\app.ts" />
+    <TypeScriptCompile Include="app\main.ts" />
+    <TypeScriptCompile Include="app\fancybutton.component.ts" />
+    <TypeScriptCompile Include="app\multi.component.ts" />
+    <TypeScriptCompile Include="app\ngsample\forms\app.ts" />
+    <TypeScriptCompile Include="app\ngsample\forms\main.ts" />
+    <TypeScriptCompile Include="app\ngsample\forms\hero-form.component.ts" />
+    <TypeScriptCompile Include="app\ngsample\forms\hero.ts" />
+    <TypeScriptCompile Include="app\ngsample\router\app.route.ts" />
+    <TypeScriptCompile Include="app\ngsample\router\app.ts" />
+    <TypeScriptCompile Include="app\ngsample\router\main.ts" />
+    <TypeScriptCompile Include="app\ngsample\router\crisis-center.component.ts" />
+    <TypeScriptCompile Include="app\ngsample\router\hero-detail.component.ts" />
+    <TypeScriptCompile Include="app\ngsample\router\hero-home.component.ts" />
+    <TypeScriptCompile Include="app\ngsample\router\hero-list.component.ts" />
+    <TypeScriptCompile Include="app\ngsample\router\index.ts" />
+    <TypeScriptCompile Include="app\panel.component.ts" />
+    <TypeScriptCompile Include="app\ngsample\editor\app.ts" />
+    <TypeScriptCompile Include="app\ngsample\editor\main.ts" />
+    <TypeScriptCompile Include="app\ngsample\editor\message.comp.ts" />
+    <TypeScriptCompile Include="app\ngsample\editor\mylogger.svc.ts" />
+    <TypeScriptCompile Include="app\tabcontent.component.ts" />
+    <TypeScriptCompile Include="app\tabs.component.ts" />
+    <TypeScriptCompile Include="app\tabtitle.component.ts" />
+    <TypeScriptCompile Include="app\textinput.component.ts" />
+    <TypeScriptCompile Include="app\todolist.component.ts" />
+    <TypeScriptCompile Include="app\tooltip\overlay.ts" />
+    <TypeScriptCompile Include="app\tooltip\tooltip.ts" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

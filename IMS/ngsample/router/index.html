@@ -3,6 +3,7 @@
 <head>
     <script>document.write('<base href="' + document.location + '" />');</script>
     <title>PrimeNG & AngularJS2.0 Test</title>
+    <link href="../../Content/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="/node_modules/primeui/themes/omega/theme.css" />
     <link rel="stylesheet" type="text/css" href="/Content/font-awesome.min.css" />
     <link rel="stylesheet" type="text/css" href="/node_modules/primeui/primeui-ng-all.min.css" />
@@ -12,8 +13,19 @@
     <script src="/node_modules/zone.js/dist/zone.js"></script>
     <script src="/node_modules/reflect-metadata/Reflect.js"></script>
     <script src="/node_modules/systemjs/dist/system.src.js"></script>
-    <script src="/app/ngsample/editor/systemjs.config.js"></script>
+    <script src="/app/ngsample/router/systemjs.config.js"></script>
     <script>System.import('app').catch(function (err) { console.error(err); });</script>
+    <style>
+    .ng-valid[required] {
+    border-left: 5px solid #42A948; /* green */
+    }
+
+    .ng-invalid {
+    border-left: 5px solid #a94442; /* red */
+    }
+    </style>
 </head>
-<body><my-app>Loading...</my-app></body>
+<body>
+    <my-app>Loading...</my-app>
+</body>
 </html>
