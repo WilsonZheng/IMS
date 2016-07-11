@@ -96,24 +96,6 @@ namespace IMS.Controllers
         {
             using (var db = new ApplicationDbContext())
             {
-                if (db.Templates.Where(x => x.Org.Id == IMSUserUtil.OrgId).Count() == 0)
-                {
-                    foreach (var tmpType in db.TemplateTypes.Where(x => x.IsActive).ToList())
-                    {
-
-                        db.Templates.Add(new Template
-                        {
-                            Name ="This is test template",
-                            IsActive = false,
-                            Content = Encoding.UTF8.GetBytes(tmpType.Code != (int)TemplateTypeCode.Email ? "" : JsonConvert.SerializeObject(new InvitationTemplateContentViewModel { DefaultSubject = "Notice", DefaultContent = "Hi" })),
-                            TemplateType = tmpType,
-                            OrgId = IMSUserUtil.OrgId,
-                            CreatedBy = IMSUserUtil.AttachedUser(db),
-                            CreatedAt = DateTime.UtcNow
-                        });
-                    }
-                    db.SaveChanges();
-                }
                 var result = db.Templates
                     .Where(x => x.OrgId == IMSUserUtil.OrgId)
                     .Select(x => new TemplateListViewModel {
@@ -121,7 +103,8 @@ namespace IMS.Controllers
                         Name=x.Name,
                         Description = x.TemplateType.Description,
                         IsActive = x.IsActive,
-                        TemplateTypeCode = (int)x.TemplateType.Code
+                        TemplateTypeCode = (int)x.TemplateType.Code,
+                        CreatedAt        = x.CreatedAt
                     }).ToList();
                 return Json(result,JsonRequestBehavior.AllowGet);
             }

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace IMS.ViewModels
 {
@@ -12,5 +9,6 @@ namespace IMS.ViewModels
         public string Description { get; set; }
         public int TemplateTypeCode { get; set; }
         public bool IsActive { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

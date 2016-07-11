@@ -24,6 +24,9 @@ var TemplateComponent = (function () {
         this.templateService.getTemplates()
             .then(function (templates) {
             _this.templates = templates;
+            for (var i = 0; i < _this.templates.length; i++) {
+                _this.templates[i].CreatedAtDate = new Date(parseInt(templates[i].CreatedAt.substr(6)));
+            }
         })
             .catch(function (error) {
             console.log(error);
@@ -33,7 +36,7 @@ var TemplateComponent = (function () {
         core_1.Component({
             selector: 'inv-template',
             templateUrl: '/app/invitation/template.component.html',
-            directives: [primeng_1.DataTable, primeng_1.Column]
+            directives: [primeng_1.DataGrid, primeng_1.Dialog, primeng_1.Button]
         }), 
         __metadata('design:paramtypes', [template_service_1.TemplateService, http_1.Http])
     ], TemplateComponent);

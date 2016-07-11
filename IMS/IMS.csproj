@@ -275,6 +275,7 @@
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Common\ConfigurationTypeCode.cs" />
+    <Compile Include="Common\FixedIsoDateTimeConverter.cs" />
     <Compile Include="Common\ImsGmailProvider.cs" />
     <Compile Include="Common\IEmailProvider.cs" />
     <Compile Include="Common\IMSEnvProperties.cs" />
