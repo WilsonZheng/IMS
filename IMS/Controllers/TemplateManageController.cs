@@ -67,6 +67,30 @@ namespace IMS.Controllers
         }
 
 
+        public ActionResult SeedTemplates()
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                var tmpType = db.TemplateTypes.Where(x => x.Code == (int)TemplateTypeCode.Email).Single();
+                int i =0;
+                while (i++ < 30)
+                {
+                    db.Templates.Add(new Template
+                    {
+                        Name = "This is test template",
+                        IsActive = false,
+                        Content = Encoding.UTF8.GetBytes(tmpType.Code != (int)TemplateTypeCode.Email ? "" : JsonConvert.SerializeObject(new InvitationTemplateContentViewModel { DefaultSubject = "Notice", DefaultContent = "Hi" })),
+                        TemplateType = tmpType,
+                        OrgId = IMSUserUtil.OrgId,
+                        CreatedBy = IMSUserUtil.AttachedUser(db),
+                        CreatedAt = DateTime.UtcNow
+                    });
+                }
+                db.SaveChanges();
+                return Json(new { }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
 
         public ActionResult Templates()
         {
@@ -79,6 +103,7 @@ namespace IMS.Controllers
 
                         db.Templates.Add(new Template
                         {
+                            Name ="This is test template",
                             IsActive = false,
                             Content = Encoding.UTF8.GetBytes(tmpType.Code != (int)TemplateTypeCode.Email ? "" : JsonConvert.SerializeObject(new InvitationTemplateContentViewModel { DefaultSubject = "Notice", DefaultContent = "Hi" })),
                             TemplateType = tmpType,
@@ -91,7 +116,13 @@ namespace IMS.Controllers
                 }
                 var result = db.Templates
                     .Where(x => x.OrgId == IMSUserUtil.OrgId)
-                    .Select(x => new TemplateListViewModel { Id = x.Id, Description = x.TemplateType.Description, IsActive = x.IsActive, TemplateTypeCode = (int)x.TemplateType.Code }).ToList();
+                    .Select(x => new TemplateListViewModel {
+                        Id = x.Id,
+                        Name=x.Name,
+                        Description = x.TemplateType.Description,
+                        IsActive = x.IsActive,
+                        TemplateTypeCode = (int)x.TemplateType.Code
+                    }).ToList();
                 return Json(result,JsonRequestBehavior.AllowGet);
             }
         }

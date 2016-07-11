@@ -360,7 +360,6 @@
     <Content Include="app\tooltip\tooltip.js" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\font-awesome.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -449,6 +448,7 @@
   <ItemGroup>
     <Folder Include="app\shared\" />
     <Folder Include="App_Data\" />
+    <Folder Include="Content\font-awesome-4.6.3\" />
     <Folder Include="Views\wilsonTest\" />
   </ItemGroup>
   <ItemGroup>

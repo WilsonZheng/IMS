@@ -10,12 +10,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
+require('rxjs/add/operator/toPromise');
 var TemplateService = (function () {
     function TemplateService(http) {
         this.http = http;
     }
     TemplateService.prototype.getTemplates = function () {
-        return this.http.get("/TemplateManage/Templates1");
+        return this.http.get("/TemplateManage/Templates").toPromise()
+            .then(function (response) { return response.json(); }).catch(function (error) {
+            return Promise.reject(error);
+        });
     };
     TemplateService = __decorate([
         core_1.Injectable(), 
