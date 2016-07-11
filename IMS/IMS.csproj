@@ -345,7 +345,9 @@
     <Compile Include="ViewModels\ApplicantInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\invitation\app.component.html" />
     <Content Include="app\invitation\systemjs.config.js" />
+    <Content Include="app\invitation\template.component.html" />
     <Content Include="app\ngsample\editor\systemjs.config.js" />
     <Content Include="app\ngsample\forms\systemjs.config.js" />
     <Content Include="app\ngsample\router\systemjs.config.js" />
@@ -445,7 +447,6 @@
     <Content Include="Views\TemplateManage\_NewOrModifyEmail.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="app\invitation\shared\" />
     <Folder Include="app\shared\" />
     <Folder Include="App_Data\" />
     <Folder Include="Views\wilsonTest\" />
@@ -462,7 +463,11 @@
     <TypeScriptCompile Include="app\app.ts" />
     <TypeScriptCompile Include="app\invitation\app.component.ts" />
     <TypeScriptCompile Include="app\invitation\index.ts" />
+    <TypeScriptCompile Include="app\invitation\shared\mock-template.ts" />
+    <TypeScriptCompile Include="app\invitation\shared\template.service.ts" />
+    <TypeScriptCompile Include="app\invitation\template.component.ts" />
     <TypeScriptCompile Include="app\invitation\main.ts" />
+    <TypeScriptCompile Include="app\invitation\template.ts" />
     <TypeScriptCompile Include="app\main.ts" />
     <TypeScriptCompile Include="app\fancybutton.component.ts" />
     <TypeScriptCompile Include="app\multi.component.ts" />

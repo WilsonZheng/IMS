@@ -10,21 +10,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
-var index_1 = require('./index');
-var template_service_1 = require('./shared/template.service');
-var AppComponent = (function () {
-    function AppComponent() {
+var TemplateService = (function () {
+    function TemplateService(http) {
+        this.http = http;
     }
-    AppComponent = __decorate([
-        core_1.Component({
-            selector: 'inv-app',
-            templateUrl: '/app/invitation/app.component.html',
-            directives: [index_1.TemplateComponent],
-            providers: [template_service_1.TemplateService, http_1.HTTP_PROVIDERS]
-        }), 
-        __metadata('design:paramtypes', [])
-    ], AppComponent);
-    return AppComponent;
+    TemplateService.prototype.getTemplates = function () {
+        return this.http.get("/TemplateManage/Templates1");
+    };
+    TemplateService = __decorate([
+        core_1.Injectable(), 
+        __metadata('design:paramtypes', [http_1.Http])
+    ], TemplateService);
+    return TemplateService;
 }());
-exports.AppComponent = AppComponent;
-//# sourceMappingURL=app.component.js.map
+exports.TemplateService = TemplateService;
+//# sourceMappingURL=template.service.js.map

@@ -9,22 +9,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var http_1 = require('@angular/http');
-var index_1 = require('./index');
-var template_service_1 = require('./shared/template.service');
-var AppComponent = (function () {
-    function AppComponent() {
+var TemplateComponent = (function () {
+    function TemplateComponent() {
     }
-    AppComponent = __decorate([
+    TemplateComponent = __decorate([
         core_1.Component({
-            selector: 'inv-app',
-            templateUrl: '/app/invitation/app.component.html',
-            directives: [index_1.TemplateComponent],
-            providers: [template_service_1.TemplateService, http_1.HTTP_PROVIDERS]
+            selector: 'invitation-template',
+            template: 'list of email template, actually list of notices'
         }), 
         __metadata('design:paramtypes', [])
-    ], AppComponent);
-    return AppComponent;
+    ], TemplateComponent);
+    return TemplateComponent;
 }());
-exports.AppComponent = AppComponent;
-//# sourceMappingURL=app.component.js.map
+exports.TemplateComponent = TemplateComponent;
+//# sourceMappingURL=invitation-template.component.js.map

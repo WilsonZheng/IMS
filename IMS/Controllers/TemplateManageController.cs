@@ -66,7 +66,36 @@ namespace IMS.Controllers
             }
         }
 
-   
+
+
+        public ActionResult Templates()
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                if (db.Templates.Where(x => x.Org.Id == IMSUserUtil.OrgId).Count() == 0)
+                {
+                    foreach (var tmpType in db.TemplateTypes.Where(x => x.IsActive).ToList())
+                    {
+
+                        db.Templates.Add(new Template
+                        {
+                            IsActive = false,
+                            Content = Encoding.UTF8.GetBytes(tmpType.Code != (int)TemplateTypeCode.Email ? "" : JsonConvert.SerializeObject(new InvitationTemplateContentViewModel { DefaultSubject = "Notice", DefaultContent = "Hi" })),
+                            TemplateType = tmpType,
+                            OrgId = IMSUserUtil.OrgId,
+                            CreatedBy = IMSUserUtil.AttachedUser(db),
+                            CreatedAt = DateTime.UtcNow
+                        });
+                    }
+                    db.SaveChanges();
+                }
+                var result = db.Templates
+                    .Where(x => x.OrgId == IMSUserUtil.OrgId)
+                    .Select(x => new TemplateListViewModel { Id = x.Id, Description = x.TemplateType.Description, IsActive = x.IsActive, TemplateTypeCode = (int)x.TemplateType.Code }).ToList();
+                return Json(result,JsonRequestBehavior.AllowGet);
+            }
+        }
+
 
         public ActionResult Edit(int id)
         {
