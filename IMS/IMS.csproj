@@ -279,6 +279,7 @@
     <Compile Include="Common\ImsGmailProvider.cs" />
     <Compile Include="Common\IEmailProvider.cs" />
     <Compile Include="Common\IMSEnvProperties.cs" />
+    <Compile Include="Common\ImsResult.cs" />
     <Compile Include="Common\IOptionProvider.cs" />
     <Compile Include="Common\OptionProvider.cs" />
     <Compile Include="Common\TemplateTypeCode.cs" />
@@ -325,12 +326,13 @@
     <Compile Include="ViewModels\ApplicantSearchViewModel.cs" />
     <Compile Include="ViewModels\EmailTemplateViewModel.cs" />
     <Compile Include="ViewModels\InvitationSearchViewModel.cs" />
-    <Compile Include="ViewModels\InvitationTemplateContentViewModel.cs" />
+    <Compile Include="ViewModels\EmailTemplateContentViewModel.cs" />
     <Compile Include="ViewModels\InvitationViewModel.cs" />
     <Compile Include="Models\Lookup.cs" />
     <Compile Include="Models\LookupConfiguration.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="ViewModels\RecruitIndexViewModel.cs" />
+    <Compile Include="ViewModels\RecruitStatusViewModel.cs" />
     <Compile Include="ViewModels\TemplateListViewModel.cs" />
     <Compile Include="ViewModels\TemplateViewModel.cs" />
     <Compile Include="Models\Org.cs" />
@@ -465,6 +467,7 @@
     <TypeScriptCompile Include="app\invitation\app.component.ts" />
     <TypeScriptCompile Include="app\invitation\index.ts" />
     <TypeScriptCompile Include="app\invitation\shared\mock-template.ts" />
+    <TypeScriptCompile Include="app\invitation\shared\rest-result.ts" />
     <TypeScriptCompile Include="app\invitation\shared\template.service.ts" />
     <TypeScriptCompile Include="app\invitation\template.component.ts" />
     <TypeScriptCompile Include="app\invitation\main.ts" />

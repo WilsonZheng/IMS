@@ -16,8 +16,87 @@ var TemplateService = (function () {
         this.http = http;
     }
     TemplateService.prototype.getTemplates = function () {
-        return this.http.get("/TemplateManage/Templates").toPromise()
-            .then(function (response) { return response.json(); }).catch(function (error) {
+        var headers = new http_1.Headers({
+            'Content-Type': 'application/json'
+        });
+        return this.http.post("/TemplateManage/Templates", JSON.stringify({}), { headers: headers }).toPromise()
+            .then(function (response) {
+            var result = response.json();
+            if (result.Error) {
+                return Promise.reject(result.Error);
+            }
+            else {
+                return result.Data;
+            }
+        }).catch(function (error) {
+            return Promise.reject(error);
+        });
+    };
+    TemplateService.prototype.deleteTemplate = function (id) {
+        return this.http.delete("/TemplateManage/DeleteTemplate/" + id).toPromise()
+            .then(function (response) {
+            var result = response.json();
+            if (result.Error) {
+                return Promise.reject(result.Error);
+            }
+            else {
+                return;
+            }
+        }).catch(function (error) {
+            return Promise.reject(error);
+        });
+    };
+    TemplateService.prototype.getTemplate = function (id) {
+        var headers = new http_1.Headers({
+            'Content-Type': 'application/json'
+        });
+        return this.http.post("/TemplateManage/GetTemplate", JSON.stringify({ id: id }), { headers: headers }).toPromise()
+            .then(function (response) {
+            var result = response.json();
+            if (result.Error) {
+                return Promise.reject(result.Error);
+            }
+            else {
+                return result.Data;
+            }
+        })
+            .catch(function (error) {
+            return Promise.reject(error);
+        });
+    };
+    TemplateService.prototype.updateTemplate = function (template) {
+        var headers = new http_1.Headers({
+            'Content-Type': 'application/json'
+        });
+        return this.http.put("/TemplateManage/UpdateTemplate", JSON.stringify(template), { headers: headers }).toPromise()
+            .then(function (response) {
+            var result = response.json();
+            if (result.Error) {
+                return Promise.reject(result.Error);
+            }
+            else {
+                return;
+            }
+        })
+            .catch(function (error) {
+            return Promise.reject(error);
+        });
+    };
+    TemplateService.prototype.createTemplate = function (template) {
+        var headers = new http_1.Headers({
+            'Content-Type': 'application/json'
+        });
+        return this.http.post("/TemplateManage/CreateTemplate", JSON.stringify(template), { headers: headers }).toPromise()
+            .then(function (response) {
+            var result = response.json();
+            if (result.Error) {
+                return Promise.reject(result.Error);
+            }
+            else {
+                return result.Data;
+            }
+        })
+            .catch(function (error) {
             return Promise.reject(error);
         });
     };

@@ -141,7 +141,7 @@ namespace IMS.Controllers
                                                           && x.IsActive
                                                           && x.OrgId == IMSUserUtil.OrgId).SingleOrDefault();
                     if (template == null) throw new Exception("No Template Found!");
-                    var content =JsonConvert.DeserializeObject<InvitationTemplateContentViewModel>(Encoding.UTF8.GetString(template.Content));
+                    var content =JsonConvert.DeserializeObject<EmailTemplateContentViewModel>(Encoding.UTF8.GetString(template.Content));
                     var invitations = db.Invitations.Where(x => x.EmailTemplate.OrgId == IMSUserUtil.OrgId  && x.RecruitStatusType.Code == (int)RecruitStatusCode.InvitationCreated).ToList();
                     if (invitations.Count() == 0) throw new Exception("No Available Invitation Found!");
 
@@ -187,7 +187,7 @@ namespace IMS.Controllers
                                                           && x.IsActive
                                                           && x.OrgId == IMSUserUtil.OrgId).SingleOrDefault();
                     if (template == null) throw new Exception("No Template Found!");
-                    var content =  JsonConvert.DeserializeObject<InvitationTemplateContentViewModel>(Encoding.UTF8.GetString(template.Content));
+                    var content =  JsonConvert.DeserializeObject<EmailTemplateContentViewModel>(Encoding.UTF8.GetString(template.Content));
                     var invitation = db.Invitations.Include(x => x.RecruitStatusType).Where(x => x.EmailTemplate.OrgId == IMSUserUtil.OrgId && x.TemplateId==model.TemplateId && x.Email==model.Email).Single();
                     var newRecruitStatusType = db.RecruitStatusType.Where(x => x.Code == (int)RecruitStatusCode.InvitationSent).Single();
                     try

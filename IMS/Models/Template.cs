@@ -15,5 +15,6 @@ namespace IMS.Models
         public User CreatedBy { get; set; }
         public int CreatedById { get; set; }
         public DateTime CreatedAt { get; set;}
+        
     }
 }

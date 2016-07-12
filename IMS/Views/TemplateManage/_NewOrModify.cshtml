@@ -4,7 +4,6 @@
     {
         @Html.HiddenFor(m => m.Id)
         @Html.HiddenFor(m=>m.Description)
-        <h3>@string.Format("{0} Template",Model.Description)</h3>
         <div class="form-group">
             @Html.TextAreaFor(m => m.Content, new { @class = "form-control", style = "height:30em;", placeholder = "Content" })<br />
             @Html.ValidationMessageFor(m => m.Content)

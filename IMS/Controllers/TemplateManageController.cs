@@ -36,21 +36,176 @@ namespace IMS.Controllers
             return View();
         }
 
-        
-        
+        //Rest Call
+        [HttpPost]
+        public ActionResult CreateTemplate(EmailTemplateViewModel model)
+        {
+            try
+            {
+                if (!ModelState.IsValid) throw new Exception("Invalid Input");
+                using (var db = new ApplicationDbContext())
+                {
+                    var templateType = db.TemplateTypes.Where(x => x.Code == (int)TemplateTypeCode.Email).Single();
+                    var template = new Template {
+                        Name = model.Name,
+                        Content = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(model.Content)),
+                        IsActive = true,
+                        OrgId = IMSUserUtil.OrgId,
+                        CreatedAt = DateTime.UtcNow,
+                        CreatedById = IMSUserUtil.Id,
+                        TemplateType = templateType
+                    };
+                    db.Templates.Add(template);
+                    db.SaveChanges();
+                    model.Id = template.Id;
+                    
+                    model.Content = null;
+                    var recruitStatus = db.Invitations.Where(x => x.TemplateId == model.Id).GroupBy(x => x.RecruitStatusType).Select(group => new { Key = group.Key.Code, Count = group.Count() }).ToList();
+                    model.RecruitStatus =
+                    new RecruitStatusViewModel
+                    {
+                        Approved = recruitStatus.Where(x => x.Key == (int)RecruitStatusCode.Approved).Select(x => x.Count).SingleOrDefault(),
+                        Received = recruitStatus.Where(x => x.Key == (int)RecruitStatusCode.ContractReceived).Select(x => x.Count).SingleOrDefault(),
+                        Saved = recruitStatus.Where(x => x.Key == (int)RecruitStatusCode.InvitationCreated).Select(x => x.Count).SingleOrDefault(),
+                        Sent = recruitStatus.Where(x => x.Key == (int)RecruitStatusCode.Approved).Select(x => x.Count).SingleOrDefault(),
+                        Total = recruitStatus.Sum(x => x.Count)
+                    };
+
+                    return Json(new ImsResult { Data=model});
+                }
+            }
+            catch (Exception e)
+            {
+                return Json(new ImsResult { Error = e.Message });
+            }
+        }
+
+
+        [HttpPut]
+        public ActionResult UpdateTemplate(EmailTemplateViewModel model)
+        {
+            try
+            {
+                using (var db = new ApplicationDbContext())
+                {
+                    var template = db.Templates.Where(x => x.Id == model.Id && x.IsActive && x.OrgId == IMSUserUtil.OrgId).SingleOrDefault();
+                    if (template == null) throw new Exception("Not Found!");
+                    template.Name = model.Name;
+                    template.Content = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(model.Content));
+                    db.SaveChanges();
+                    return Json(new ImsResult());
+                }
+            }
+            catch (Exception e)
+            {
+                return Json(new ImsResult { Error = e.Message });
+            }
+        }
+
+        [HttpDelete]
+        public ActionResult DeleteTemplate(int id)
+        {
+            try
+            {
+                using (var db = new ApplicationDbContext())
+                {
+                    var template = db.Templates.Where(x => x.Id == id && x.IsActive && x.OrgId == IMSUserUtil.OrgId).SingleOrDefault();
+                    if(template==null)throw new Exception("Not Found!");
+                    template.IsActive = false;
+                    db.SaveChanges();
+                    return Json(new ImsResult());
+                }
+
+            }
+            catch(Exception e) {
+                return Json(new ImsResult { Error=e.Message });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult GetTemplate(int id)
+        {
+            try
+            {
+                using (var db = new ApplicationDbContext())
+                {
+                    var template = db.Templates.Where(x => x.Id == id && x.IsActive && x.OrgId == IMSUserUtil.OrgId).SingleOrDefault();
+                    if (template == null) throw new Exception("Not Found!");
+                    var model=new EmailTemplateViewModel
+                    {
+                        Id = template.Id,
+                        Name = template.Name,
+                        Content = JsonConvert.DeserializeObject<EmailTemplateContentViewModel>(Encoding.UTF8.GetString(template.Content))
+                    };
+                    db.SaveChanges();
+                    return Json(new ImsResult() {Data=model},JsonRequestBehavior.AllowGet);
+                }
+
+            }
+            catch (Exception e)
+            {
+                return Json(new ImsResult { Error = e.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Templates()
+        {
+            try
+            {
+                using (var db = new ApplicationDbContext())
+                {
+                    var result = db.Templates.Include(x=>x.TemplateType)
+                        .Where(x => x.OrgId == IMSUserUtil.OrgId && x.IsActive && x.TemplateType.Code == (int)TemplateTypeCode.Email)
+                        .GroupJoin( db.Invitations,
+                                    template=>template.Id,
+                                    invitation=>invitation.TemplateId,
+                        (template,invitation)=>
+                        new {
+                                template,
+                                Total =invitation.Count(),
+                                Saved= invitation.Where(x => x.RecruitStatusType.Code == (int)RecruitStatusCode.InvitationCreated).Count(),
+                                Sent =invitation.Where(x=>x.RecruitStatusType.Code==(int)RecruitStatusCode.InvitationSent).Count(),
+                                Received = invitation.Where(x => x.RecruitStatusType.Code == (int)RecruitStatusCode.ContractReceived).Count(),
+                                Approved = invitation.Where(x => x.RecruitStatusType.Code == (int)RecruitStatusCode.Approved).Count()
+                            })
+                        .ToList().OrderByDescending(x=>x.template.Id)
+                        .Select(x => new EmailTemplateViewModel
+                        {
+                            Id = x.template.Id,
+                            Name = x.template.Name,
+                            RecruitStatus=new RecruitStatusViewModel{
+                                                                      Total=x.Total,
+                                                                      Saved=x.Saved,
+                                                                      Sent=x.Sent,
+                                                                      Received=x.Received,
+                                                                      Approved=x.Approved
+                                                                     }
+
+                        }).ToList();
+                    return Json(new ImsResult { Data = result }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch(Exception e)
+            {
+                return Json(new ImsResult { Error = e.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        //Rest Call End
+
         public ActionResult List()
         {
             using (var db = new ApplicationDbContext())
             {
-                if (db.Templates.Where(x => x.Org.Id == IMSUserUtil.OrgId).Count() == 0)
+                if (db.Templates.Where(x => x.Org.Id == IMSUserUtil.OrgId && x.TemplateType.Code==(int)TemplateTypeCode.Contract).Count() == 0)
                 {
-                    foreach(var tmpType in db.TemplateTypes.Where(x => x.IsActive).ToList())
+                    foreach(var tmpType in db.TemplateTypes.Where(x => x.IsActive && x.Code ==(int)TemplateTypeCode.Contract).ToList())
                     {
                         
                         db.Templates.Add(new Template
                         {
                             IsActive = false,
-                            Content = Encoding.UTF8.GetBytes(tmpType.Code != (int)TemplateTypeCode.Email?"":JsonConvert.SerializeObject(new InvitationTemplateContentViewModel { DefaultSubject="Notice", DefaultContent="Hi"})),
+                            Content = Encoding.UTF8.GetBytes(""),
                             TemplateType = tmpType,
                             OrgId = IMSUserUtil.OrgId,
                             CreatedBy =IMSUserUtil.AttachedUser(db),
@@ -60,8 +215,8 @@ namespace IMS.Controllers
                     db.SaveChanges();
                 }
                 var result = db.Templates
-                    .Where(x => x.OrgId == IMSUserUtil.OrgId)
-                    .Select(x => new TemplateListViewModel { Id = x.Id, Description = x.TemplateType.Description, IsActive = x.IsActive , TemplateTypeCode=(int)x.TemplateType.Code }).ToList();
+                    .Where(x => x.OrgId == IMSUserUtil.OrgId && x.TemplateType.Code==(int)TemplateTypeCode.Contract)
+                    .Select(x => new TemplateListViewModel { Id = x.Id, IsActive = x.IsActive  }).ToList();
                 return PartialView("_TemplateList",result);
             }
         }
@@ -79,7 +234,7 @@ namespace IMS.Controllers
                     {
                         Name = "This is test template",
                         IsActive = false,
-                        Content = Encoding.UTF8.GetBytes(tmpType.Code != (int)TemplateTypeCode.Email ? "" : JsonConvert.SerializeObject(new InvitationTemplateContentViewModel { DefaultSubject = "Notice", DefaultContent = "Hi" })),
+                        Content = Encoding.UTF8.GetBytes(tmpType.Code != (int)TemplateTypeCode.Email ? "" : JsonConvert.SerializeObject(new EmailTemplateContentViewModel { DefaultSubject = "Notice", DefaultContent = "Hi" })),
                         TemplateType = tmpType,
                         OrgId = IMSUserUtil.OrgId,
                         CreatedBy = IMSUserUtil.AttachedUser(db),
@@ -92,23 +247,7 @@ namespace IMS.Controllers
         }
 
 
-        public ActionResult Templates()
-        {
-            using (var db = new ApplicationDbContext())
-            {
-                var result = db.Templates
-                    .Where(x => x.OrgId == IMSUserUtil.OrgId)
-                    .Select(x => new TemplateListViewModel {
-                        Id = x.Id,
-                        Name=x.Name,
-                        Description = x.TemplateType.Description,
-                        IsActive = x.IsActive,
-                        TemplateTypeCode = (int)x.TemplateType.Code,
-                        CreatedAt        = x.CreatedAt
-                    }).ToList();
-                return Json(result,JsonRequestBehavior.AllowGet);
-            }
-        }
+      
 
 
         public ActionResult Edit(int id)
@@ -140,7 +279,7 @@ namespace IMS.Controllers
                     {
                         Id = x.Id,
                         Name=x.Name,
-                        Content =  JsonConvert.DeserializeObject<InvitationTemplateContentViewModel>(Encoding.UTF8.GetString(x.Content))
+                        Content =  JsonConvert.DeserializeObject<EmailTemplateContentViewModel>(Encoding.UTF8.GetString(x.Content))
                     }).Single();
                 return PartialView("_NewOrModifyEmail", model);
             }
