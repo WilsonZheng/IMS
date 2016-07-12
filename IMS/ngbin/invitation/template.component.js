@@ -18,8 +18,6 @@ var TemplateComponent = (function () {
     function TemplateComponent(templateService, http) {
         this.templateService = templateService;
         this.http = http;
-        //Edit Notice (A Notice is actually A Template). 
-        this.noticeEditted = new template_1.Template();
         this.templateEditting = false;
         //Information Modal
         this.informModal = false;
