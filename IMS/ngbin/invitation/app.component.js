@@ -10,19 +10,47 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
+var primeng_1 = require('primeng/primeng');
 var index_1 = require('./index');
 var template_service_1 = require('./shared/template.service');
+var message_service_1 = require('../shared/message.service');
 var AppComponent = (function () {
-    function AppComponent() {
+    function AppComponent(messageService) {
+        this.messageService = messageService;
+        //Global Confirm modal
+        this.confirmModal = false;
+        //Global Inform modal
+        this.informModal = false;
+        this.informMessage = "";
     }
+    AppComponent.prototype.confirm = function (result) {
+        this.confirmModal = false;
+        this.messageService.announceResult(result);
+    };
+    AppComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.subscriptionConfirm =
+            this.messageService.request$.subscribe(function (request) {
+                _this.confirmModal = true;
+            });
+        this.subscriptionInform =
+            this.messageService.requestInform$.subscribe(function (request) {
+                _this.informModal = true;
+                _this.informMessage = request;
+            });
+    };
+    AppComponent.prototype.ngOnDestroy = function () {
+        this.subscriptionConfirm.unsubscribe();
+        this.subscriptionInform.unsubscribe();
+    };
     AppComponent = __decorate([
         core_1.Component({
             selector: 'inv-app',
             templateUrl: '/app/invitation/app.component.html',
-            directives: [index_1.TemplateComponent],
-            providers: [template_service_1.TemplateService, http_1.HTTP_PROVIDERS]
+            directives: [index_1.TemplateComponent, primeng_1.Dialog, primeng_1.Footer, primeng_1.Header, primeng_1.Button],
+            providers: [template_service_1.TemplateService, http_1.HTTP_PROVIDERS, message_service_1.MessageService]
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [message_service_1.MessageService])
     ], AppComponent);
     return AppComponent;
 }());

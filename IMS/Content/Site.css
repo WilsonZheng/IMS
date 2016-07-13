@@ -35,6 +35,10 @@ th{
     cursor: pointer;
 }
 
+.ctrl-panel{
+    text-align:right;
+}
+
 .ctrl-panel input[type=button]{
     margin-left:10px;
 }
@@ -131,4 +135,8 @@ div.search-panel{
 
 #ims-template-manage .form-control{
     font-size:12px;
+}
+
+.ims-form-dialog .ui-dialog{
+    width:70%;
 }

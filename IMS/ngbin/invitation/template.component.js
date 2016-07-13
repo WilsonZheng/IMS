@@ -10,19 +10,23 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 /// <reference path="../../node_modules/rxjs/add/operator/toPromise.d.ts" />
 var core_1 = require('@angular/core');
-var http_1 = require('@angular/http');
 var primeng_1 = require('primeng/primeng');
+//Custom service
 var template_service_1 = require('./shared/template.service');
+var invitation_service_1 = require('./shared/invitation.service');
+var message_service_1 = require('../shared/message.service');
+//Custom Models.
 var template_1 = require('./template');
+//Custom Component
+var notice_editor_component_1 = require('./notice-editor.component');
+var invitation_editor_component_1 = require('./invitation-editor.component');
 var TemplateComponent = (function () {
-    function TemplateComponent(templateService, http) {
+    function TemplateComponent(templateService, messageService) {
         this.templateService = templateService;
-        this.http = http;
-        this.templateEditting = false;
-        //Information Modal
-        this.informModal = false;
-        this.informMessage = "";
-        this.templateService = templateService;
+        this.messageService = messageService;
+        this.handleNotice = false;
+        //Write Invitation
+        this.handleInvitation = false;
     }
     TemplateComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -33,12 +37,48 @@ var TemplateComponent = (function () {
             //    this.templates[i].CreatedAtDate = new Date(parseInt(templates[i].CreatedAt.substr(6)));
             //}
         })
-            .catch(function (error) { _this.handError(error); });
+            .catch(function (error) { _this.handleError(error); });
     };
-    TemplateComponent.prototype.writeEmail = function (id) {
-        console.log("writeEmail:" + id);
+    //notice manipulation callback.
+    TemplateComponent.prototype.noticeUpdated = function (notice) {
+        for (var i = 0; i < this.templates.length; i++) {
+            if (this.templates[i].Id == notice.Id) {
+                this.templates[i].Name = notice.Name;
+                break;
+            }
+        }
+        this.closeNotice();
+        this.showInformModal("Updated");
+    };
+    TemplateComponent.prototype.noticeCreated = function (notice) {
+        this.templates.splice(0, 0, notice);
+        this.closeNotice();
+        this.showInformModal("created");
+    };
+    //notice manipuation function.
+    TemplateComponent.prototype.editNotice = function (id) {
+        var _this = this;
+        this.templateService.getTemplate(id)
+            .then(function (result) {
+            _this.notice = result;
+            _this.handleNotice = true;
+        })
+            .catch(function (error) { _this.handleError(error); });
+    };
+    TemplateComponent.prototype.closeNotice = function () {
+        this.handleNotice = false;
     };
     TemplateComponent.prototype.deleteNotice = function (id) {
+        var _this = this;
+        this.messageService.request();
+        this.confirmSubscription = this.messageService.result.subscribe(function (result) {
+            _this.confirmSubscription.unsubscribe();
+            if (result == 1) {
+                _this.proceedDelete(id);
+            }
+        });
+    };
+    TemplateComponent.prototype.proceedDelete = function (id) {
         var _this = this;
         this.templateService.deleteTemplate(id)
             .then(function () {
@@ -50,79 +90,37 @@ var TemplateComponent = (function () {
                 }
             }
         })
-            .catch(function (error) { _this.handError(error); });
-    };
-    TemplateComponent.prototype.editNotice = function (id) {
-        var _this = this;
-        this.templateService.getTemplate(id)
-            .then(function (result) {
-            _this.noticeEditted = result;
-            _this.templateEditting = true;
-        })
-            .catch(function (error) { _this.handError(error); });
-    };
-    TemplateComponent.prototype.closeNotice = function () {
-        this.templateEditting = false;
-    };
-    TemplateComponent.prototype.saveNotice = function () {
-        if (this.noticeEditted.Id && this.noticeEditted.Id > 0) {
-            this.updateNotice();
-        }
-        else {
-            this.createNotice();
-        }
-    };
-    TemplateComponent.prototype.updateNotice = function () {
-        var _this = this;
-        this.templateService.updateTemplate(this.noticeEditted)
-            .then(function () {
-            for (var i = 0; i < _this.templates.length; i++) {
-                if (_this.templates[i].Id == _this.noticeEditted.Id) {
-                    _this.templates[i].Name = _this.noticeEditted.Name;
-                    break;
-                }
-            }
-            _this.closeNotice();
-            _this.showInformModal("Updated");
-        })
-            .catch(function (error) { _this.handError(error); });
-    };
-    TemplateComponent.prototype.createNotice = function () {
-        var _this = this;
-        this.templateService.createTemplate(this.noticeEditted)
-            .then(function (notice) {
-            //Add notice at the beginning of the list.
-            _this.templates.splice(0, 0, notice);
-            _this.closeNotice();
-            //this.showInformModal("Created");
-        })
-            .catch(function (error) { _this.handError(error); });
+            .catch(function (error) {
+            _this.showErrorModal(error);
+        });
     };
     TemplateComponent.prototype.newNotice = function () {
-        this.noticeEditted = new template_1.Template();
-        this.templateEditting = true;
+        this.notice = new template_1.Template();
+        this.handleNotice = true;
     };
     TemplateComponent.prototype.showInformModal = function (message) {
-        this.informMessage = message;
-        this.informModal = true;
+        this.messageService.requestInform(message);
     };
     TemplateComponent.prototype.showErrorModal = function (message) {
-        this.showInformModal(message);
+        this.messageService.requestInform(message);
     };
-    TemplateComponent.prototype.handError = function (message) {
-        this.showErrorModal(message);
+    TemplateComponent.prototype.handleError = function (message) {
+        this.messageService.requestInform(message);
     };
     //Listing invitation by condition.
     TemplateComponent.prototype.listInvitation = function () {
-        alert("not yet");
+        //Not implemented.
+    };
+    TemplateComponent.prototype.writeEmail = function (notice) {
     };
     TemplateComponent = __decorate([
         core_1.Component({
             selector: 'inv-template',
             templateUrl: '/app/invitation/template.component.html',
-            directives: [primeng_1.DataGrid, primeng_1.Dialog, primeng_1.Button, primeng_1.Header, primeng_1.Tooltip]
+            directives: [primeng_1.DataGrid, primeng_1.Dialog, primeng_1.Button, primeng_1.Header, primeng_1.Tooltip, notice_editor_component_1.NoticeEditorComponent, invitation_editor_component_1.InvitationEditorComponent],
+            providers: [invitation_service_1.InvitationService]
         }), 
-        __metadata('design:paramtypes', [template_service_1.TemplateService, http_1.Http])
+        __metadata('design:paramtypes', [template_service_1.TemplateService, message_service_1.MessageService])
     ], TemplateComponent);
     return TemplateComponent;
 }());
