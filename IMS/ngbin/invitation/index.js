@@ -4,7 +4,6 @@ function __export(m) {
 }
 __export(require('./template.component'));
 __export(require('./template'));
-__export(require('./shared/mock-template'));
 var template_service_1 = require('./shared/template.service');
 exports.TemplateService = template_service_1.TemplateService;
 //# sourceMappingURL=index.js.map

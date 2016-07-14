@@ -24,9 +24,15 @@ var TemplateComponent = (function () {
     function TemplateComponent(templateService, messageService) {
         this.templateService = templateService;
         this.messageService = messageService;
+        this.noticeOption = {
+            resizable: false
+        };
         this.handleNotice = false;
         //Write Invitation
         this.handleInvitation = false;
+        this.invitationOption = {
+            resizable: false
+        };
     }
     TemplateComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -99,19 +105,39 @@ var TemplateComponent = (function () {
         this.handleNotice = true;
     };
     TemplateComponent.prototype.showInformModal = function (message) {
-        this.messageService.requestInform(message);
+        this.messageService.info(message);
     };
     TemplateComponent.prototype.showErrorModal = function (message) {
-        this.messageService.requestInform(message);
+        this.messageService.error(message);
     };
     TemplateComponent.prototype.handleError = function (message) {
-        this.messageService.requestInform(message);
+        this.messageService.error(message);
     };
     //Listing invitation by condition.
     TemplateComponent.prototype.listInvitation = function () {
-        //Not implemented.
+        //Not implemented yet.
     };
     TemplateComponent.prototype.writeEmail = function (notice) {
+        var _this = this;
+        //Fetch the default email subject & content which have been stored for the notice(=template).
+        this.templateService.getEmailTemplateContent(notice.Id)
+            .then(function (templateContent) {
+            _this.notice = notice;
+            _this.notice.Content = templateContent;
+            _this.handleInvitation = true;
+        })
+            .catch(function (error) { _this.handleError(error); });
+    };
+    TemplateComponent.prototype.invitationSuccess = function (notice) {
+        var _this = this;
+        this.messageService.info("Request completed");
+        this.handleInvitation = false;
+        //update RecruitStatus.
+        this.templateService.getRecruitStatus(notice.Id)
+            .then(function (status) {
+            notice.RecruitStatus = status;
+        })
+            .catch(function (error) { _this.handleError(error); });
     };
     TemplateComponent = __decorate([
         core_1.Component({

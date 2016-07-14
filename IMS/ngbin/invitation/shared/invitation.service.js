@@ -14,26 +14,12 @@ require('rxjs/add/operator/toPromise');
 var InvitationService = (function () {
     function InvitationService(http) {
         this.http = http;
+        this.headers = new http_1.Headers({
+            'Content-Type': 'application/json'
+        });
     }
-    InvitationService.prototype.getTemplates = function () {
-        var headers = new http_1.Headers({
-            'Content-Type': 'application/json'
-        });
-        return this.http.post("/TemplateManage/Templates", JSON.stringify({}), { headers: headers }).toPromise()
-            .then(function (response) {
-            var result = response.json();
-            if (result.Error) {
-                return Promise.reject(result.Error);
-            }
-            else {
-                return result.Data;
-            }
-        }).catch(function (error) {
-            return Promise.reject(error);
-        });
-    };
-    InvitationService.prototype.deleteTemplate = function (id) {
-        return this.http.delete("/TemplateManage/DeleteTemplate/" + id).toPromise()
+    InvitationService.prototype.saveInvitation = function (batch) {
+        return this.http.post("/Invitation/Save", JSON.stringify(batch), { headers: this.headers }).toPromise()
             .then(function (response) {
             var result = response.json();
             if (result.Error) {
@@ -46,29 +32,8 @@ var InvitationService = (function () {
             return Promise.reject(error);
         });
     };
-    InvitationService.prototype.getTemplate = function (id) {
-        var headers = new http_1.Headers({
-            'Content-Type': 'application/json'
-        });
-        return this.http.post("/TemplateManage/GetTemplate", JSON.stringify({ id: id }), { headers: headers }).toPromise()
-            .then(function (response) {
-            var result = response.json();
-            if (result.Error) {
-                return Promise.reject(result.Error);
-            }
-            else {
-                return result.Data;
-            }
-        })
-            .catch(function (error) {
-            return Promise.reject(error);
-        });
-    };
-    InvitationService.prototype.updateTemplate = function (template) {
-        var headers = new http_1.Headers({
-            'Content-Type': 'application/json'
-        });
-        return this.http.put("/TemplateManage/UpdateTemplate", JSON.stringify(template), { headers: headers }).toPromise()
+    InvitationService.prototype.sendInvitation = function (batch) {
+        return this.http.post("/Invitation/Send", JSON.stringify(batch), { headers: this.headers }).toPromise()
             .then(function (response) {
             var result = response.json();
             if (result.Error) {
@@ -77,26 +42,7 @@ var InvitationService = (function () {
             else {
                 return;
             }
-        })
-            .catch(function (error) {
-            return Promise.reject(error);
-        });
-    };
-    InvitationService.prototype.createTemplate = function (template) {
-        var headers = new http_1.Headers({
-            'Content-Type': 'application/json'
-        });
-        return this.http.post("/TemplateManage/CreateTemplate", JSON.stringify(template), { headers: headers }).toPromise()
-            .then(function (response) {
-            var result = response.json();
-            if (result.Error) {
-                return Promise.reject(result.Error);
-            }
-            else {
-                return result.Data;
-            }
-        })
-            .catch(function (error) {
+        }).catch(function (error) {
             return Promise.reject(error);
         });
     };

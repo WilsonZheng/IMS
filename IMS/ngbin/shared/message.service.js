@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var subject_1 = require('rxjs/subject');
+var global_message_1 = require('./global-message');
 var MessageService = (function () {
     function MessageService() {
         ///Confirmation Modal area.
@@ -31,7 +32,16 @@ var MessageService = (function () {
     };
     //Send message to open up Information Dialog.
     MessageService.prototype.requestInform = function (message) {
-        this.requestInformSource.next(message);
+        this.info(message);
+    };
+    MessageService.prototype.error = function (message) {
+        this.requestInformSource.next(new global_message_1.GlobalMessage("error", "error", message));
+    };
+    MessageService.prototype.info = function (message) {
+        this.requestInformSource.next(new global_message_1.GlobalMessage("info", "info", message));
+    };
+    MessageService.prototype.warn = function (message) {
+        this.requestInformSource.next(new global_message_1.GlobalMessage("warn", "warn", message));
     };
     MessageService = __decorate([
         core_1.Injectable(), 

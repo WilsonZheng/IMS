@@ -14,12 +14,12 @@ require('rxjs/add/operator/toPromise');
 var TemplateService = (function () {
     function TemplateService(http) {
         this.http = http;
-    }
-    TemplateService.prototype.getTemplates = function () {
-        var headers = new http_1.Headers({
+        this.headers = new http_1.Headers({
             'Content-Type': 'application/json'
         });
-        return this.http.post("/TemplateManage/Templates", JSON.stringify({}), { headers: headers }).toPromise()
+    }
+    TemplateService.prototype.getTemplates = function () {
+        return this.http.post("/TemplateManage/Templates", JSON.stringify({}), { headers: this.headers }).toPromise()
             .then(function (response) {
             var result = response.json();
             if (result.Error) {
@@ -47,10 +47,22 @@ var TemplateService = (function () {
         });
     };
     TemplateService.prototype.getTemplate = function (id) {
-        var headers = new http_1.Headers({
-            'Content-Type': 'application/json'
+        return this.http.post("/TemplateManage/GetTemplate", JSON.stringify({ id: id }), { headers: this.headers }).toPromise()
+            .then(function (response) {
+            var result = response.json();
+            if (result.Error) {
+                return Promise.reject(result.Error);
+            }
+            else {
+                return result.Data;
+            }
+        })
+            .catch(function (error) {
+            return Promise.reject(error);
         });
-        return this.http.post("/TemplateManage/GetTemplate", JSON.stringify({ id: id }), { headers: headers }).toPromise()
+    };
+    TemplateService.prototype.getEmailTemplateContent = function (id) {
+        return this.http.post("/TemplateManage/EmailTemplateContent", JSON.stringify({ id: id }), { headers: this.headers }).toPromise()
             .then(function (response) {
             var result = response.json();
             if (result.Error) {
@@ -65,10 +77,7 @@ var TemplateService = (function () {
         });
     };
     TemplateService.prototype.updateTemplate = function (template) {
-        var headers = new http_1.Headers({
-            'Content-Type': 'application/json'
-        });
-        return this.http.put("/TemplateManage/UpdateTemplate", JSON.stringify(template), { headers: headers }).toPromise()
+        return this.http.put("/TemplateManage/UpdateTemplate", JSON.stringify(template), { headers: this.headers }).toPromise()
             .then(function (response) {
             var result = response.json();
             if (result.Error) {
@@ -83,10 +92,22 @@ var TemplateService = (function () {
         });
     };
     TemplateService.prototype.createTemplate = function (template) {
-        var headers = new http_1.Headers({
-            'Content-Type': 'application/json'
+        return this.http.post("/TemplateManage/CreateTemplate", JSON.stringify(template), { headers: this.headers }).toPromise()
+            .then(function (response) {
+            var result = response.json();
+            if (result.Error) {
+                return Promise.reject(result.Error);
+            }
+            else {
+                return result.Data;
+            }
+        })
+            .catch(function (error) {
+            return Promise.reject(error);
         });
-        return this.http.post("/TemplateManage/CreateTemplate", JSON.stringify(template), { headers: headers }).toPromise()
+    };
+    TemplateService.prototype.getRecruitStatus = function (id) {
+        return this.http.post("/Invitation/RecruitStatus", JSON.stringify({ id: id }), { headers: this.headers }).toPromise()
             .then(function (response) {
             var result = response.json();
             if (result.Error) {

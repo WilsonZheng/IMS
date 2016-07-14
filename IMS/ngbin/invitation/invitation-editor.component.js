@@ -9,51 +9,64 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var template_1 = require('./template');
+var primeng_1 = require('primeng/primeng');
 var invitation_service_1 = require('./shared/invitation.service');
+var message_service_1 = require('../shared/message.service');
+var utility_service_1 = require('../shared/utility.service');
+var template_1 = require('./template');
+var invitation_batch_model_1 = require('./invitation-batch.model');
+var invitation_batch_transfer_1 = require('./invitation-batch.transfer');
 var InvitationEditorComponent = (function () {
-    function InvitationEditorComponent(invitationService) {
+    function InvitationEditorComponent(invitationService, messageService, utilityService) {
         this.invitationService = invitationService;
-        this.created = new core_1.EventEmitter();
-        this.updated = new core_1.EventEmitter();
-        this.canceled = new core_1.EventEmitter();
-        this.error = new core_1.EventEmitter();
+        this.messageService = messageService;
+        this.utilityService = utilityService;
+        this.success = new core_1.EventEmitter();
+        this.msgs = [];
     }
     InvitationEditorComponent.prototype.ngOnInit = function () {
+        this.invitation = new invitation_batch_model_1.InvitationBatchModel();
+        this.invitation.Subject = this.notice.Content.DefaultSubject;
+        this.invitation.Content = this.notice.Content.DefaultContent;
+        this.invitation.NoticeId = this.notice.Id;
     };
-    InvitationEditorComponent.prototype.saveNotice = function () {
-        if (this.notice.Id && this.notice.Id > 0) {
-            this.updateNotice();
-        }
-        else {
-            this.createNotice();
-        }
-    };
-    InvitationEditorComponent.prototype.cancelNotice = function () {
-        this.canceled.emit(null);
-    };
-    InvitationEditorComponent.prototype.updateNotice = function () {
+    InvitationEditorComponent.prototype.transform = function () {
         var _this = this;
-        this.invitationService.updateTemplate(this.notice)
-            .then(function () {
-            _this.updated.emit(_this.notice);
-        })
-            .catch(function (error) {
-            _this.handleError(error);
+        var emails = this.invitation.Email.replace(/\s/g, "").split(",");
+        var isValid = true;
+        emails.forEach(function (email, index, arr) {
+            if (!_this.utilityService.validEmail(email)) {
+                _this.messageService.warn(email + ' is not a valid address');
+                isValid = false;
+            }
         });
+        if (!isValid)
+            return null;
+        var batch = new invitation_batch_transfer_1.InvitationBatchTransfer(this.invitation.NoticeId, this.invitation.Subject, this.invitation.Content, emails);
+        return batch;
     };
-    InvitationEditorComponent.prototype.createNotice = function () {
+    InvitationEditorComponent.prototype.save = function () {
         var _this = this;
-        this.invitationService.createTemplate(this.notice)
-            .then(function (notice) {
-            _this.created.emit(notice);
-        })
-            .catch(function (error) {
-            _this.handleError(error);
-        });
+        var batch = this.transform();
+        if (batch) {
+            this.invitationService.saveInvitation(batch).then(function () {
+                _this.success.emit(_this.notice);
+            }).catch(function (error) { return _this.handleError(error); });
+        }
     };
-    InvitationEditorComponent.prototype.handleError = function (msg) {
-        this.error.emit(msg);
+    InvitationEditorComponent.prototype.send = function () {
+        var _this = this;
+        var batch = this.transform();
+        if (batch) {
+            this.invitationService.sendInvitation(batch).then(function () {
+                _this.success.emit(_this.notice);
+            }).catch(function (error) { return _this.handleError(error); });
+        }
+    };
+    InvitationEditorComponent.prototype.preview = function () {
+    };
+    InvitationEditorComponent.prototype.handleError = function (message) {
+        this.messageService.error(message);
     };
     __decorate([
         core_1.Input(), 
@@ -62,25 +75,15 @@ var InvitationEditorComponent = (function () {
     __decorate([
         core_1.Output(), 
         __metadata('design:type', Object)
-    ], InvitationEditorComponent.prototype, "created", void 0);
-    __decorate([
-        core_1.Output(), 
-        __metadata('design:type', Object)
-    ], InvitationEditorComponent.prototype, "updated", void 0);
-    __decorate([
-        core_1.Output(), 
-        __metadata('design:type', Object)
-    ], InvitationEditorComponent.prototype, "canceled", void 0);
-    __decorate([
-        core_1.Output(), 
-        __metadata('design:type', Object)
-    ], InvitationEditorComponent.prototype, "error", void 0);
+    ], InvitationEditorComponent.prototype, "success", void 0);
     InvitationEditorComponent = __decorate([
         core_1.Component({
             selector: 'inv-invitation-editor',
-            templateUrl: '/app/invitation/invitation-editor.component.html'
+            templateUrl: '/app/invitation/invitation-editor.component.html',
+            directives: [primeng_1.Growl],
+            providers: [invitation_service_1.InvitationService, utility_service_1.UtilityService]
         }), 
-        __metadata('design:paramtypes', [invitation_service_1.InvitationService])
+        __metadata('design:paramtypes', [invitation_service_1.InvitationService, message_service_1.MessageService, utility_service_1.UtilityService])
     ], InvitationEditorComponent);
     return InvitationEditorComponent;
 }());

@@ -40,7 +40,7 @@ th{
 }
 
 .ctrl-panel input[type=button]{
-    margin-left:10px;
+    margin-left:5px;
 }
 
 .ctrl-panel input[type=button]:first-child{
@@ -139,4 +139,13 @@ div.search-panel{
 
 .ims-form-dialog .ui-dialog{
     width:70%;
+}
+
+
+.ng-valid[required] {
+  border-left: 5px solid #42A948; /* green */
+}
+
+.ng-invalid {
+  border-left: 5px solid #a94442; /* red */
 }

@@ -38,6 +38,27 @@ namespace IMS.Controllers
 
         //Rest Call
         [HttpPost]
+        public ActionResult EmailTemplateContent(int id)
+        {
+            try
+            {
+                using (var db = new ApplicationDbContext())
+                {
+                    var template = db.Templates.Where(x => x.Id == id).SingleOrDefault();
+                    if (template == null) throw new Exception("No matching template found!");
+                    var model = JsonConvert.DeserializeObject<EmailTemplateContentViewModel>(Encoding.UTF8.GetString(template.Content));
+                    return Json(new ImsResult { Data = model });
+                }
+            }
+            catch (Exception e)
+            {
+                return Json(new ImsResult { Error = e.Message });
+            }
+        }
+
+
+
+        [HttpPost]
         public ActionResult CreateTemplate(EmailTemplateViewModel model)
         {
             try

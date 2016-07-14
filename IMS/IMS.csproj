@@ -327,7 +327,7 @@
     <Compile Include="ViewModels\EmailTemplateViewModel.cs" />
     <Compile Include="ViewModels\InvitationSearchViewModel.cs" />
     <Compile Include="ViewModels\EmailTemplateContentViewModel.cs" />
-    <Compile Include="ViewModels\InvitationViewModel.cs" />
+    <Compile Include="ViewModels\InvitationBatchViewModel.cs" />
     <Compile Include="Models\Lookup.cs" />
     <Compile Include="Models\LookupConfiguration.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -469,11 +469,14 @@
     <TypeScriptCompile Include="app\invitation\app.component.ts" />
     <TypeScriptCompile Include="app\invitation\index.ts" />
     <TypeScriptCompile Include="app\invitation\invitation-editor.component.ts" />
+    <TypeScriptCompile Include="app\invitation\invitation-batch.transfer.ts" />
+    <TypeScriptCompile Include="app\invitation\invitation-batch.model.ts" />
     <TypeScriptCompile Include="app\invitation\notice-editor.component.ts" />
+    <TypeScriptCompile Include="app\invitation\recruit-status.ts" />
     <TypeScriptCompile Include="app\invitation\shared\invitation.service.ts" />
-    <TypeScriptCompile Include="app\invitation\shared\mock-template.ts" />
     <TypeScriptCompile Include="app\invitation\shared\rest-result.ts" />
     <TypeScriptCompile Include="app\invitation\shared\template.service.ts" />
+    <TypeScriptCompile Include="app\invitation\template-content.ts" />
     <TypeScriptCompile Include="app\invitation\template.component.ts" />
     <TypeScriptCompile Include="app\invitation\main.ts" />
     <TypeScriptCompile Include="app\invitation\template.ts" />
@@ -497,7 +500,10 @@
     <TypeScriptCompile Include="app\ngsample\editor\main.ts" />
     <TypeScriptCompile Include="app\ngsample\editor\message.comp.ts" />
     <TypeScriptCompile Include="app\ngsample\editor\mylogger.svc.ts" />
+    <TypeScriptCompile Include="app\shared\global-constant.ts" />
     <TypeScriptCompile Include="app\shared\message.service.ts" />
+    <TypeScriptCompile Include="app\shared\global-message.ts" />
+    <TypeScriptCompile Include="app\shared\utility.service.ts" />
     <TypeScriptCompile Include="app\tabcontent.component.ts" />
     <TypeScriptCompile Include="app\tabs.component.ts" />
     <TypeScriptCompile Include="app\tabtitle.component.ts" />

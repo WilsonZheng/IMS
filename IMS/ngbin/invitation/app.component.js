@@ -19,9 +19,8 @@ var AppComponent = (function () {
         this.messageService = messageService;
         //Global Confirm modal
         this.confirmModal = false;
-        //Global Inform modal
-        this.informModal = false;
-        this.informMessage = "";
+        //Global Message(Growl)
+        this.msgs = [];
     }
     AppComponent.prototype.confirm = function (result) {
         this.confirmModal = false;
@@ -35,8 +34,7 @@ var AppComponent = (function () {
             });
         this.subscriptionInform =
             this.messageService.requestInform$.subscribe(function (request) {
-                _this.informModal = true;
-                _this.informMessage = request;
+                _this.msgs.push({ severity: request.severity, summary: request.summary, detail: request.detail });
             });
     };
     AppComponent.prototype.ngOnDestroy = function () {
@@ -47,7 +45,7 @@ var AppComponent = (function () {
         core_1.Component({
             selector: 'inv-app',
             templateUrl: '/app/invitation/app.component.html',
-            directives: [index_1.TemplateComponent, primeng_1.Dialog, primeng_1.Footer, primeng_1.Header, primeng_1.Button],
+            directives: [index_1.TemplateComponent, primeng_1.Dialog, primeng_1.Footer, primeng_1.Header, primeng_1.Button, primeng_1.Growl],
             providers: [template_service_1.TemplateService, http_1.HTTP_PROVIDERS, message_service_1.MessageService]
         }), 
         __metadata('design:paramtypes', [message_service_1.MessageService])
