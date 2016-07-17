@@ -18,8 +18,8 @@ var InvitationService = (function () {
             'Content-Type': 'application/json'
         });
     }
-    InvitationService.prototype.saveInvitation = function (batch) {
-        return this.http.post("/Invitation/Save", JSON.stringify(batch), { headers: this.headers }).toPromise()
+    InvitationService.prototype.sendInvitation = function (batch) {
+        return this.http.post("/Invitation/Send", JSON.stringify(batch), { headers: this.headers }).toPromise()
             .then(function (response) {
             var result = response.json();
             if (result.Error) {
@@ -32,15 +32,15 @@ var InvitationService = (function () {
             return Promise.reject(error);
         });
     };
-    InvitationService.prototype.sendInvitation = function (batch) {
-        return this.http.post("/Invitation/Send", JSON.stringify(batch), { headers: this.headers }).toPromise()
+    InvitationService.prototype.getInvitations = function (noticeIds, recruitStatusCodes) {
+        return this.http.post("/Invitation/Search", JSON.stringify({ NoticeIds: noticeIds || [], RecruitStatusCodes: recruitStatusCodes || [] }), { headers: this.headers }).toPromise()
             .then(function (response) {
             var result = response.json();
             if (result.Error) {
                 return Promise.reject(result.Error);
             }
             else {
-                return;
+                return result.Data;
             }
         }).catch(function (error) {
             return Promise.reject(error);

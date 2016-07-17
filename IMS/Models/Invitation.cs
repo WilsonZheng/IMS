@@ -14,13 +14,14 @@ namespace IMS.Models
         public string Subject { get; set; }
         public string Content { get; set; }
         public string InvitationCode { get; set; }
-        public bool IsSent { get; set; }
         public DateTime? SentAt { get; set; }
         public RecruitStatusType RecruitStatusType { get; set; }
         public int RecruitStatusTypeId { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public User UpdatedBy { get; set; }
+        public int UpdatedById { get; set; }
         public User CreatedBy { get; set; }
+        public int CreatedById { get; set; }
     }
 }

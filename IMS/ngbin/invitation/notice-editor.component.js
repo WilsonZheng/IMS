@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
+var primeng_1 = require('primeng/primeng');
 var template_service_1 = require('./shared/template.service');
 var template_1 = require('./template');
 var NoticeEditorComponent = (function () {
@@ -80,7 +81,8 @@ var NoticeEditorComponent = (function () {
         core_1.Component({
             selector: 'inv-notice-editor',
             templateUrl: '/app/invitation/notice-editor.component.html',
-            styleUrls: ['/app/invitation/notice-editor.component.css']
+            styleUrls: ['/app/invitation/notice-editor.component.css'],
+            directives: [primeng_1.Button]
         }), 
         __metadata('design:paramtypes', [template_service_1.TemplateService])
     ], NoticeEditorComponent);

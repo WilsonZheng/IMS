@@ -22,7 +22,6 @@ var InvitationEditorComponent = (function () {
         this.messageService = messageService;
         this.utilityService = utilityService;
         this.success = new core_1.EventEmitter();
-        this.msgs = [];
     }
     InvitationEditorComponent.prototype.ngOnInit = function () {
         this.invitation = new invitation_batch_model_1.InvitationBatchModel();
@@ -44,15 +43,6 @@ var InvitationEditorComponent = (function () {
             return null;
         var batch = new invitation_batch_transfer_1.InvitationBatchTransfer(this.invitation.NoticeId, this.invitation.Subject, this.invitation.Content, emails);
         return batch;
-    };
-    InvitationEditorComponent.prototype.save = function () {
-        var _this = this;
-        var batch = this.transform();
-        if (batch) {
-            this.invitationService.saveInvitation(batch).then(function () {
-                _this.success.emit(_this.notice);
-            }).catch(function (error) { return _this.handleError(error); });
-        }
     };
     InvitationEditorComponent.prototype.send = function () {
         var _this = this;
@@ -80,7 +70,7 @@ var InvitationEditorComponent = (function () {
         core_1.Component({
             selector: 'inv-invitation-editor',
             templateUrl: '/app/invitation/invitation-editor.component.html',
-            directives: [primeng_1.Growl],
+            directives: [primeng_1.Button],
             providers: [invitation_service_1.InvitationService, utility_service_1.UtilityService]
         }), 
         __metadata('design:paramtypes', [invitation_service_1.InvitationService, message_service_1.MessageService, utility_service_1.UtilityService])

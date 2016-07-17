@@ -331,6 +331,8 @@
     <Compile Include="Models\Lookup.cs" />
     <Compile Include="Models\LookupConfiguration.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="ViewModels\InvitationViewModel.cs" />
+    <Compile Include="ViewModels\ProgressSearchViewModel.cs" />
     <Compile Include="ViewModels\RecruitIndexViewModel.cs" />
     <Compile Include="ViewModels\RecruitStatusViewModel.cs" />
     <Compile Include="ViewModels\TemplateListViewModel.cs" />
@@ -352,8 +354,9 @@
     <Content Include="app\invitation\invitation-editor.component.html" />
     <Content Include="app\invitation\notice-editor.component.css" />
     <Content Include="app\invitation\notice-editor.component.html" />
+    <Content Include="app\invitation\recruit-progress.component.html" />
     <Content Include="app\invitation\systemjs.config.js" />
-    <Content Include="app\invitation\template.component.html" />
+    <Content Include="app\invitation\notice-main.component.html" />
     <Content Include="app\ngsample\editor\systemjs.config.js" />
     <Content Include="app\ngsample\forms\systemjs.config.js" />
     <Content Include="app\ngsample\router\systemjs.config.js" />
@@ -465,19 +468,21 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="app\app.route.ts" />
     <TypeScriptCompile Include="app\app.ts" />
     <TypeScriptCompile Include="app\invitation\app.component.ts" />
-    <TypeScriptCompile Include="app\invitation\index.ts" />
     <TypeScriptCompile Include="app\invitation\invitation-editor.component.ts" />
     <TypeScriptCompile Include="app\invitation\invitation-batch.transfer.ts" />
     <TypeScriptCompile Include="app\invitation\invitation-batch.model.ts" />
+    <TypeScriptCompile Include="app\invitation\invitation.ts" />
     <TypeScriptCompile Include="app\invitation\notice-editor.component.ts" />
+    <TypeScriptCompile Include="app\invitation\recruit-progress.component.ts" />
     <TypeScriptCompile Include="app\invitation\recruit-status.ts" />
     <TypeScriptCompile Include="app\invitation\shared\invitation.service.ts" />
     <TypeScriptCompile Include="app\invitation\shared\rest-result.ts" />
     <TypeScriptCompile Include="app\invitation\shared\template.service.ts" />
     <TypeScriptCompile Include="app\invitation\template-content.ts" />
-    <TypeScriptCompile Include="app\invitation\template.component.ts" />
+    <TypeScriptCompile Include="app\invitation\notice-main.component.ts" />
     <TypeScriptCompile Include="app\invitation\main.ts" />
     <TypeScriptCompile Include="app\invitation\template.ts" />
     <TypeScriptCompile Include="app\main.ts" />
@@ -503,6 +508,7 @@
     <TypeScriptCompile Include="app\shared\global-constant.ts" />
     <TypeScriptCompile Include="app\shared\message.service.ts" />
     <TypeScriptCompile Include="app\shared\global-message.ts" />
+    <TypeScriptCompile Include="app\shared\recruit-status-code.ts" />
     <TypeScriptCompile Include="app\shared\utility.service.ts" />
     <TypeScriptCompile Include="app\tabcontent.component.ts" />
     <TypeScriptCompile Include="app\tabs.component.ts" />

@@ -1,8 +1,8 @@
 "use strict";
-var InvitationBatchViewModel = (function () {
-    function InvitationBatchViewModel() {
+var Invitation = (function () {
+    function Invitation() {
     }
-    return InvitationBatchViewModel;
+    return Invitation;
 }());
-exports.InvitationBatchViewModel = InvitationBatchViewModel;
+exports.Invitation = Invitation;
 //# sourceMappingURL=invitation.js.map

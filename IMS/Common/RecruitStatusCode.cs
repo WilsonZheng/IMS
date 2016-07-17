@@ -2,9 +2,9 @@
 {
     public enum RecruitStatusCode
     {
-        InvitationCreated=1,
-        InvitationSent=2,
-        ContractReceived=3,
-        Approved=4
+        InvitationSent=1,
+        ContractReceived=2,
+        Approved=3,
+        InvitationCreated=100
     }
 }

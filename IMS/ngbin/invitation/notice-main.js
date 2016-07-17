@@ -9,25 +9,24 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var router_1 = require('@angular/router');
 var http_1 = require('@angular/http');
 var primeng_1 = require('primeng/primeng');
-var notice_main_component_1 = require('./notice-main.component');
+var index_1 = require('./index');
 var template_service_1 = require('./shared/template.service');
 var message_service_1 = require('../shared/message.service');
-var AppComponent = (function () {
-    function AppComponent(messageService) {
+var NoticeMainComponent = (function () {
+    function NoticeMainComponent(messageService) {
         this.messageService = messageService;
         //Global Confirm modal
         this.confirmModal = false;
         //Global Message(Growl)
         this.msgs = [];
     }
-    AppComponent.prototype.confirm = function (result) {
+    NoticeMainComponent.prototype.confirm = function (result) {
         this.confirmModal = false;
         this.messageService.announceResult(result);
     };
-    AppComponent.prototype.ngOnInit = function () {
+    NoticeMainComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.subscriptionConfirm =
             this.messageService.request$.subscribe(function (request) {
@@ -38,20 +37,20 @@ var AppComponent = (function () {
                 _this.msgs.push({ severity: request.severity, summary: request.summary, detail: request.detail });
             });
     };
-    AppComponent.prototype.ngOnDestroy = function () {
+    NoticeMainComponent.prototype.ngOnDestroy = function () {
         this.subscriptionConfirm.unsubscribe();
         this.subscriptionInform.unsubscribe();
     };
-    AppComponent = __decorate([
+    NoticeMainComponent = __decorate([
         core_1.Component({
             selector: 'inv-app',
             templateUrl: '/app/invitation/app.component.html',
-            directives: [notice_main_component_1.NoticeMainComponent, primeng_1.Dialog, primeng_1.Footer, primeng_1.Header, primeng_1.Button, primeng_1.Growl, router_1.ROUTER_DIRECTIVES],
+            directives: [index_1.TemplateComponent, primeng_1.Dialog, primeng_1.Footer, primeng_1.Header, primeng_1.Button, primeng_1.Growl],
             providers: [template_service_1.TemplateService, http_1.HTTP_PROVIDERS, message_service_1.MessageService]
         }), 
         __metadata('design:paramtypes', [message_service_1.MessageService])
-    ], AppComponent);
-    return AppComponent;
+    ], NoticeMainComponent);
+    return NoticeMainComponent;
 }());
-exports.AppComponent = AppComponent;
-//# sourceMappingURL=app.component.js.map
+exports.NoticeMainComponent = NoticeMainComponent;
+//# sourceMappingURL=notice-main.js.map

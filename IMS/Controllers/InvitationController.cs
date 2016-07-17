@@ -11,6 +11,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Linq;
 using System.Data.Entity;
+using LinqKit;
 
 namespace IMS.Controllers
 {
@@ -69,7 +70,6 @@ namespace IMS.Controllers
                     var status = new RecruitStatusViewModel
                     {
                         Total = result.Sum(x => x.Count),
-                        Saved = result.Where(x => x.Key == (int)RecruitStatusCode.InvitationCreated).Sum(x => x.Count),
                         Sent = result.Where(x => x.Key == (int)RecruitStatusCode.InvitationSent).Sum(x => x.Count),
                         Received = result.Where(x => x.Key == (int)RecruitStatusCode.ContractReceived).Sum(x => x.Count),
                         Approved = result.Where(x => x.Key == (int)RecruitStatusCode.Approved).Sum(x => x.Count)
@@ -84,145 +84,102 @@ namespace IMS.Controllers
         }
         
 
-        public ActionResult Save(InvitationBatchViewModel model) {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    using (var db = new ApplicationDbContext())
-                    {
-                        //Check duplicate.
-                        var duplicates = db.Invitations.Where(x => x.TemplateId == model.NoticeId && model.Emails.Contains(x.Email)).ToList();
-                        if (duplicates.Count() > 0)
-                        {
-                            throw new Exception(string.Format("Duplicated request: {0}", string.Join(", ", duplicates.Select(x => x.Email).ToArray())));
-                        }
-                        var status = db.RecruitStatusType.Where(x => x.Code == (int)RecruitStatusCode.InvitationCreated).Single();
-                        var template = db.Templates.Where(x => x.Id == model.NoticeId && x.OrgId == IMSUserUtil.OrgId && x.IsActive && x.TemplateType.Code == (int)TemplateTypeCode.Email).Single();
-                        var user = IMSUserUtil.AttachedUser(db);
-                        foreach(var email in model.Emails) {
-                            var invitation = new Invitation
-                            {
-                                TemplateId = template.Id,
-                                Email = email,
-                                Subject=model.Subject,
-                                Content=model.Content,
-                                RecruitStatusType = status,
-                                CreatedAt = DateTime.UtcNow,
-                                UpdatedAt = DateTime.UtcNow,
-                                IsSent = false,
-                                CreatedBy = user,
-                                UpdatedBy = user,
-                                InvitationCode = Convert.ToBase64String(Encoding.UTF8.GetBytes(Guid.NewGuid().ToString()))
-                            };
-                            db.Invitations.Add(invitation);
-                        }
-                        db.SaveChanges();
-                        return Json(new ImsResult());
-                    }
-                }
-                else
-                {
-                    throw new Exception("Input value is not valid!");
-                }
-            }
-            catch (Exception e) { return Json(new ImsResult{ Error = e.Message }); }
-       }
-
         public ActionResult Send(InvitationBatchViewModel model)
         {
             try
             {
+                StringBuilder smtpError = new StringBuilder();
                 if (!ModelState.IsValid) throw new Exception("Invalid Input!");
+                //To check the placeholder for the invitation link.
+                if (!model.Content.Contains(IMSContants.INVITATION_CODE_PLACEHOLER)) throw new Exception("Invitation Code Placeholder is missing!");
+
                 var invitationQueue = new List<Invitation>();
-                RecruitStatusType newRecruitStatusType;
+                RecruitStatusType recruitStatusType;
                 using (var db = new ApplicationDbContext())
                 {
-                    //Check duplicate.
-                    var duplicates=db.Invitations.Where(x => x.TemplateId == model.NoticeId && model.Emails.Contains(x.Email)).ToList();
+                    var template = db.Templates.Where(x => x.Id == model.NoticeId && x.IsActive && x.OrgId == IMSUserUtil.OrgId && x.TemplateType.Code == (int)TemplateTypeCode.Email).SingleOrDefault();
+                    if (template == null) throw new Exception("Invalid Notice");
+                    //To prevent sending a duplicate invitation.
+                    var duplicates = db.Invitations.Where(x => x.TemplateId == model.NoticeId && model.Emails.Contains(x.Email)).ToList();
                     if (duplicates.Count() > 0)
                     {
                         throw new Exception(string.Format("Duplicated request: {0}", string.Join(", ", duplicates.Select(x => x.Email).ToArray())));
                     }
+                    recruitStatusType = db.RecruitStatusType.Where(x => x.Code == (int)RecruitStatusCode.InvitationSent).Single();
+                }
 
-
-                    var template = db.Templates.Where(x => x.Id == model.NoticeId && x.IsActive && x.OrgId == IMSUserUtil.OrgId && x.TemplateType.Code == (int)TemplateTypeCode.Email).Single();
-                    newRecruitStatusType = db.RecruitStatusType.Where(x => x.Code == (int)RecruitStatusCode.InvitationSent).Single();
-                    var status = db.RecruitStatusType.Where(x => x.Code == (int)RecruitStatusCode.InvitationCreated).Single();
-                    var user = IMSUserUtil.AttachedUser(db);
-
-                    foreach (var email in model.Emails.Distinct())
-                    {
+                //To avoid holding db resource too long, make the following smtp job done separately.
+                //After finishing smtp job, get db connection to save the record. 
+                foreach (var email in model.Emails.Distinct())
+                {
+                   try {
+                        var invitationCode = Convert.ToBase64String(Encoding.UTF8.GetBytes(Guid.NewGuid().ToString()));
+                        var link = string.Format("<a href='{0}?invitationCode={1}'>{0}?invitationCode={1}</a>", IMSEnvProperties.ContractEndPoint, invitationCode);
+                        var html = model.Content.Replace(IMSContants.INVITATION_CODE_PLACEHOLER, link);
+                        EmailProvider.Send(model.Subject, email, html, IMSEnvProperties.GmailAccount, IMSEnvProperties.GmailAppPassword);
                         var invitation = new Invitation
                         {
-                            TemplateId = template.Id,
+                            TemplateId = model.NoticeId,
                             Email = email,
                             Subject = model.Subject,
-                            Content = model.Content,
-                            RecruitStatusType = status,
+                            Content = html,
+                            RecruitStatusTypeId = recruitStatusType.Id,
+                            InvitationCode = invitationCode,
+                            SentAt = DateTime.UtcNow,
+                            CreatedById = IMSUserUtil.Id,
                             CreatedAt = DateTime.UtcNow,
-                            UpdatedAt = DateTime.UtcNow,
-                            IsSent = false,
-                            CreatedBy = user,
-                            UpdatedBy = user,
-                            InvitationCode = Convert.ToBase64String(Encoding.UTF8.GetBytes(Guid.NewGuid().ToString()))
+                            UpdatedById = IMSUserUtil.Id,
+                            UpdatedAt = DateTime.UtcNow
                         };
                         invitationQueue.Add(invitation);
+                    } catch
+                    {
+                        smtpError.Append(string.Format(" {0} ",email));
                     }
+                }
+                //Save the log only for successful invitation.
+                //Return the list of failed invitation as an error message.
+                using(var db=new ApplicationDbContext())
+                {
                     db.Invitations.AddRange(invitationQueue);
                     db.SaveChanges();
                 }
-
-                StringBuilder sb = new StringBuilder();
-                foreach (var invitation in invitationQueue)
-                {
-                    try
-                    {
-                        var link = string.Format("<a href='{0}?invitationCode={1}'>{0}?invitationCode={1}</a>", IMSEnvProperties.ContractEndPoint, invitation.InvitationCode);
-                        var html = invitation.Content.Replace(IMSContants.INVITATION_CODE_PLACEHOLER,link);
-                        //check if the invitation_code_placeholder is missing. if that is the case, skip to the next.
-                        if (html.Equals(invitation.Content)) {
-                            sb.Append(invitation.Email);
-                            sb.Append(":Missing PlaceHolder ");
-                            continue;
-                        }
-                       
-                        EmailProvider.Send(invitation.Subject, invitation.Email, html, IMSEnvProperties.GmailAccount, IMSEnvProperties.GmailAppPassword);
-                        invitation.Content = html;
-                        invitation.RecruitStatusTypeId = newRecruitStatusType.Id;
-                        invitation.SentAt = DateTime.UtcNow;
-                        
-                       
-                    }
-                    catch
-                    {
-                        sb.Append(invitation.Email);
-                        sb.Append(":Smtp relating Error");
-                        
-                        //possibly
-                        //1. invalid email(well formatted but invalid)
-                        //2. smtp connection error.
-                        //3. something else.
-                    }
-                }
-
-                //Save invitation regardless of whether it has been sent or not.
-                using(var db=new ApplicationDbContext())
-                {
-                    var targets = db.Invitations.Where(x => x.TemplateId == model.NoticeId && model.Emails.Contains(x.Email)).ToList();
-                    Invitation old;
-                    foreach (var target in targets)
-                    {
-                        old = invitationQueue.Where(x => x.Email.Equals(target.Email)).Single();
-                        target.Content              =  old.Content;
-                        target.RecruitStatusTypeId = old.RecruitStatusTypeId;
-                        target.SentAt = old.SentAt;
-                    }
-                    db.SaveChanges();
-                }
-                return Json(new ImsResult { Error=sb.ToString()});
+                if (smtpError.Length>0) throw new Exception(string.Format("SMTP Error:{0}", smtpError.ToString()));
+                return Json(new ImsResult {});
             }
             catch (Exception e) { return Json(new ImsResult { Error = e.Message }); }
         }
+        
+        [HttpPost]
+        public ActionResult Search(ProgressSearchViewModel model)
+        {
+            try
+            {
+                using (var db = new ApplicationDbContext())
+                {
+                    var predicate = PredicateBuilder.True<Invitation>().And(p => p.EmailTemplate.OrgId == IMSUserUtil.OrgId);
+                    if (model.NoticeIds.Count() > 0)
+                    {
+                        predicate = predicate.And(model.NoticeIdPredicate);
+                    }
+                    if(model.RecruitStatusCodes.Count() > 0)
+                    {
+                        predicate = predicate.And(model.RecruitStatusCodePredicate);
+                    }
+                    var result = db.Invitations.Include(x=>x.RecruitStatusType)
+                        .AsExpandable()
+                        .Where(predicate).ToList()
+                        .Select(x=>new InvitationViewModel{ Email=x.Email, RecruitStatusCode=x.RecruitStatusType.Code })
+                        .OrderByDescending(x => x.Email)
+                    .ToList();
+                    return Json(new ImsResult { Data=result});
+                }
+            }
+            catch (Exception e)
+            {
+                return Json(new ImsResult { Error = e.Message });
+            }
+        }
+
     }
 }

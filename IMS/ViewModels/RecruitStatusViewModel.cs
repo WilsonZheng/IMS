@@ -8,7 +8,6 @@ namespace IMS.ViewModels
     public class RecruitStatusViewModel
     {
         public int Total { get; set; }
-        public int Saved { get; set; }
         public int Sent { get; set; }
         public int Received { get; set; }
         public int Approved { get; set; }

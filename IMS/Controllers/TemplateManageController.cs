@@ -78,20 +78,14 @@ namespace IMS.Controllers
                     };
                     db.Templates.Add(template);
                     db.SaveChanges();
+
+
                     model.Id = template.Id;
                     
+                    //clear unnecessary data.
                     model.Content = null;
-                    var recruitStatus = db.Invitations.Where(x => x.TemplateId == model.Id).GroupBy(x => x.RecruitStatusType).Select(group => new { Key = group.Key.Code, Count = group.Count() }).ToList();
-                    model.RecruitStatus =
-                    new RecruitStatusViewModel
-                    {
-                        Approved = recruitStatus.Where(x => x.Key == (int)RecruitStatusCode.Approved).Select(x => x.Count).SingleOrDefault(),
-                        Received = recruitStatus.Where(x => x.Key == (int)RecruitStatusCode.ContractReceived).Select(x => x.Count).SingleOrDefault(),
-                        Saved = recruitStatus.Where(x => x.Key == (int)RecruitStatusCode.InvitationCreated).Select(x => x.Count).SingleOrDefault(),
-                        Sent = recruitStatus.Where(x => x.Key == (int)RecruitStatusCode.Approved).Select(x => x.Count).SingleOrDefault(),
-                        Total = recruitStatus.Sum(x => x.Count)
-                    };
-
+                    //Set recruitStatus with default values.
+                    model.RecruitStatus = new RecruitStatusViewModel();
                     return Json(new ImsResult { Data=model});
                 }
             }
@@ -197,7 +191,6 @@ namespace IMS.Controllers
                             Name = x.template.Name,
                             RecruitStatus=new RecruitStatusViewModel{
                                                                       Total=x.Total,
-                                                                      Saved=x.Saved,
                                                                       Sent=x.Sent,
                                                                       Received=x.Received,
                                                                       Approved=x.Approved
@@ -253,7 +246,7 @@ namespace IMS.Controllers
                 {
                     db.Templates.Add(new Template
                     {
-                        Name = "This is test template",
+                        Name = "Job Ready Program No "+i,
                         IsActive = false,
                         Content = Encoding.UTF8.GetBytes(tmpType.Code != (int)TemplateTypeCode.Email ? "" : JsonConvert.SerializeObject(new EmailTemplateContentViewModel { DefaultSubject = "Notice", DefaultContent = "Hi" })),
                         TemplateType = tmpType,
