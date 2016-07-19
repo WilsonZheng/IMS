@@ -1,99 +1,106 @@
-﻿<h2><span style="text-decoration: underline;">VOLUNTEER INTERN/AGREEMENT</span></h2>
-<h3>Personal/Volunteer Intern Details</h3>
-<table style="height: 384px;" width="500" ; border="1">
-    <tbody>
-        <tr>
-            <td>
-                <p>Name</p>
-                <p>(As on your passport)</p>
-            </td>
-            <td>@Model.Name</td>
-        </tr>
-        <tr>
-            <td>
-                <p>Name</p>
-                <p>(Kiwi name)</p>
-            </td>
-            <td>@Model.KiwiName</td>
-        </tr>
-        <tr>
-            <td>
-                <p>Home Address</p>
-                <p>(Street name and number)</p>
-            </td>
-            <td>@Model.Address</td>
-        </tr>
-        <tr>
-            <td>
-                <p>Home Adress</p>
-                <p>(Suburb)</p>
-            </td>
-            <td>@Model.Suburb</td>
-        </tr>
-        <tr>
-            <td>Email</td>
-            <td>@Model.Email</td>
-        </tr>
-        <tr>
-            <td>Mobile</td>
-            <td>@Model.Mobile</td>
-        </tr>
-        <tr>
-            <td>Visa Status</td>
-            <td>@Model.VisaStatus</td>
-        </tr>
-        <tr>
-            <td>
-                <p>Medical Condition</p>
-                <p>(Conditions we should be aware of for your safety)</p>
-            </td>
-            <td>@Model.MedicalCondition</td>
-        </tr>
-    </tbody>
-</table>
-<h3>Identification and Documentation</h3>
-<p>Please acknowledge that you have attached a copy of your Passport and Visa.</p>
-<h3>Position of Engagement</h3>
-<p>I acknowledge that,</p>
-<ul>
-    <li>Central Station Software limited is in a partnership with industry Connect(Education Provider) to provide workplace experience and on the job training.</li>
-    <li>This arrangement/agreement to have the Volunteer/Intern on site to participate in work place training is with Industry Connect and not with the intern.</li>
-    <li>Industry Connect has brought to my personal attention that this is a <span style="text-decoration: underline;"><strong>Volunteer</strong></span> Internship and that no payment,wage,or salary or is provided for what so ever.</li>
-    <li>The Internship period is for a 3 month period, at the address shown above, from the date of this agreement any extension must be re-applied for and will need to go through an approval process with Central Station Software limited and Industry Connect.</li>
-</ul>
-<h3>Terms of Engagement</h3>
-<ul>
-    <li>Either party can cancel the internship arrangement at anytime in writing, at which time all property of Central Station Software limited must be handed over.</li>
-    <li>Central Station Software limited is under no obligation to provide any specific outcomes, results,nor should anything in this agreement be construed towards the intern being an employee,joint venturer, or partner.</li>
-    <li>The Volunteer Intern is to conduct themselves in a professional manner, agreeing to turning up to work on time,company dress code and positive character attributes.</li>
-    <li>The Volunteer intern agrees not to employ, canvass, solicit or endeavour to solicit away from the Central Station Software limited( either directly or indirectly and for whatever reason) during the term of this contract and for 1 year thereafter any client or employee or Volunteer of the Company.</li>
-    <li>Commercial information and material regarding the Company's business which the Volunteer Intern comes into contact with is confidential and the commercial property of the Company.</li>
-    <li>During the course of this Agreement or after the termination of this Agreement, the Volunteer Intern will not disclose to any unauthorised person any confidential information relating to the Company and its business acquired in the course of exercising the Volunteer Intern's responsibilities under this contract.</li>
-    <li>The Volunteer Intern indemnifies and holds harmless Central Station Software limited against claim or demand made or brought against the Company arising out of the negligence of the Volunteer Intern and shall indemnify the Company against any damage to person or property arising from the negligence of the Volunteer Intern.</li>
-    <li>The Company shall not be liable to the Volunteer Intern for any loss of or damage to the volunteer's property during or in connection with the performance of this Agreement unless caused by the negligence of the Company.</li>
-    <li>This Agreement supercedes any previous agreements,representations or discussions relating to the provision of services by the Volunteer Intern to the Company.</li>
-    <li>If at any time during the term of this Agreement the Volunteer Intern, in the course of performing services for the Company, makes, creates or originates any work(alone or with any other person) for Central Station Software Limited shall have the right to acquire the intellectual property/copyright in the work itself.</li>
-    <li>This Agreement contains the entire understanding of the parties relating to the subject matter contained herein. No termination, change, modification, amendment, or waiver of any terms or conditions is effective, unless in writing and signed by both parties to this Agreement.</li>
-</ul>
-<h3>Please sign acknowledging that,</h3>
-<p>1. Your Personal Information corect and true.</p>
-<p>2. That you understand and accept the Position of Engagement</p>
-<p>3. That you understand and accept the Terms of Engagement</p>
-<table style="height: 59px;" width="110" ; border="1">
-    <tbody>
-        <tr>
-            <td>Signature</td>
-            <td>@Model.Signature</td>
-        </tr>
-        <tr>
-            <td>Name</td>
-            <td>@Model.Name</td>
-        </tr>
-        <tr>
-            <td>Date</td>
-            <td>@Model.Date</td>
-        </tr>
-    </tbody>
-</table>
+﻿<html>
+<head>
 
+</head>
+<body>
+
+    <h2><span style="text-decoration: underline;">VOLUNTEER INTERN/AGREEMENT</span></h2>
+    <h3>Personal/Volunteer Intern Details</h3>
+    <table style="height: 384px;" width="500" ; border="1">
+        <tbody>
+            <tr>
+                <td>
+                    <p>Name</p>
+                    <p>(As on your passport)</p>
+                </td>
+                <td>@Model.Firstname @Model.Lastname</td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Name</p>
+                    <p>(Kiwi name)</p>
+                </td>
+                <td>@Model.Firstname</td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Home Address</p>
+
+                </td>
+                <td>@Model.Address</td>
+            </tr>
+
+            <tr>
+                <td>Email</td>
+                <td>@Model.Email</td>
+            </tr>
+            <tr>
+                <td>Mobile</td>
+                <td>@Model.Mobile</td>
+            </tr>
+            <tr>
+                <td>Visa Status</td>
+                <td>@Model.VisaStatus</td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Medical Condition</p>
+                    <p>(Conditions we should be aware of for your safety)</p>
+                </td>
+                <td>@Model.MedicalCondition</td>
+            </tr>
+        </tbody>
+    </table>
+    <h3>Identification and Documentation</h3>
+    <p>Please acknowledge that you have attached a copy of your Passport and Visa.</p>
+    <h3>Position of Engagement</h3>
+    <p>I acknowledge that,</p>
+    <ul>
+        <li>Central Station Software limited is in a partnership with industry Connect(Education Provider) to provide workplace experience and on the job training.</li>
+        <li>This arrangement/agreement to have the Volunteer/Intern on site to participate in work place training is with Industry Connect and not with the intern.</li>
+        <li>Industry Connect has brought to my personal attention that this is a <span style="text-decoration: underline;"><strong>Volunteer</strong></span> Internship and that no payment,wage,or salary or is provided for what so ever.</li>
+        <li>The Internship period is for a 3 month period, at the address shown above, from the date of this agreement any extension must be re-applied for and will need to go through an approval process with Central Station Software limited and Industry Connect.</li>
+    </ul>
+    <h3>Terms of Engagement</h3>
+    <ul>
+        <li>Either party can cancel the internship arrangement at anytime in writing, at which time all property of Central Station Software limited must be handed over.</li>
+        <li>Central Station Software limited is under no obligation to provide any specific outcomes, results,nor should anything in this agreement be construed towards the intern being an employee,joint venturer, or partner.</li>
+        <li>The Volunteer Intern is to conduct themselves in a professional manner, agreeing to turning up to work on time,company dress code and positive character attributes.</li>
+        <li>The Volunteer intern agrees not to employ, canvass, solicit or endeavour to solicit away from the Central Station Software limited( either directly or indirectly and for whatever reason) during the term of this contract and for 1 year thereafter any client or employee or Volunteer of the Company.</li>
+        <li>Commercial information and material regarding the Company's business which the Volunteer Intern comes into contact with is confidential and the commercial property of the Company.</li>
+        <li>During the course of this Agreement or after the termination of this Agreement, the Volunteer Intern will not disclose to any unauthorised person any confidential information relating to the Company and its business acquired in the course of exercising the Volunteer Intern's responsibilities under this contract.</li>
+        <li>The Volunteer Intern indemnifies and holds harmless Central Station Software limited against claim or demand made or brought against the Company arising out of the negligence of the Volunteer Intern and shall indemnify the Company against any damage to person or property arising from the negligence of the Volunteer Intern.</li>
+        <li>The Company shall not be liable to the Volunteer Intern for any loss of or damage to the volunteer's property during or in connection with the performance of this Agreement unless caused by the negligence of the Company.</li>
+        <li>This Agreement supercedes any previous agreements,representations or discussions relating to the provision of services by the Volunteer Intern to the Company.</li>
+        <li>If at any time during the term of this Agreement the Volunteer Intern, in the course of performing services for the Company, makes, creates or originates any work(alone or with any other person) for Central Station Software Limited shall have the right to acquire the intellectual property/copyright in the work itself.</li>
+        <li>This Agreement contains the entire understanding of the parties relating to the subject matter contained herein. No termination, change, modification, amendment, or waiver of any terms or conditions is effective, unless in writing and signed by both parties to this Agreement.</li>
+    </ul>
+    <h3>Please sign acknowledging that,</h3>
+    <p>1. Your Personal Information corect and true.</p>
+    <p>2. That you understand and accept the Position of Engagement</p>
+    <p>3. That you understand and accept the Terms of Engagement</p>
+    <table style="height: 59px;" width="110" ; border="1">
+        <tbody>
+            <tr>
+                <td>Signature</td>
+                <td>@Model.Firstname</td>
+            </tr>
+            <tr>
+                <td>Name</td>
+                <td>@Model.Firstname @Model.Lastname</td>
+            </tr>
+            <tr>
+                <td>Date</td>
+                <td>@DateTime.Now</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+
+
+
+
+</body>
+</html>
 
