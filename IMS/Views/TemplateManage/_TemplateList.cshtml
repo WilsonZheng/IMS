@@ -1,8 +1,8 @@
-﻿@model List<IMS.ViewModels.TemplateListViewModel>
+﻿@using IMS.Common
+@model List<IMS.ViewModels.TemplateListViewModel>
 <table class="table table-condensed table-striped table-bordered table-hover">
     <thead>
         <tr>
-            <th>Template Type</th>
             <th>Active</th>
             <th>Toggle Active Status</th>
             <th>Edit</th>
@@ -11,11 +11,10 @@
     <tbody>
         @foreach (var templete in Model)
         {
-            <tr class="text-center">
-                <td>@templete.Description</td>
+           <tr class="text-center">
                 <td>@(templete.IsActive)</td>
                 <td><span tmpId="@(templete.Id)" class="glyphicon glyphicon-refresh clickable ims-remove"></span></td>
-                <td><span tmpId="@(templete.Id)" class="glyphicon glyphicon-pencil clickable ims-edit"></span></td>
+                <td><span data-template-type-code="@TemplateTypeCode.Contract" tmpId="@(templete.Id)" class="glyphicon glyphicon-pencil clickable ims-edit"></span></td>
             </tr>
         }
     </tbody>

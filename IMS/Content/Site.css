@@ -1,5 +1,5 @@
 ﻿body {
-    padding-top: 60px;
+    padding-top:0px;
     padding-bottom: 20px;
 }
 
@@ -35,10 +35,115 @@ th{
     cursor: pointer;
 }
 
+.ctrl-panel{
+    text-align:right;
+}
+
 .ctrl-panel input[type=button]{
-    margin-left:10px;
+    margin-left:5px;
 }
 
 .ctrl-panel input[type=button]:first-child{
     margin-left:0px;
+}
+
+td [class*="cm-"] {
+  margin-left:10px;  
+}
+
+td [class*="cm-"]:first-child{
+    margin-left:0px;
+}
+
+div.search-panel{
+    margin-bottom:5px;
+}
+
+.modal-body{
+    padding:10px 0 0 10px;
+}
+.modal-footer{
+    padding:4px;
+}
+
+.ims-title-bar{
+    font-size:1.3em;
+    font-weight:200;
+    background-color:lightgray;
+    padding:5px;
+    margin-bottom:10px;
+    border:1px solid;
+
+}
+
+.cm-delete-applicant,.cm-resend-invitation{
+    display:none;
+}
+
+.ims-del .cm-delete-applicant,.ims-email .cm-resend-invitation{
+    display:inline-block;
+}
+
+#ims-section-smtp-config .ims-vs-editting
+{
+    display:none;
+}
+
+
+#ims-section-smtp-config.ims-editting .cm-edit{
+    display:none;
+}
+
+
+.ims-main-title{
+    font-weight:bold;
+    font-size:2em;
+}
+
+.ims-content-title{
+    font-weight:bold;
+    font-size:1.2em;
+    height:1.3em;
+    line-height:1.3em;
+    overflow:hidden;
+}
+
+.ims-recruit-status .ims-label{
+    display:inline-block;
+    width:70px;
+    
+    text-align:right;
+    margin-right:4px;
+    font-weight:bold;
+}
+
+.ims-recruit-status .ims-content-title {
+    text-align:center;
+    border-bottom:1px solid darkgray;
+
+}
+
+.ims-recruit-status .ims-label,.ims-recruit-status .ims-value{
+    line-height:1.2em;
+    font-size:1.2em;
+}
+
+.ims-recruit-status .clickable:hover{
+   background-color:black;
+   color:white;
+}
+
+#ims-template-manage .form-control{
+    font-size:12px;
+}
+
+.ims-form-dialog .ui-dialog{
+    width:70%;
+}
+
+
+.ims-link-label:hover{
+    font-weight:400;
+    color:blue;
+    cursor:pointer;    
 }

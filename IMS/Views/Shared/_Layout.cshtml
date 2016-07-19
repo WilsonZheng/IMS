@@ -3,13 +3,81 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>IMS V1.0</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <link rel="stylesheet"  type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.12/datatables.min.css" String />
+    <script type="text/javascript"  src="https://cdn.datatables.net/v/bs/dt-1.10.12/datatables.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/app.js"></script>
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <!--Progress bar-->
+    <div class="text-center" id="ajaxProgress" style="position:absolute;bottom:0%;width:100%;z-index:999;display:none;">
+    <div class="progress" style="position:relative;width:200px;margin:0px auto;">
+        <div class="progress-bar text-center" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;width:100%;">
+            loading.....    
+        </div>
+    </div>
+    </div>
+
+    <!-- Alert Modal -->
+    <div class="modal" id="modalAlert" tabindex="-1" role="dialog" aria-labelledby="modalAlertLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <!--
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modalAlertLabel">Alert</h4>
+                </div>
+                    -->
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div class="modal" id="modalConfirm" tabindex="-1" role="dialog" aria-labelledby="modalConfirmLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <!--
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modalConfirmLabel">Confirm</h4>
+                </div>
+-->
+                <div class="modal-body"><span class="ims-message"></span></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default cfm-yes" data-dismiss="modal">Yes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inform Modal -->
+    <div class="modal" id="modalInform" tabindex="-1" role="dialog" aria-labelledby="modalInformLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <!--
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modalInformLabel">Information</h4>
+                </div>
+                -->
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="navbar navbar-inverse">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -21,9 +89,19 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Template","Index","TemplateManage")</li>
-                    <li>@Html.ActionLink("Recruit", "Index", "Recruit")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Settings<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Contract Template", "Index", "TemplateManage")</li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Recruit <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Notice", "Index", "Invitation")</li>
+                            <li>@Html.ActionLink("Progress", "Index", "Recruit")</li>
+                        </ul>
+                    </li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -31,14 +109,28 @@
     </div>
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <footer>
-          
-        </footer>
+       
     </div>
-
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
+    <script>
+        $(function () {
+            var progressBar = $("#ajaxProgress");
+            $(document).ajaxStart(function () {
+                progressBar.show();
+            });
+            $(document).ajaxStop(function () {
+                progressBar.hide();
+            });
+
+
+
+        });
+    </script>
 </body>
+
+
+
+
+
 </html>

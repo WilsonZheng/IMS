@@ -9,8 +9,8 @@ namespace IMS.Models
             this.Property(x => x.Description).IsRequired();
             this.Property(x => x.Code).IsRequired();
             this.Map<RecruitStatusType>(x => x.Requires("EntityType").HasValue("RecruitStatusType"))
-                .Map<TemplateType>(x => x.Requires("EntityType").HasValue("TemplateType"));
-
+                .Map<TemplateType>(x => x.Requires("EntityType").HasValue("TemplateType"))
+                .Map<ConfigurationType>(x => x.Requires("EntityType").HasValue("ConfigurationType"));
         }
     }
 }

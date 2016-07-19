@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -25,6 +26,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TypeScriptToolsVersion>1.8</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -272,12 +274,20 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Common\ConfigurationTypeCode.cs" />
+    <Compile Include="Common\FixedIsoDateTimeConverter.cs" />
+    <Compile Include="Common\ImsGmailProvider.cs" />
+    <Compile Include="Common\IEmailProvider.cs" />
+    <Compile Include="Common\IMSEnvProperties.cs" />
+    <Compile Include="Common\ImsResult.cs" />
     <Compile Include="Common\IOptionProvider.cs" />
     <Compile Include="Common\OptionProvider.cs" />
     <Compile Include="Common\TemplateTypeCode.cs" />
     <Compile Include="Common\IMSContants.cs" />
     <Compile Include="Common\IMSUserUtil.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ConfigurationController.cs" />
+    <Compile Include="Controllers\InvitationController.cs" />
     <Compile Include="Controllers\JayTestController.cs" />
     <Compile Include="Controllers\RecruitController.cs" />
     <Compile Include="Controllers\RegistrationController.cs" />
@@ -295,6 +305,9 @@
     <Compile Include="Models\ApplicationRoleManager.cs" />
     <Compile Include="Models\ApplicationSignInManager.cs" />
     <Compile Include="Models\ApplicationUserManager.cs" />
+    <Compile Include="Models\Configuration.cs" />
+    <Compile Include="Models\ConfigurationConfiguration.cs" />
+    <Compile Include="Models\ConfigurationType.cs" />
     <Compile Include="Models\CustomRole.cs" />
     <Compile Include="Models\CustomRoleConfiguration.cs" />
     <Compile Include="Models\CustomRoleStore.cs" />
@@ -308,12 +321,20 @@
     <Compile Include="Models\GenerateViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Common\RecruitStatusCode.cs" />
+    <Compile Include="Models\Invitation.cs" />
+    <Compile Include="Models\InvitationConfiguration.cs" />
     <Compile Include="ViewModels\ApplicantSearchViewModel.cs" />
-    <Compile Include="ViewModels\InvitationViewModel.cs" />
+    <Compile Include="ViewModels\EmailTemplateViewModel.cs" />
+    <Compile Include="ViewModels\InvitationSearchViewModel.cs" />
+    <Compile Include="ViewModels\EmailTemplateContentViewModel.cs" />
+    <Compile Include="ViewModels\InvitationBatchViewModel.cs" />
     <Compile Include="Models\Lookup.cs" />
     <Compile Include="Models\LookupConfiguration.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="ViewModels\InvitationViewModel.cs" />
+    <Compile Include="ViewModels\ProgressSearchViewModel.cs" />
     <Compile Include="ViewModels\RecruitIndexViewModel.cs" />
+    <Compile Include="ViewModels\RecruitStatusViewModel.cs" />
     <Compile Include="ViewModels\TemplateListViewModel.cs" />
     <Compile Include="ViewModels\TemplateViewModel.cs" />
     <Compile Include="Models\Org.cs" />
@@ -329,19 +350,45 @@
     <Compile Include="ViewModels\ApplicantInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\invitation\app.component.html" />
+    <Content Include="app\invitation\invitation-editor.component.html" />
+    <Content Include="app\invitation\notice-editor.component.css" />
+    <Content Include="app\invitation\notice-editor.component.html" />
+    <Content Include="app\invitation\notice-main.component.css" />
+    <Content Include="app\invitation\recruit-progress.component.html" />
+    <Content Include="app\invitation\systemjs.config.js" />
+    <Content Include="app\invitation\notice-main.component.html" />
+    <Content Include="app\ngsample\editor\systemjs.config.js" />
+    <Content Include="app\ngsample\forms\systemjs.config.js" />
+    <Content Include="app\ngsample\router\systemjs.config.js" />
+    <Content Include="ngbin\app.tabs.html" />
+    <Content Include="ngbin\tabcontent.tp.html" />
+    <Content Include="ngbin\tabs.tp.html" />
+    <Content Include="ngbin\tabtitle.tp.html" />
+    <Content Include="app\systemjs.config.js" />
+    <Content Include="app\tooltip\overlay.js" />
+    <Content Include="app\tooltip\tooltip.js" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="ngsample\editor\index.html" />
+    <Content Include="ngsample\forms\index.html" />
+    <Content Include="app\ngsample\forms\hero-form.component.html" />
+    <Content Include="ngsample\router\index.html" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
+    <Content Include="Scripts\app.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="package.json" />
+    <Content Include="app\tooltip\overlay.js.map" />
+    <Content Include="app\tooltip\tooltip.js.map" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -354,7 +401,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -398,11 +447,17 @@
     <Content Include="Views\JayTest\Index.cshtml" />
     <Content Include="Views\Registration\AddApplicant.cshtml" />
     <Content Include="Views\Recruit\Index.cshtml" />
-    <Content Include="Views\Recruit\_List.cshtml" />
     <Content Include="Views\Recruit\NewOrModify.cshtml" />
+    <Content Include="Views\Recruit\InvitationTemplate.cshtml" />
+    <Content Include="Views\Configuration\Smtp.cshtml" />
+    <Content Include="tsconfig.json" />
+    <Content Include="typings.json" />
+    <Content Include="Views\Invitation\Index.cshtml" />
+    <Content Include="Views\TemplateManage\_NewOrModifyEmail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\font-awesome-4.6.3\" />
     <Folder Include="Views\wilsonTest\" />
   </ItemGroup>
   <ItemGroup>
@@ -413,11 +468,66 @@
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="app\app.route.ts" />
+    <TypeScriptCompile Include="app\app.ts" />
+    <TypeScriptCompile Include="app\invitation\app.component.ts" />
+    <TypeScriptCompile Include="app\invitation\invitation-editor.component.ts" />
+    <TypeScriptCompile Include="app\invitation\invitation-batch.transfer.ts" />
+    <TypeScriptCompile Include="app\invitation\invitation-batch.model.ts" />
+    <TypeScriptCompile Include="app\invitation\invitation.ts" />
+    <TypeScriptCompile Include="app\invitation\notice-editor.component.ts" />
+    <TypeScriptCompile Include="app\invitation\recruit-progress.component.ts" />
+    <TypeScriptCompile Include="app\invitation\recruit-status.ts" />
+    <TypeScriptCompile Include="app\invitation\shared\invitation.service.ts" />
+    <TypeScriptCompile Include="app\invitation\shared\rest-result.ts" />
+    <TypeScriptCompile Include="app\invitation\shared\template.service.ts" />
+    <TypeScriptCompile Include="app\invitation\template-content.ts" />
+    <TypeScriptCompile Include="app\invitation\notice-main.component.ts" />
+    <TypeScriptCompile Include="app\invitation\main.ts" />
+    <TypeScriptCompile Include="app\invitation\template.ts" />
+    <TypeScriptCompile Include="app\main.ts" />
+    <TypeScriptCompile Include="app\fancybutton.component.ts" />
+    <TypeScriptCompile Include="app\multi.component.ts" />
+    <TypeScriptCompile Include="app\ngsample\forms\app.ts" />
+    <TypeScriptCompile Include="app\ngsample\forms\main.ts" />
+    <TypeScriptCompile Include="app\ngsample\forms\hero-form.component.ts" />
+    <TypeScriptCompile Include="app\ngsample\forms\hero.ts" />
+    <TypeScriptCompile Include="app\ngsample\router\app.route.ts" />
+    <TypeScriptCompile Include="app\ngsample\router\app.ts" />
+    <TypeScriptCompile Include="app\ngsample\router\main.ts" />
+    <TypeScriptCompile Include="app\ngsample\router\crisis-center.component.ts" />
+    <TypeScriptCompile Include="app\ngsample\router\hero-detail.component.ts" />
+    <TypeScriptCompile Include="app\ngsample\router\hero-home.component.ts" />
+    <TypeScriptCompile Include="app\ngsample\router\hero-list.component.ts" />
+    <TypeScriptCompile Include="app\ngsample\router\index.ts" />
+    <TypeScriptCompile Include="app\panel.component.ts" />
+    <TypeScriptCompile Include="app\ngsample\editor\app.ts" />
+    <TypeScriptCompile Include="app\ngsample\editor\main.ts" />
+    <TypeScriptCompile Include="app\ngsample\editor\message.comp.ts" />
+    <TypeScriptCompile Include="app\ngsample\editor\mylogger.svc.ts" />
+    <TypeScriptCompile Include="app\shared\global-constant.ts" />
+    <TypeScriptCompile Include="app\shared\message.service.ts" />
+    <TypeScriptCompile Include="app\shared\global-message.ts" />
+    <TypeScriptCompile Include="app\shared\recruit-status-code.ts" />
+    <TypeScriptCompile Include="app\shared\utility.service.ts" />
+    <TypeScriptCompile Include="app\tabcontent.component.ts" />
+    <TypeScriptCompile Include="app\tabs.component.ts" />
+    <TypeScriptCompile Include="app\tabtitle.component.ts" />
+    <TypeScriptCompile Include="app\textinput.component.ts" />
+    <TypeScriptCompile Include="app\todolist.component.ts" />
+    <TypeScriptCompile Include="app\tooltip\overlay.ts" />
+    <TypeScriptCompile Include="app\tooltip\tooltip.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">

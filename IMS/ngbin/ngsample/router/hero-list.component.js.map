@@ -1,0 +1,1 @@
+{"version":3,"file":"hero-list.component.js","sourceRoot":"","sources":["../../../app/ngsample/router/hero-list.component.ts"],"names":[],"mappings":";;;;;;;;;;AAAC,qBAAkC,eAAe,CAAC,CAAA;AAKnD;IAAA;IAAiC,CAAC;IAJlC;QAAC,gBAAS,CAAC;YACP,QAAQ,EAAE,gBAAgB;YAC1B,QAAQ,EAAE,mBAAmB;SAChC,CAAC;;yBAAA;IAC+B,wBAAC;AAAD,CAAC,AAAlC,IAAkC;AAArB,yBAAiB,oBAAI,CAAA"}

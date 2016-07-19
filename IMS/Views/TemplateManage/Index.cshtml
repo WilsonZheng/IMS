@@ -1,13 +1,40 @@
-﻿<div id="template-list">
+﻿@using IMS.Common
+<div class="ims-title-bar">Contract Template</div>
+<div id="template-list">
 @{Html.RenderAction("List");}
 </div>
 <div id="tmpl-edit"></div>
+
+<!--
+<div id="ims-section-smtp-config">
+    <div class="ims-title-bar">
+        <span style="vertical-align:middle">Stmp</span>
+        <button type="button" style="float:right;" class="ims-hide-read cm-save btn btn-default btn-sm">Save</button>
+        <button type="button" style="float:right;" class="ims-hide-read cm-cancel btn btn-default btn-sm">Cancel</button>
+        <button type="button" style="float:right;" class="ims-hide-edit cm-edit btn btn-default btn-sm">Edit</button>
+        <div class="clearfix"></div>
+    </div>
+    <div class="ims-hide-read">
+        <form>
+            <textarea class="form-control" id="Config" style="height:20em"></textarea>
+        </form>
+    </div>
+</div>
+//-->
+
 @section Scripts
 {
     <script>
         jQuery(function () {
-            $("#template-list").on('click','*.ims-edit', function () {
-                $("#tmpl-edit").load("/TemplateManage/Edit?id=" + $(this).attr("tmpId"));
+            $("#template-list").on('click', '*.ims-edit', function () {
+                var templateTypeCode = $(this).attr('data-template-type-code');
+                var emailCode = '@((int)TemplateTypeCode.Email)';
+                if (templateTypeCode == emailCode) {
+                    $("#tmpl-edit").load("/TemplateManage/EditEmailTemplate?id=" + $(this).attr("tmpId"));
+                }
+                else {
+                    $("#tmpl-edit").load("/TemplateManage/Edit?id=" + $(this).attr("tmpId"));
+                }
             });
 
             $("#template-list").on('click','*.ims-remove', function () {
@@ -30,6 +57,29 @@
             $("#tmpl-edit").on('click', '#btnCancel', function () {
                     $("#tmpl-edit").html("");
             });
+
+            var $smtpSection = $("#ims-section-smtp-config");
+            $smtpSection.on('click',".cm-edit", function () {
+                $smtpSection.addClass("ims-editting");
+                //$.get("/Configuration/Smtp").then(function (response) {
+                //    if (response.Error) {
+                //        Ims.alert(Response.Error);
+                //    }
+                //    else {
+                //        $section.addClass("ims-editting");
+                //        $("#Config").val(response.Config);
+                //    }
+                //});
+            });
+
+            $smtpSection.on('click', ".cm-cancel", function () {
+                $smtpSection.removeClass("ims-editting");
+            });
+
+            $smtpSection.on('click', ".cm-save", function () {
+                $smtpSection.removeClass("ims-editting");
+            });
+
         });
     </script>
 

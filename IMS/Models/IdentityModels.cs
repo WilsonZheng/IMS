@@ -26,8 +26,8 @@ namespace IMS.Models
         {
             // Set the database intializer which is run once during application start
             // This seeds the database with admin user credentials and admin role
-            //Database.SetInitializer<ApplicationDbContext>(null);//to use current db tables(faster)
-            Database.SetInitializer<ApplicationDbContext>(new ApplicationDbInitializer());//to generate db tables automatically
+            Database.SetInitializer<ApplicationDbContext>(null);//to use current db tables(faster)
+            //Database.SetInitializer<ApplicationDbContext>(new ApplicationDbInitializer());//to generate db tables automatically
         }
 
 
@@ -45,16 +45,19 @@ namespace IMS.Models
             modelBuilder.Configurations.Add(new CustomUserClaimConfiguration());
             modelBuilder.Configurations.Add(new CustomUserLoginConfiguration());
             modelBuilder.Configurations.Add(new CustomRoleConfiguration());
+            modelBuilder.Configurations.Add(new ConfigurationConfiguration());
+            modelBuilder.Configurations.Add(new InvitationConfiguration());
         }
 
         public DbSet<Applicant> Applicants { get; set; }
- 
         public DbSet<Org> Orgs { get; set; }
         public DbSet<Lookup> Lookups { get; set; }
         public DbSet<RecruitStatusType> RecruitStatusType { get; set;}
         public DbSet<TemplateType> TemplateTypes { get; set; }
+        public DbSet<ConfigurationType> ConfigurationTypes { get; set; }
         public DbSet<Template> Templates { get; set; }
-        
+        public DbSet<Configuration> Configurations { get; set; }
+        public DbSet<Invitation> Invitations { get; set; }
     }
     
     public class ApplicationDbInitializer : DropCreateDatabaseAlways<ApplicationDbContext>
@@ -88,20 +91,16 @@ namespace IMS.Models
                 Email = "intern@test.com",
                 Org = org
             });
-
             
-
-
             var user = userManager.FindByName("leader@test.com");
             userManager.AddToRole(user.Id, "leader");
 
             user = userManager.FindByName("admin@test.com");
             userManager.AddToRole(user.Id,"admin");
-                       
-                                    
-            context.RecruitStatusType.Add(new RecruitStatusType { Code = (int)RecruitStatusCode.InvitationCreated, Description = "Created Invitation",CreatedBy=user,UpdatedBy=user,CreatedAt=DateTime.UtcNow,UpdatedAt=DateTime.UtcNow,IsActive=true });
-            context.RecruitStatusType.Add(new RecruitStatusType { Code = (int)RecruitStatusCode.InvitationSent,Description="Sent Invitation", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
-            context.RecruitStatusType.Add(new RecruitStatusType { Code = (int)RecruitStatusCode.ContractReceived,Description="Received Contract", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
+
+            context.ConfigurationTypes.Add(new ConfigurationType { Code = (int)ConfigurationTypeCode.Smtp, Description = "Smtp", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });                   
+            context.RecruitStatusType.Add(new RecruitStatusType { Code = (int)RecruitStatusCode.InvitationSent,Description="Sent", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
+            context.RecruitStatusType.Add(new RecruitStatusType { Code = (int)RecruitStatusCode.ContractReceived,Description="Replied", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
             context.RecruitStatusType.Add(new RecruitStatusType { Code = (int)RecruitStatusCode.Approved,Description="Approved", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
             context.TemplateTypes.Add(new TemplateType { Code =(int)TemplateTypeCode.Email, Description = "Email", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
             context.TemplateTypes.Add(new TemplateType { Code =(int)TemplateTypeCode.Contract, Description = "Contract", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });
