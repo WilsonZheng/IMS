@@ -166,10 +166,16 @@ namespace IMS.Controllers
                     {
                         predicate = predicate.And(model.RecruitStatusCodePredicate);
                     }
-                    var result = db.Invitations.Include(x=>x.RecruitStatusType)
+                    var result = db.Invitations
+                        .Include(x=>x.RecruitStatusType)
+                        .Include(x=>x.EmailTemplate)
                         .AsExpandable()
                         .Where(predicate).ToList()
-                        .Select(x=>new InvitationViewModel{ Email=x.Email, RecruitStatusCode=x.RecruitStatusType.Code })
+                        .Select(x=>new InvitationViewModel{
+                            NoticeId=x.TemplateId,
+                            NoticeName=x.EmailTemplate.Name,
+                            Email =x.Email,
+                            RecruitStatusCode =x.RecruitStatusType.Code })
                         .OrderByDescending(x => x.Email)
                     .ToList();
                     return Json(new ImsResult { Data=result});
@@ -181,5 +187,44 @@ namespace IMS.Controllers
             }
         }
 
+
+        [HttpPost]
+        public ActionResult Delete(InvitationViewModel model)
+        {
+            try
+            {
+                using (var db = new ApplicationDbContext())
+                {
+                    var result = db.Invitations.Where(x => x.Email == model.Email && x.TemplateId == model.NoticeId && x.EmailTemplate.OrgId == IMSUserUtil.OrgId).SingleOrDefault();
+                    if (result == null) throw new Exception("Not found");
+                    db.Invitations.Remove(result);
+                    db.SaveChanges();
+                    return Json(new ImsResult { });
+                }
+            }
+            catch (Exception e)
+            {
+                return Json(new ImsResult { Error = e.Message });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Resend(InvitationViewModel model)
+        {
+            try
+            {
+                using (var db = new ApplicationDbContext())
+                {
+                    var result = db.Invitations.Where(x => x.Email == model.Email && x.TemplateId == model.NoticeId && x.EmailTemplate.OrgId == IMSUserUtil.OrgId).SingleOrDefault();
+                    if (result == null) throw new Exception("Not found");
+                    EmailProvider.Send(result.Subject,model.Email,result.Content, IMSEnvProperties.GmailAccount, IMSEnvProperties.GmailAppPassword);
+                    return Json(new ImsResult { });
+                }
+            }
+            catch (Exception e)
+            {
+                return Json(new ImsResult { Error = e.Message });
+            }
+        }
     }
 }

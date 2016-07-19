@@ -46,6 +46,34 @@ var InvitationService = (function () {
             return Promise.reject(error);
         });
     };
+    InvitationService.prototype.deleteInvitation = function (invitation) {
+        return this.http.post("/Invitation/Delete", JSON.stringify(invitation), { headers: this.headers }).toPromise()
+            .then(function (response) {
+            var result = response.json();
+            if (result.Error) {
+                return Promise.reject(result.Error);
+            }
+            else {
+                return;
+            }
+        }).catch(function (error) {
+            return Promise.reject(error);
+        });
+    };
+    InvitationService.prototype.resendInvitation = function (invitation) {
+        return this.http.post("/Invitation/Resend", JSON.stringify(invitation), { headers: this.headers }).toPromise()
+            .then(function (response) {
+            var result = response.json();
+            if (result.Error) {
+                return Promise.reject(result.Error);
+            }
+            else {
+                return;
+            }
+        }).catch(function (error) {
+            return Promise.reject(error);
+        });
+    };
     InvitationService = __decorate([
         core_1.Injectable(), 
         __metadata('design:paramtypes', [http_1.Http])

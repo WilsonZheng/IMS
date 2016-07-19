@@ -45,5 +45,36 @@ export class InvitationService {
                 return Promise.reject(error);
             });
     }
+
+
+    deleteInvitation(invitation: Invitation): Promise<void> {
+        return this.http.post("/Invitation/Delete", JSON.stringify(invitation), { headers: this.headers }).toPromise()
+            .then(response => {
+                var result: RestResult = response.json();
+                if (result.Error) {
+                    return Promise.reject(result.Error);
+                }
+                else {
+                    return;
+                }
+            }).catch((error) => {
+                return Promise.reject(error);
+            });
+    }
+
+    resendInvitation(invitation: Invitation): Promise<void> {
+        return this.http.post("/Invitation/Resend", JSON.stringify(invitation), { headers: this.headers }).toPromise()
+            .then(response => {
+                var result: RestResult = response.json();
+                if (result.Error) {
+                    return Promise.reject(result.Error);
+                }
+                else {
+                    return;
+                }
+            }).catch((error) => {
+                return Promise.reject(error);
+            });
+    }
    
 }

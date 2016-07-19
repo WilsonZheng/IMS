@@ -1,6 +1,6 @@
 ﻿/// <reference path="../../node_modules/rxjs/add/operator/toPromise.d.ts" />
 import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
-import { DataTable, Column, Dialog, Header, Button, Menu, MenuItem } from 'primeng/primeng';
+import { DataTable, Column, Dialog, Header, Button, Menu, MenuItem, Tooltip, DataList } from 'primeng/primeng';
 import { Subscription } from 'rxjs/Subscription';
 
 //Custom service
@@ -13,6 +13,7 @@ import { MessageService } from '../shared/message.service';
 import { Template } from './template';
 import { RestResult } from './shared/rest-result';
 import { RecruitStatusCode } from '../shared/recruit-status-code';
+import { Invitation } from './invitation';
 
 //Custom Component
 import { NoticeEditorComponent } from  './notice-editor.component';
@@ -22,12 +23,15 @@ import { RecruitProgressComponent } from './recruit-progress.component';
 @Component({
     selector: 'inv-notice-main',
     templateUrl:'app/invitation/notice-main.component.html',
-    styleUrls:["app/invitation/notice-main.component.css"],
-    directives: [ DataTable, Column, Dialog, Button, Header, Menu, NoticeEditorComponent, InvitationEditorComponent, RecruitProgressComponent ],
+    styleUrls: ["app/invitation/notice-main.component.css"],
+    directives: [DataTable, Column, Dialog, Button, Header, Menu, NoticeEditorComponent
+        , InvitationEditorComponent, RecruitProgressComponent, Tooltip, DataList],
     providers: [InvitationService]
 })
 export class NoticeMainComponent implements OnInit {
+
     
+
     templates: Template[];
     confirmSubscription: Subscription;
 
@@ -41,16 +45,7 @@ export class NoticeMainComponent implements OnInit {
     private menuItems: MenuItem[];
 
     ngOnInit() {
-
-        this.templateService.getTemplates()
-            .then(templates => {
-                this.templates = templates;
-                //for (var i = 0; i < this.templates.length; i++) {
-                //    this.templates[i].RecruitStatus.Received = i;
-                //}
-            })
-            .catch(error => { this.handleError(error); });
-  
+        this.loadNotice();
         this.headerRows = [
            // {
            //     columns: [{ header: "Title", rowspan: 2, filter: true, field: "Name", filterMatchMode:"contains", sortable:true}, {header:"Progress", colspan:4 }]
@@ -62,7 +57,7 @@ export class NoticeMainComponent implements OnInit {
         this.menuItems = [
                         { label: 'Send Invitation', icon: 'fa-envelope-o', command: (event) => { this.writeEmail(); } },
                         { label: 'Edit', icon: 'fa-edit', command: (event) => { this.editNotice(); } },
-                        { label: 'Delete', icon: 'fa-trash-o', command: (event) => { this.deleteNotice(); }}
+                        { label: 'Archive', icon: 'fa-archive', command: (event) => { this.deleteNotice(); }}
         ];
     }
     
@@ -79,7 +74,17 @@ export class NoticeMainComponent implements OnInit {
         resizable: false
     }
     handleNotice: boolean = false;
-       
+
+    private loadNotice() {
+        this.templateService.getTemplates()
+            .then(templates => {
+                this.templates = templates;
+                
+            })
+            .catch(error => { this.handleError(error); });
+    }
+
+
     //notice manipulation callback.
     noticeUpdated(notice: Template) {
                 for (var i = 0; i < this.templates.length; i++) {
@@ -165,8 +170,6 @@ export class NoticeMainComponent implements OnInit {
         resizable:false
     }
     writeEmail() {
-
-        
         //Fetch the default email subject & content which have been stored for the notice(=template).
         this.templateService.getEmailTemplateContent(this.notice.Id)
             .then((templateContent) => {
@@ -193,13 +196,82 @@ export class NoticeMainComponent implements OnInit {
         this.menuComponent.toggle(event);
     }
     
-    progress(event: Event, notice: Template) {
-        this.invitationService.getInvitations([notice.Id],[]).then((result) => {
-           
-           
-           
+    //Search Intivation.
+    
+    private invitations: Invitation[];
+    progressTotal(event: Event, notice: Template) {
+        this.invitationService.getInvitations([notice.Id], []).then((result) => {
+            this.invitations = result;
         })
         .catch(error => { this.handleError(error); });
+    }
+    
+    progressSent(event: Event, notice: Template) {
+        this.invitationService.getInvitations([notice.Id], [RecruitStatusCode.InvitationSent]).then((result) => {
+            this.invitations = result;
+        })
+            .catch(error => { this.handleError(error); });
+    }
+
+    progressReplied(event: Event, notice: Template) {
+        this.invitationService.getInvitations([notice.Id], [RecruitStatusCode.ContractReceived]).then((result) => {
+            this.invitations = result;
+        })
+            .catch(error => { this.handleError(error); });
+    }
+
+
+    progressApproved(event: Event, notice: Template) {
+        this.invitationService.getInvitations([notice.Id], [RecruitStatusCode.Approved]).then((result) => {
+            this.invitations = result;
+        })
+            .catch(error => { this.handleError(error); });
+    }
+    
+    private resend(invitation: Invitation) {
+        this.messageService.request();
+        this.confirmSubscription = this.messageService.result.subscribe((result) => {
+            this.confirmSubscription.unsubscribe();
+            if (result == 1) {
+                this.proceedResend(invitation);
+            }
+        });
+        
+    }
+    
+    private proceedResend(invitation: Invitation) {
+        this.invitationService.resendInvitation(invitation)
+            .then(() => {
+                this.showInformModal("Completed");
+            })
+            .catch(error => { this.handleError(error); });
+    }
+
+
+
+    private deleteInvitation(invitation: Invitation) {
+        
+        this.messageService.request();
+        this.confirmSubscription = this.messageService.result.subscribe((result) => {
+            this.confirmSubscription.unsubscribe();
+            if (result == 1) {
+                this.proceedDeleteInvitation(invitation);
+            }
+        });
+    }
+
+    private proceedDeleteInvitation(invitation: Invitation) {
+        this.invitationService.deleteInvitation(invitation)
+            .then(() => {
+                for (var i = 0; i < this.invitations.length; i++) {
+                    if (this.invitations[i].Email == invitation.Email && this.invitations[i].NoticeId == invitation.NoticeId) {
+                        this.invitations.splice(i, 1);
+                        this.showInformModal("Deleted");
+                        return;
+                    }
+                }
+            })
+            .catch(error => { this.handleError(error); });
     }
    
 }
