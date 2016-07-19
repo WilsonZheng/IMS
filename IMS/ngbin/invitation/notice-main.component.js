@@ -15,9 +15,6 @@ var primeng_1 = require('primeng/primeng');
 var template_service_1 = require('./shared/template.service');
 var invitation_service_1 = require('./shared/invitation.service');
 var message_service_1 = require('../shared/message.service');
-//Custom Models.
-var template_1 = require('./template');
-var recruit_status_code_1 = require('../shared/recruit-status-code');
 //Custom Component
 var notice_editor_component_1 = require('./notice-editor.component');
 var invitation_editor_component_1 = require('./invitation-editor.component');
@@ -27,9 +24,7 @@ var NoticeMainComponent = (function () {
         this.templateService = templateService;
         this.messageService = messageService;
         this.invitationService = invitationService;
-        this.SENT = recruit_status_code_1.RecruitStatusCode.InvitationSent;
-        this.REPLIED = recruit_status_code_1.RecruitStatusCode.ContractReceived;
-        this.APPROVED = recruit_status_code_1.RecruitStatusCode.Approved;
+        this.isCreatNotice = false;
         this.noticeOption = {
             resizable: false
         };
@@ -54,9 +49,7 @@ var NoticeMainComponent = (function () {
             // {
             //     columns: [{ header: "Title", rowspan: 2, filter: true, field: "Name", filterMatchMode:"contains", sortable:true}, {header:"Progress", colspan:4 }]
             // },
-            {
-                columns: [{ header: "Title", filter: true, field: "Name", filterMatchMode: "contains", sortable: true }, { header: "Total" }, { header: "Sent" }, { header: "Replied" }, { header: "Approved" }]
-            }
+            { columns: [{ header: "Title", filter: true, field: "Name", filterMatchMode: "contains", sortable: true }] }
         ];
         this.menuItems = [
             { label: 'Send Invitation', icon: 'fa-envelope-o', command: function (event) { _this.writeEmail(); } },
@@ -80,25 +73,20 @@ var NoticeMainComponent = (function () {
         this.closeNotice();
         this.showInformModal("created");
     };
+    NoticeMainComponent.prototype.newNotice = function () {
+        this.isCreatNotice = true;
+        this.handleNotice = true;
+    };
     //notice manipuation function.
     NoticeMainComponent.prototype.editNotice = function () {
-        var _this = this;
-        if (!this.notice)
-            return;
-        this.templateService.getTemplate(this.notice.Id)
-            .then(function (result) {
-            _this.targetNotice = result;
-            _this.handleNotice = true;
-        })
-            .catch(function (error) { _this.handleError(error); });
+        this.isCreatNotice = false;
+        this.handleNotice = true;
     };
     NoticeMainComponent.prototype.closeNotice = function () {
         this.handleNotice = false;
     };
     NoticeMainComponent.prototype.deleteNotice = function () {
         var _this = this;
-        if (!this.notice)
-            return;
         this.messageService.request();
         this.confirmSubscription = this.messageService.result.subscribe(function (result) {
             _this.confirmSubscription.unsubscribe();
@@ -123,10 +111,6 @@ var NoticeMainComponent = (function () {
             _this.showErrorModal(error);
         });
     };
-    NoticeMainComponent.prototype.newNotice = function () {
-        this.targetNotice = new template_1.Template();
-        this.handleNotice = true;
-    };
     NoticeMainComponent.prototype.showInformModal = function (message) {
         this.messageService.info(message);
     };
@@ -142,8 +126,6 @@ var NoticeMainComponent = (function () {
     };
     NoticeMainComponent.prototype.writeEmail = function () {
         var _this = this;
-        if (!this.notice)
-            return;
         //Fetch the default email subject & content which have been stored for the notice(=template).
         this.templateService.getEmailTemplateContent(this.notice.Id)
             .then(function (templateContent) {
@@ -163,7 +145,7 @@ var NoticeMainComponent = (function () {
         })
             .catch(function (error) { _this.handleError(error); });
     };
-    NoticeMainComponent.prototype.openMenu = function (event, notice) {
+    NoticeMainComponent.prototype.manageNotice = function (event, notice) {
         this.notice = notice;
         this.menuComponent.hide();
         this.menuComponent.toggle(event);
@@ -171,8 +153,6 @@ var NoticeMainComponent = (function () {
     NoticeMainComponent.prototype.progress = function (event, notice) {
         var _this = this;
         this.invitationService.getInvitations([notice.Id], []).then(function (result) {
-            notice.Invitations = result;
-            _this.targetNotice = notice;
         })
             .catch(function (error) { _this.handleError(error); });
     };
@@ -183,7 +163,8 @@ var NoticeMainComponent = (function () {
     NoticeMainComponent = __decorate([
         core_1.Component({
             selector: 'inv-notice-main',
-            templateUrl: '/app/invitation/notice-main.component.html',
+            templateUrl: 'app/invitation/notice-main.component.html',
+            styleUrls: ["app/invitation/notice-main.component.css"],
             directives: [primeng_1.DataTable, primeng_1.Column, primeng_1.Dialog, primeng_1.Button, primeng_1.Header, primeng_1.Menu, notice_editor_component_1.NoticeEditorComponent, invitation_editor_component_1.InvitationEditorComponent, recruit_progress_component_1.RecruitProgressComponent],
             providers: [invitation_service_1.InvitationService]
         }), 

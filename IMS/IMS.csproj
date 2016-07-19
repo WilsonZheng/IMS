@@ -354,6 +354,7 @@
     <Content Include="app\invitation\invitation-editor.component.html" />
     <Content Include="app\invitation\notice-editor.component.css" />
     <Content Include="app\invitation\notice-editor.component.html" />
+    <Content Include="app\invitation\notice-main.component.css" />
     <Content Include="app\invitation\recruit-progress.component.html" />
     <Content Include="app\invitation\systemjs.config.js" />
     <Content Include="app\invitation\notice-main.component.html" />

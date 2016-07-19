@@ -53,8 +53,6 @@ var InvitationEditorComponent = (function () {
             }).catch(function (error) { return _this.handleError(error); });
         }
     };
-    InvitationEditorComponent.prototype.preview = function () {
-    };
     InvitationEditorComponent.prototype.handleError = function (message) {
         this.messageService.error(message);
     };
@@ -70,7 +68,7 @@ var InvitationEditorComponent = (function () {
         core_1.Component({
             selector: 'inv-invitation-editor',
             templateUrl: '/app/invitation/invitation-editor.component.html',
-            directives: [primeng_1.Button],
+            directives: [primeng_1.Button, primeng_1.Editor, primeng_1.Header, primeng_1.Dialog],
             providers: [invitation_service_1.InvitationService, utility_service_1.UtilityService]
         }), 
         __metadata('design:paramtypes', [invitation_service_1.InvitationService, message_service_1.MessageService, utility_service_1.UtilityService])

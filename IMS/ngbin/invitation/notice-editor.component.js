@@ -19,12 +19,21 @@ var NoticeEditorComponent = (function () {
         this.updated = new core_1.EventEmitter();
         this.canceled = new core_1.EventEmitter();
         this.error = new core_1.EventEmitter();
+        this.notice = new template_1.Template();
         this.templateService = templateService;
     }
     NoticeEditorComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        if (!this.isCreateMode) {
+            this.templateService.getTemplate(this.currentNotice.Id)
+                .then(function (result) {
+                _this.notice = result;
+            })
+                .catch(function (error) { _this.handleError(error); });
+        }
     };
     NoticeEditorComponent.prototype.saveNotice = function () {
-        if (this.notice.Id && this.notice.Id > 0) {
+        if (!this.isCreateMode) {
             this.updateNotice();
         }
         else {
@@ -58,9 +67,13 @@ var NoticeEditorComponent = (function () {
         this.error.emit(msg);
     };
     __decorate([
-        core_1.Input(), 
+        core_1.Input("notice"), 
         __metadata('design:type', template_1.Template)
-    ], NoticeEditorComponent.prototype, "notice", void 0);
+    ], NoticeEditorComponent.prototype, "currentNotice", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Boolean)
+    ], NoticeEditorComponent.prototype, "isCreateMode", void 0);
     __decorate([
         core_1.Output(), 
         __metadata('design:type', Object)
@@ -82,7 +95,7 @@ var NoticeEditorComponent = (function () {
             selector: 'inv-notice-editor',
             templateUrl: '/app/invitation/notice-editor.component.html',
             styleUrls: ['/app/invitation/notice-editor.component.css'],
-            directives: [primeng_1.Button]
+            directives: [primeng_1.Button, primeng_1.Editor, primeng_1.Header]
         }), 
         __metadata('design:paramtypes', [template_service_1.TemplateService])
     ], NoticeEditorComponent);
