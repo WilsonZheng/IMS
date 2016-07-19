@@ -4,18 +4,15 @@ Internal Internship Management System
 
 Set up Angular js environment:
 
-1.download node js
+1. download node js
 
-2.create a new folder
+2. create a new folder
 
-3.create a new txt file in the new folder and copy the following into it, then save as package.json
-
+3. create a new txt file in the new folder and copy the following into it, then save as package.json
 
 4. in the new folder, press shift and right click, open window cmd and input: npm install
 
-
 5. copy the node_modules into project files
-
 
 6. download typescript by go to nuget and search typescript(shown typescript 1.8.4 for visual studio2015) and then install it
 
