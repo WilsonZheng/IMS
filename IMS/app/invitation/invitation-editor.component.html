@@ -1,0 +1,25 @@
+﻿    <form #form="ngForm">
+        <div class="form-group">
+            <label>E-mails</label>
+            <input type="text" class="form-control" [(ngModel)]="invitation.Email" name="Email" required #email="ngModel" placeholder="Email" />
+            <div [hidden]="email.valid || email.pristine" class="alert alert-danger">
+                Email is required.
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Subject</label>
+            <input type="text" class="form-control" [(ngModel)]="invitation.Subject" name="Subject" required #subject="ngModel" placeholder="Subject" />
+            <div [hidden]="subject.valid || subject.pristine" class="alert alert-danger">
+                Subject is required.
+            </div>
+        </div>
+        <div class="form-group">
+            <p-editor [(ngModel)]="invitation.Content" [style]="{'height':'300px'}" name="Content" required #content="ngModel"></p-editor>
+            <div [hidden]="content.valid || content.pristine" class="alert alert-danger">
+                Content is required.
+            </div>
+        </div>
+        <div class="ctrl-panel">
+            <button pButton type="text" (click)="send()" label="Send" icon="fa fa-check" [disabled]="!form.form.valid"></button>
+        </div>
+    </form>

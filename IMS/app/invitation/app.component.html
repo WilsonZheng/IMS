@@ -1,0 +1,16 @@
+﻿<router-outlet></router-outlet>
+<!--Common Confirmation Modal-->
+<p-dialog header="Confirmation" [(visible)]="confirmModal" modal="modal" showEffect="fade" resizable="false">
+    <div>
+        <span>Do you want to proceed?</span>
+    </div>
+    <footer>
+        <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+            <button type="button" pButton icon="fa-close" label="No" (click)="confirm(0)"></button>
+            <button type="button" pButton icon="fa-check" label="Yes" (click)="confirm(1)"></button>
+        </div>
+    </footer>
+</p-dialog>
+
+<!--Message-->
+<p-growl [value]="msgs" sticky="sticky"></p-growl>

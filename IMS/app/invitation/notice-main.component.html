@@ -1,0 +1,64 @@
+﻿<div id="ims-template-manage">
+    <p-menu popup="popup" [model]="menuItems"></p-menu>
+    
+    <div class="pull-right">
+        <button pButton type="text" (click)="newNotice()" label="New Notice" icon="fa fa-plus-circle"></button>
+    </div>
+    <div class="clearfix"></div>
+  
+    <!--Quick Search Link-->
+    <div id="ims-nmc-quicksearch" class="xs-col-12 col-sm-3">
+        <div class="row" id="ims-nmc-hd">
+            <div>Notice</div>
+            <div id="ims-nmc-sp">
+                <div class="col-xs-3"><span>T</span></div>
+                <div class="col-xs-3"><span>S</span></div>
+                <div class="col-xs-3"><span>R</span></div>
+                <div class="col-xs-3"><span>A</span></div>
+            </div>
+        </div>
+        <div>
+            <div *ngFor="let notice of templates" class="ims-notice-box">
+                <div><span class="ims-link-label" (click)="manageNotice($event,notice)">{{notice.Name}}</span></div>
+                <div class="row">
+                    <div class="col-xs-3">
+                        <span class="ims-link-label" (click)="progress($event,notice)">{{notice.RecruitStatus.Total}}</span>
+                    </div>
+                    <div class="col-xs-3">
+                        <span class="ims-link-label" (click)="progress($event,notice)">{{notice.RecruitStatus.Sent}}</span>
+                    </div>
+                    <div class="col-xs-3">
+                        <span class="ims-link-label" (click)="progress($event,notice)">{{notice.RecruitStatus.Received}}</span>
+                    </div>
+                    <div class="col-xs-3">
+                        <span class="ims-link-label" (click)="progress($event,notice)">{{notice.RecruitStatus.Approved}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+   
+    <!--Notice-->
+    <div class="ims-form-dialog" *ngIf="handleNotice">
+        <p-dialog header="Notice" [(visible)]="handleNotice" modal="modal" showEffect="fade" [resizable]="noticeOption.resizable">
+            <inv-notice-editor [notice]="notice"
+                               [isCreateMode]="isCreatNotice"
+                               (error)="handleError($event)"
+                               (canceled)="closeNotice()"
+                               (created)="noticeCreated($event)"
+                               (updated)="noticeUpdated($event)">
+            </inv-notice-editor>
+        </p-dialog>
+    </div>
+        
+    <!--Write Invitation-->
+    <div class="ims-form-dialog" *ngIf="handleInvitation">
+        <p-dialog [header]="notice.Name" [(visible)]="handleInvitation" modal="modal" showEffect="fade" [resizable]="invitationOption.resizable">
+            <inv-invitation-editor [notice]="notice"  (success)="invitationSuccess($event)"></inv-invitation-editor>         
+        </p-dialog>
+    </div>
+   
+    
+</div>

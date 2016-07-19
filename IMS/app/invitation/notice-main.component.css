@@ -1,0 +1,21 @@
+﻿.ims-notice-box{
+    border:1px solid black;
+    margin:1px 0px;
+}
+
+#ims-nmc-hd *{
+    text-align:center;
+}
+
+#ims-nmc-sp div{
+   padding:1px;
+}
+
+#ims-nmc-sp div span{
+    display:inline-block;
+    width:100%;
+    text-align:center;
+    font-weight:400;
+    border-radius:4px;
+    background-color:grey;
+} 
