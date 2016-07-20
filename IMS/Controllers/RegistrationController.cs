@@ -43,8 +43,8 @@ namespace IMS.Controllers
                     ApplicationDt = DateTime.Now,
                     CreatedById = User.Identity.GetUserId<int>(),
                     UpdatedById = User.Identity.GetUserId<int>(),
-                    OrgId = 1,
-                    RecruitStatusTypeId = db.RecruitStatusType.Where(x => x.Code == (int)RecruitStatusCode.InvitationCreated).Single().Id
+                    OrgId = 1
+                    //RecruitStatusTypeId = db.RecruitStatusType.Where(x => x.Code == (int)RecruitStatusCode.InvitationCreated).Single().Id
 
 
                 };
