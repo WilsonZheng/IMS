@@ -286,10 +286,10 @@
     <Compile Include="Common\IMSContants.cs" />
     <Compile Include="Common\IMSUserUtil.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ConfigurationController.cs" />
     <Compile Include="Controllers\InvitationController.cs" />
     <Compile Include="Controllers\JayTestController.cs" />
-    <Compile Include="Controllers\RecruitController.cs" />
     <Compile Include="Controllers\RegistrationController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -446,17 +446,16 @@
     <Content Include="Views\TemplateManage\_TemplateList.cshtml" />
     <Content Include="Views\JayTest\Index.cshtml" />
     <Content Include="Views\Registration\AddApplicant.cshtml" />
-    <Content Include="Views\Recruit\Index.cshtml" />
-    <Content Include="Views\Recruit\NewOrModify.cshtml" />
-    <Content Include="Views\Recruit\InvitationTemplate.cshtml" />
     <Content Include="Views\Configuration\Smtp.cshtml" />
     <Content Include="tsconfig.json" />
     <Content Include="typings.json" />
     <Content Include="Views\Invitation\Index.cshtml" />
     <Content Include="Views\TemplateManage\_NewOrModifyEmail.cshtml" />
     <Content Include="Views\Registration\InvitationCodeNotExist.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="app\admin\" />
     <Folder Include="App_Data\" />
     <Folder Include="Content\font-awesome-4.6.3\" />
     <Folder Include="Views\wilsonTest\" />

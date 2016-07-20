@@ -22,6 +22,7 @@ var InvitationEditorComponent = (function () {
         this.messageService = messageService;
         this.utilityService = utilityService;
         this.success = new core_1.EventEmitter();
+        this.cancelled = new core_1.EventEmitter();
     }
     InvitationEditorComponent.prototype.ngOnInit = function () {
         this.invitation = new invitation_batch_model_1.InvitationBatchModel();
@@ -53,6 +54,9 @@ var InvitationEditorComponent = (function () {
             }).catch(function (error) { return _this.handleError(error); });
         }
     };
+    InvitationEditorComponent.prototype.cancel = function () {
+        this.cancelled.emit(null);
+    };
     InvitationEditorComponent.prototype.handleError = function (message) {
         this.messageService.error(message);
     };
@@ -64,6 +68,10 @@ var InvitationEditorComponent = (function () {
         core_1.Output(), 
         __metadata('design:type', Object)
     ], InvitationEditorComponent.prototype, "success", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', Object)
+    ], InvitationEditorComponent.prototype, "cancelled", void 0);
     InvitationEditorComponent = __decorate([
         core_1.Component({
             selector: 'inv-invitation-editor',

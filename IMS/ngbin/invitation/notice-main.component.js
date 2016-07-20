@@ -104,7 +104,7 @@ var NoticeMainComponent = (function () {
             for (var i = 0; i < _this.templates.length; i++) {
                 if (_this.templates[i].Id == id) {
                     _this.templates.splice(i, 1);
-                    _this.showInformModal("Deleted");
+                    _this.showInformModal("Archived");
                     return;
                 }
             }
@@ -146,6 +146,9 @@ var NoticeMainComponent = (function () {
             notice.RecruitStatus = status;
         })
             .catch(function (error) { _this.handleError(error); });
+    };
+    NoticeMainComponent.prototype.invitationCancelled = function () {
+        this.handleInvitation = false;
     };
     NoticeMainComponent.prototype.manageNotice = function (event, notice) {
         this.notice = notice;
@@ -216,6 +219,17 @@ var NoticeMainComponent = (function () {
                 if (_this.invitations[i].Email == invitation.Email && _this.invitations[i].NoticeId == invitation.NoticeId) {
                     _this.invitations.splice(i, 1);
                     _this.showInformModal("Deleted");
+                    //Refresh the status information for the corresponding notice which owned this deleted invitation.
+                    _this.templateService.getRecruitStatus(invitation.NoticeId)
+                        .then(function (status) {
+                        var notice = _this.templates.find(function (template) {
+                            return template.Id == invitation.NoticeId;
+                        });
+                        if (notice) {
+                            notice.RecruitStatus = status;
+                        }
+                    })
+                        .catch(function (error) { _this.handleError(error); });
                     return;
                 }
             }
@@ -231,7 +245,7 @@ var NoticeMainComponent = (function () {
             selector: 'inv-notice-main',
             templateUrl: 'app/invitation/notice-main.component.html',
             styleUrls: ["app/invitation/notice-main.component.css"],
-            directives: [primeng_1.DataTable, primeng_1.Column, primeng_1.Dialog, primeng_1.Button, primeng_1.Header, primeng_1.Menu, notice_editor_component_1.NoticeEditorComponent,
+            directives: [primeng_1.DataTable, primeng_1.Column, primeng_1.Button, primeng_1.Header, primeng_1.Menu, notice_editor_component_1.NoticeEditorComponent,
                 invitation_editor_component_1.InvitationEditorComponent, recruit_progress_component_1.RecruitProgressComponent, primeng_1.Tooltip, primeng_1.DataList],
             providers: [invitation_service_1.InvitationService]
         }), 

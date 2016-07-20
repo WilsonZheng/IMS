@@ -1,6 +1,6 @@
 ﻿/// <reference path="../../node_modules/rxjs/add/operator/toPromise.d.ts" />
 import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
-import { DataTable, Column, Dialog, Header, Button, Menu, MenuItem, Tooltip, DataList } from 'primeng/primeng';
+import { DataTable, Column, Header, Button, Menu, MenuItem, Tooltip, DataList } from 'primeng/primeng';
 import { Subscription } from 'rxjs/Subscription';
 
 //Custom service
@@ -24,7 +24,7 @@ import { RecruitProgressComponent } from './recruit-progress.component';
     selector: 'inv-notice-main',
     templateUrl:'app/invitation/notice-main.component.html',
     styleUrls: ["app/invitation/notice-main.component.css"],
-    directives: [DataTable, Column, Dialog, Button, Header, Menu, NoticeEditorComponent
+    directives: [DataTable, Column, Button, Header, Menu, NoticeEditorComponent
         , InvitationEditorComponent, RecruitProgressComponent, Tooltip, DataList],
     providers: [InvitationService]
 })
@@ -136,7 +136,7 @@ export class NoticeMainComponent implements OnInit {
                 for (var i = 0; i < this.templates.length; i++) {
                     if (this.templates[i].Id == id) {
                         this.templates.splice(i, 1);
-                        this.showInformModal("Deleted");
+                        this.showInformModal("Archived");
                         return;
                     }
                 }
@@ -188,6 +188,10 @@ export class NoticeMainComponent implements OnInit {
                 notice.RecruitStatus = status;
             })
             .catch(error => { this.handleError(error); });
+    }
+
+    private invitationCancelled() {
+        this.handleInvitation = false;
     }
     
     manageNotice(event: Event, notice: Template) {
@@ -267,6 +271,18 @@ export class NoticeMainComponent implements OnInit {
                     if (this.invitations[i].Email == invitation.Email && this.invitations[i].NoticeId == invitation.NoticeId) {
                         this.invitations.splice(i, 1);
                         this.showInformModal("Deleted");
+
+                        //Refresh the status information for the corresponding notice which owned this deleted invitation.
+                        this.templateService.getRecruitStatus(invitation.NoticeId)
+                            .then((status) => {
+                                let notice = this.templates.find(function (template) {
+                                    return template.Id == invitation.NoticeId
+                                });
+                                if (notice) {
+                                    notice.RecruitStatus = status;
+                                }
+                            })
+                            .catch(error => { this.handleError(error); });
                         return;
                     }
                 }

@@ -22,7 +22,7 @@ import { InvitationBatchTransfer } from './invitation-batch.transfer';
 export class InvitationEditorComponent implements OnInit {
     @Input() notice: Template;
     @Output() success = new EventEmitter<Template>();
-   
+    @Output() cancelled  = new EventEmitter<void>();
     invitation: InvitationBatchModel;
    
 
@@ -51,7 +51,7 @@ export class InvitationEditorComponent implements OnInit {
         return batch;
     }
    
-    send() {
+    private send() {
         let batch = this.transform();
         if (batch) {
             this.invitationService.sendInvitation(batch).then(() => {
@@ -59,7 +59,11 @@ export class InvitationEditorComponent implements OnInit {
             }).catch((error) => this.handleError(error));
         }       
     }
-   
+    
+    private cancel() {
+        this.cancelled.emit(null);
+    }
+    
     
     handleError(message: string) {
         this.messageService.error(message);
