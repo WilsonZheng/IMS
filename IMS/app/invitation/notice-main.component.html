@@ -1,64 +1,106 @@
 ﻿<div id="ims-template-manage">
     <p-menu popup="popup" [model]="menuItems"></p-menu>
     
-    <div class="pull-right">
-        <button pButton type="text" (click)="newNotice()" label="New Notice" icon="fa fa-plus-circle"></button>
-    </div>
+    
     <div class="clearfix"></div>
   
     <!--Quick Search Link-->
-    <div id="ims-nmc-quicksearch" class="xs-col-12 col-sm-3">
-        <div class="row" id="ims-nmc-hd">
-            <div>Notice</div>
-            <div id="ims-nmc-sp">
-                <div class="col-xs-3"><span>T</span></div>
-                <div class="col-xs-3"><span>S</span></div>
-                <div class="col-xs-3"><span>R</span></div>
-                <div class="col-xs-3"><span>A</span></div>
-            </div>
-        </div>
-        <div>
-            <div *ngFor="let notice of templates" class="ims-notice-box">
-                <div><span class="ims-link-label" (click)="manageNotice($event,notice)">{{notice.Name}}</span></div>
-                <div class="row">
-                    <div class="col-xs-3">
-                        <span class="ims-link-label" (click)="progress($event,notice)">{{notice.RecruitStatus.Total}}</span>
-                    </div>
-                    <div class="col-xs-3">
-                        <span class="ims-link-label" (click)="progress($event,notice)">{{notice.RecruitStatus.Sent}}</span>
-                    </div>
-                    <div class="col-xs-3">
-                        <span class="ims-link-label" (click)="progress($event,notice)">{{notice.RecruitStatus.Received}}</span>
-                    </div>
-                    <div class="col-xs-3">
-                        <span class="ims-link-label" (click)="progress($event,notice)">{{notice.RecruitStatus.Approved}}</span>
+    <div class="xs-col-12 col-sm-4" id="quick-search-container">
+        <p-dataList [value]="templates" [paginator]="true" [rows]="10">
+            <header>
+                <div class="ims-header-container">
+                    Notice
+                    <div class="pull-right">
+                        <button pButton type="text" (click)="loadNotice()" icon="fa fa-refresh"></button>
+                        <button pButton type="text" (click)="newNotice()" icon="fa fa-plus-circle"></button>
                     </div>
                 </div>
-            </div>
-        </div>
+            </header>
+            <template let-notice>
+                <div class="ims-iterator">
+                    <div><i class="fa fa-bars ims-link-label" (click)="manageNotice($event,notice)"></i>&nbsp;<span>{{notice.Name}}</span></div>
+                    <div class="recruit-status-stat">
+                        <div class="col-xs-3">
+                            <span class="ims-link-label label-container" (click)="progressTotal($event,notice)" pTooltip="Total" tooltipPosition="top">{{notice.RecruitStatus.Total}}</span>
+                        </div>
+                        <div class="col-xs-3">
+                            <span class="ims-link-label label-container" (click)="progressSent($event,notice)" pTooltip="Sent" tooltipPosition="top">{{notice.RecruitStatus.Sent}}</span>
+                        </div>
+                        <div class="col-xs-3">
+                            <span class="ims-link-label label-container" (click)="progressReplied($event,notice)" pTooltip="Replied" tooltipPosition="top">{{notice.RecruitStatus.Received}}</span>
+                        </div>
+                        <div class="col-xs-3">
+                            <span class="ims-link-label label-container" (click)="progressApproved($event,notice)" pTooltip="Approved" tooltipPosition="top">{{notice.RecruitStatus.Approved}}</span>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </template>
+        </p-dataList>
+        
+
+        
     </div>
+    <!--Quick Search Link-->
+
+    <!--Invitation Search Result-->
+    <div class="col-xs-12 col-sm-8">
+        <p-dataList [value]="invitations" [paginator]="true" [rows]="10">
+            <header><div class="ims-header-container">Invitation</div></header>
+            <template let-invitation>
+                <li>
+                    <div class="ims-iterator row">
+                        <div class="col-xs-12">{{invitation.NoticeName}}</div>
+                        <div class="col-xs-12 col-sm-8"> {{invitation.Email}}</div>
+                        <div class="col-xs-12 col-sm-1">
+                            <span [ngSwitch]="invitation.RecruitStatusCode">
+                                <template [ngSwitchCase]="1">
+                                    <span class="badge" pTooltip="Sent" tooltipPosition="left">S</span>
+                                </template>
+                                <template [ngSwitchCase]="2">
+                                    <span class="badge" pTooltip="Replied" tooltipPosition="left">R</span>
+                                </template>
+                                <template ngSwitchDefault>
+                                    <span class="badge" pTooltip="Approved" tooltipPosition="left">A</span>
+                                </template>
+                            </span>
+          
+                        </div>
+                        <div class="col-xs-12 col-sm-3">
+                            <i class="fa fa-envelope-o ims-link-label" *ngIf="invitation.RecruitStatusCode==1" (click)="resend(invitation)"></i>
+                            <i class="fa fa-trash-o ims-link-label" *ngIf="invitation.RecruitStatusCode==1" (click)="deleteInvitation(invitation)"></i>
+                        </div>
+                    </div>
+                </li>
+            </template>
+        </p-dataList>
+    </div>
+    <!--Invitation Search Result-->
+</div>
 
 
-   
-    <!--Notice-->
-    <div class="ims-form-dialog" *ngIf="handleNotice">
-        <p-dialog header="Notice" [(visible)]="handleNotice" modal="modal" showEffect="fade" [resizable]="noticeOption.resizable">
-            <inv-notice-editor [notice]="notice"
+
+
+<!--Notice-->
+<div class="ims-form-dialog">
+    <p-dialog header="Notice" [(visible)]="handleNotice" modal="modal" showEffect="fade" [resizable]="noticeOption.resizable">
+        <div style="min-height:550px;">
+            <inv-notice-editor *ngIf="handleNotice" [notice]="notice"
                                [isCreateMode]="isCreatNotice"
                                (error)="handleError($event)"
                                (canceled)="closeNotice()"
                                (created)="noticeCreated($event)"
                                (updated)="noticeUpdated($event)">
             </inv-notice-editor>
-        </p-dialog>
-    </div>
-        
-    <!--Write Invitation-->
-    <div class="ims-form-dialog" *ngIf="handleInvitation">
-        <p-dialog [header]="notice.Name" [(visible)]="handleInvitation" modal="modal" showEffect="fade" [resizable]="invitationOption.resizable">
-            <inv-invitation-editor [notice]="notice"  (success)="invitationSuccess($event)"></inv-invitation-editor>         
-        </p-dialog>
-    </div>
-   
-    
+        </div>
+    </p-dialog>
+</div>
+
+<!--Write Invitation-->
+<div class="ims-form-dialog">
+    <p-dialog header="Send Invitation" [(visible)]="handleInvitation" modal="modal" showEffect="fade" [resizable]="invitationOption.resizable">
+        <div style="min-height:550px;">
+            <inv-invitation-editor *ngIf="handleInvitation" [notice]="notice" (success)="invitationSuccess($event)"></inv-invitation-editor>
+        </div>
+    </p-dialog>
 </div>

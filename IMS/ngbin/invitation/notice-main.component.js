@@ -15,6 +15,7 @@ var primeng_1 = require('primeng/primeng');
 var template_service_1 = require('./shared/template.service');
 var invitation_service_1 = require('./shared/invitation.service');
 var message_service_1 = require('../shared/message.service');
+var recruit_status_code_1 = require('../shared/recruit-status-code');
 //Custom Component
 var notice_editor_component_1 = require('./notice-editor.component');
 var invitation_editor_component_1 = require('./invitation-editor.component');
@@ -37,14 +38,7 @@ var NoticeMainComponent = (function () {
     }
     NoticeMainComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.templateService.getTemplates()
-            .then(function (templates) {
-            _this.templates = templates;
-            //for (var i = 0; i < this.templates.length; i++) {
-            //    this.templates[i].RecruitStatus.Received = i;
-            //}
-        })
-            .catch(function (error) { _this.handleError(error); });
+        this.loadNotice();
         this.headerRows = [
             // {
             //     columns: [{ header: "Title", rowspan: 2, filter: true, field: "Name", filterMatchMode:"contains", sortable:true}, {header:"Progress", colspan:4 }]
@@ -54,8 +48,16 @@ var NoticeMainComponent = (function () {
         this.menuItems = [
             { label: 'Send Invitation', icon: 'fa-envelope-o', command: function (event) { _this.writeEmail(); } },
             { label: 'Edit', icon: 'fa-edit', command: function (event) { _this.editNotice(); } },
-            { label: 'Delete', icon: 'fa-trash-o', command: function (event) { _this.deleteNotice(); } }
+            { label: 'Archive', icon: 'fa-archive', command: function (event) { _this.deleteNotice(); } }
         ];
+    };
+    NoticeMainComponent.prototype.loadNotice = function () {
+        var _this = this;
+        this.templateService.getTemplates()
+            .then(function (templates) {
+            _this.templates = templates;
+        })
+            .catch(function (error) { _this.handleError(error); });
     };
     //notice manipulation callback.
     NoticeMainComponent.prototype.noticeUpdated = function (notice) {
@@ -150,9 +152,73 @@ var NoticeMainComponent = (function () {
         this.menuComponent.hide();
         this.menuComponent.toggle(event);
     };
-    NoticeMainComponent.prototype.progress = function (event, notice) {
+    NoticeMainComponent.prototype.progressTotal = function (event, notice) {
         var _this = this;
         this.invitationService.getInvitations([notice.Id], []).then(function (result) {
+            _this.invitations = result;
+        })
+            .catch(function (error) { _this.handleError(error); });
+    };
+    NoticeMainComponent.prototype.progressSent = function (event, notice) {
+        var _this = this;
+        this.invitationService.getInvitations([notice.Id], [recruit_status_code_1.RecruitStatusCode.InvitationSent]).then(function (result) {
+            _this.invitations = result;
+        })
+            .catch(function (error) { _this.handleError(error); });
+    };
+    NoticeMainComponent.prototype.progressReplied = function (event, notice) {
+        var _this = this;
+        this.invitationService.getInvitations([notice.Id], [recruit_status_code_1.RecruitStatusCode.ContractReceived]).then(function (result) {
+            _this.invitations = result;
+        })
+            .catch(function (error) { _this.handleError(error); });
+    };
+    NoticeMainComponent.prototype.progressApproved = function (event, notice) {
+        var _this = this;
+        this.invitationService.getInvitations([notice.Id], [recruit_status_code_1.RecruitStatusCode.Approved]).then(function (result) {
+            _this.invitations = result;
+        })
+            .catch(function (error) { _this.handleError(error); });
+    };
+    NoticeMainComponent.prototype.resend = function (invitation) {
+        var _this = this;
+        this.messageService.request();
+        this.confirmSubscription = this.messageService.result.subscribe(function (result) {
+            _this.confirmSubscription.unsubscribe();
+            if (result == 1) {
+                _this.proceedResend(invitation);
+            }
+        });
+    };
+    NoticeMainComponent.prototype.proceedResend = function (invitation) {
+        var _this = this;
+        this.invitationService.resendInvitation(invitation)
+            .then(function () {
+            _this.showInformModal("Completed");
+        })
+            .catch(function (error) { _this.handleError(error); });
+    };
+    NoticeMainComponent.prototype.deleteInvitation = function (invitation) {
+        var _this = this;
+        this.messageService.request();
+        this.confirmSubscription = this.messageService.result.subscribe(function (result) {
+            _this.confirmSubscription.unsubscribe();
+            if (result == 1) {
+                _this.proceedDeleteInvitation(invitation);
+            }
+        });
+    };
+    NoticeMainComponent.prototype.proceedDeleteInvitation = function (invitation) {
+        var _this = this;
+        this.invitationService.deleteInvitation(invitation)
+            .then(function () {
+            for (var i = 0; i < _this.invitations.length; i++) {
+                if (_this.invitations[i].Email == invitation.Email && _this.invitations[i].NoticeId == invitation.NoticeId) {
+                    _this.invitations.splice(i, 1);
+                    _this.showInformModal("Deleted");
+                    return;
+                }
+            }
         })
             .catch(function (error) { _this.handleError(error); });
     };
@@ -165,7 +231,8 @@ var NoticeMainComponent = (function () {
             selector: 'inv-notice-main',
             templateUrl: 'app/invitation/notice-main.component.html',
             styleUrls: ["app/invitation/notice-main.component.css"],
-            directives: [primeng_1.DataTable, primeng_1.Column, primeng_1.Dialog, primeng_1.Button, primeng_1.Header, primeng_1.Menu, notice_editor_component_1.NoticeEditorComponent, invitation_editor_component_1.InvitationEditorComponent, recruit_progress_component_1.RecruitProgressComponent],
+            directives: [primeng_1.DataTable, primeng_1.Column, primeng_1.Dialog, primeng_1.Button, primeng_1.Header, primeng_1.Menu, notice_editor_component_1.NoticeEditorComponent,
+                invitation_editor_component_1.InvitationEditorComponent, recruit_progress_component_1.RecruitProgressComponent, primeng_1.Tooltip, primeng_1.DataList],
             providers: [invitation_service_1.InvitationService]
         }), 
         __metadata('design:paramtypes', [template_service_1.TemplateService, message_service_1.MessageService, invitation_service_1.InvitationService])
