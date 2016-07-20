@@ -247,7 +247,7 @@ var NoticeMainComponent = (function () {
             styleUrls: ["app/invitation/notice-main.component.css"],
             directives: [primeng_1.DataTable, primeng_1.Column, primeng_1.Button, primeng_1.Header, primeng_1.Menu, notice_editor_component_1.NoticeEditorComponent,
                 invitation_editor_component_1.InvitationEditorComponent, recruit_progress_component_1.RecruitProgressComponent, primeng_1.Tooltip, primeng_1.DataList],
-            providers: [invitation_service_1.InvitationService]
+            providers: [template_service_1.TemplateService, invitation_service_1.InvitationService]
         }), 
         __metadata('design:paramtypes', [template_service_1.TemplateService, message_service_1.MessageService, invitation_service_1.InvitationService])
     ], NoticeMainComponent);

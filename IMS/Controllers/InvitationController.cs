@@ -44,14 +44,7 @@ namespace IMS.Controllers
             }
         }
         private IMSUserUtil _imsUserUtil;
-
-
-
-        // GET: Invitation
-        public ActionResult Index()
-        {
-            return View();
-        }
+             
 
         [HttpPost]
         public ActionResult RecruitStatus(int id)

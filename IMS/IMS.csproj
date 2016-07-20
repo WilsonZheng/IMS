@@ -286,10 +286,9 @@
     <Compile Include="Common\IMSContants.cs" />
     <Compile Include="Common\IMSUserUtil.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ConfigurationController.cs" />
     <Compile Include="Controllers\InvitationController.cs" />
-    <Compile Include="Controllers\JayTestController.cs" />
+    <Compile Include="Controllers\AppMainController.cs" />
     <Compile Include="Controllers\RegistrationController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -350,14 +349,14 @@
     <Compile Include="ViewModels\ApplicantInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\invitation\app.component.html" />
     <Content Include="app\invitation\invitation-editor.component.html" />
     <Content Include="app\invitation\notice-editor.component.css" />
     <Content Include="app\invitation\notice-editor.component.html" />
     <Content Include="app\invitation\notice-main.component.css" />
     <Content Include="app\invitation\recruit-progress.component.html" />
-    <Content Include="app\invitation\systemjs.config.js" />
     <Content Include="app\invitation\notice-main.component.html" />
+    <Content Include="app\main\app.component.html" />
+    <Content Include="app\main\systemjs.config.js" />
     <Content Include="app\ngsample\editor\systemjs.config.js" />
     <Content Include="app\ngsample\forms\systemjs.config.js" />
     <Content Include="app\ngsample\router\systemjs.config.js" />
@@ -444,18 +443,16 @@
     <Content Include="Views\TemplateManage\_NewOrModify.cshtml" />
     <Content Include="Views\TemplateManage\ContractTemp.cshtml" />
     <Content Include="Views\TemplateManage\_TemplateList.cshtml" />
-    <Content Include="Views\JayTest\Index.cshtml" />
     <Content Include="Views\Registration\AddApplicant.cshtml" />
     <Content Include="Views\Configuration\Smtp.cshtml" />
     <Content Include="tsconfig.json" />
     <Content Include="typings.json" />
-    <Content Include="Views\Invitation\Index.cshtml" />
     <Content Include="Views\TemplateManage\_NewOrModifyEmail.cshtml" />
     <Content Include="Views\Registration\InvitationCodeNotExist.cshtml" />
-    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\AppMain\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="app\admin\" />
+    <Folder Include="app\main\shared\" />
     <Folder Include="App_Data\" />
     <Folder Include="Content\font-awesome-4.6.3\" />
     <Folder Include="Views\wilsonTest\" />
@@ -469,9 +466,8 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="app\app.route.ts" />
+    <TypeScriptCompile Include="app\main\app.route.ts" />
     <TypeScriptCompile Include="app\app.ts" />
-    <TypeScriptCompile Include="app\invitation\app.component.ts" />
     <TypeScriptCompile Include="app\invitation\invitation-editor.component.ts" />
     <TypeScriptCompile Include="app\invitation\invitation-batch.transfer.ts" />
     <TypeScriptCompile Include="app\invitation\invitation-batch.model.ts" />
@@ -480,14 +476,15 @@
     <TypeScriptCompile Include="app\invitation\recruit-progress.component.ts" />
     <TypeScriptCompile Include="app\invitation\recruit-status.ts" />
     <TypeScriptCompile Include="app\invitation\shared\invitation.service.ts" />
-    <TypeScriptCompile Include="app\invitation\shared\rest-result.ts" />
+    <TypeScriptCompile Include="app\shared\rest-result.ts" />
     <TypeScriptCompile Include="app\invitation\shared\template.service.ts" />
     <TypeScriptCompile Include="app\invitation\template-content.ts" />
     <TypeScriptCompile Include="app\invitation\notice-main.component.ts" />
-    <TypeScriptCompile Include="app\invitation\main.ts" />
     <TypeScriptCompile Include="app\invitation\template.ts" />
     <TypeScriptCompile Include="app\main.ts" />
     <TypeScriptCompile Include="app\fancybutton.component.ts" />
+    <TypeScriptCompile Include="app\main\app.component.ts" />
+    <TypeScriptCompile Include="app\main\main.ts" />
     <TypeScriptCompile Include="app\multi.component.ts" />
     <TypeScriptCompile Include="app\ngsample\forms\app.ts" />
     <TypeScriptCompile Include="app\ngsample\forms\main.ts" />

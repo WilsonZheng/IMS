@@ -4,7 +4,7 @@ import 'rxjs/add/operator/toPromise';
 
 import { Template } from '../template';
 import { TemplateContent } from '../template-content';
-import { RestResult } from './rest-result';
+import { RestResult } from '../../shared/rest-result';
 import { RecruitStatus } from '../recruit-status';
 
 @Injectable()

@@ -3,7 +3,7 @@ import { Button, Editor, Header } from 'primeng/primeng';
 
 import {TemplateService} from './shared/template.service';
 import {Template} from './template';
-import {RestResult} from './shared/rest-result';
+import {RestResult} from '../shared/rest-result';
 
 @Component({
     selector: 'inv-notice-editor',

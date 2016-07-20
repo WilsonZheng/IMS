@@ -2,7 +2,7 @@
 import {Headers, Http, HTTP_PROVIDERS, Response, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import { InvitationBatchTransfer } from '../invitation-batch.transfer';
-import { RestResult } from './rest-result';
+import { RestResult } from '../../shared/rest-result';
 import { Invitation } from '../invitation';
 import { RecruitStatusCode } from '../../shared/recruit-status-code';
 

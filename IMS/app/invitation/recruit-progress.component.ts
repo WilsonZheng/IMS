@@ -7,7 +7,7 @@ import { MessageService } from '../shared/message.service';
 
 //Custom Models.
 import { Template } from './template';
-import { RestResult } from './shared/rest-result';
+import { RestResult } from '../shared/rest-result';
 import { Invitation } from './invitation';
 
 //Custom Component

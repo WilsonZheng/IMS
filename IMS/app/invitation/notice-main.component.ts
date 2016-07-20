@@ -11,7 +11,7 @@ import { MessageService } from '../shared/message.service';
 
 //Custom Models.
 import { Template } from './template';
-import { RestResult } from './shared/rest-result';
+import { RestResult } from '../shared/rest-result';
 import { RecruitStatusCode } from '../shared/recruit-status-code';
 import { Invitation } from './invitation';
 
@@ -26,7 +26,7 @@ import { RecruitProgressComponent } from './recruit-progress.component';
     styleUrls: ["app/invitation/notice-main.component.css"],
     directives: [DataTable, Column, Button, Header, Menu, NoticeEditorComponent
         , InvitationEditorComponent, RecruitProgressComponent, Tooltip, DataList],
-    providers: [InvitationService]
+    providers: [TemplateService,InvitationService]
 })
 export class NoticeMainComponent implements OnInit {
 

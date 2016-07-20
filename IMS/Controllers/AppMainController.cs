@@ -6,9 +6,10 @@ using System.Web.Mvc;
 
 namespace IMS.Controllers
 {
-    public class AdminController : Controller
+    [Authorize]
+    public class AppMainController : Controller
     {
-        // GET: Admin
+        // GET: Main
         public ActionResult Index()
         {
             return View();
