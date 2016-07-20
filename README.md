@@ -2,13 +2,13 @@
 Internal Internship Management System
 
 
-Set up Angular js environment:
+Set up Angular js environment and primeNG UI:
 
-1. download node js
+1. download node js 6.3.0,node js tools 1.1.1vs2015
 
 2. create a new folder
 
-3. create a new txt file in the new folder and copy the following into it, then save as package.json
+3. copy the package.json in the project to the above folder:
 
 4. in the new folder, press shift and right click, open window cmd and input: npm install
 
@@ -21,3 +21,5 @@ Set up Angular js environment:
 8. http://jameschambers.com/2015/09/upgrading-npm-in-visual-studio-2015/
 
 9. typescript 1.8.6 will work but 1.8.4 does not (after install restart windows)
+
+10. Install PrimeNG: In the project folder(where there is node_modulus folder), press shift+ right click, open cmd and type in npm install primeng --save, after sucessful, type in npm install primeui --save, then sucessfully install PrimeNG
