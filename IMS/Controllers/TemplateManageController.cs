@@ -179,7 +179,6 @@ namespace IMS.Controllers
                         new {
                                 template,
                                 Total =invitation.Count(),
-                                Saved= invitation.Where(x => x.RecruitStatusType.Code == (int)RecruitStatusCode.InvitationCreated).Count(),
                                 Sent =invitation.Where(x=>x.RecruitStatusType.Code==(int)RecruitStatusCode.InvitationSent).Count(),
                                 Received = invitation.Where(x => x.RecruitStatusType.Code == (int)RecruitStatusCode.ContractReceived).Count(),
                                 Approved = invitation.Where(x => x.RecruitStatusType.Code == (int)RecruitStatusCode.Approved).Count()
