@@ -454,6 +454,7 @@
     <Content Include="typings.json" />
     <Content Include="Views\Invitation\Index.cshtml" />
     <Content Include="Views\TemplateManage\_NewOrModifyEmail.cshtml" />
+    <Content Include="Views\Registration\InvitationCodeNotExist.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -518,6 +519,15 @@
     <TypeScriptCompile Include="app\todolist.component.ts" />
     <TypeScriptCompile Include="app\tooltip\overlay.ts" />
     <TypeScriptCompile Include="app\tooltip\tooltip.ts" />
+    <TypeScriptCompile Include="typings\browser.d.ts" />
+    <TypeScriptCompile Include="typings\browser\ambient\es6-shim\index.d.ts" />
+    <TypeScriptCompile Include="typings\browser\ambient\jasmine\index.d.ts" />
+    <TypeScriptCompile Include="typings\browser\ambient\node\index.d.ts" />
+    <TypeScriptCompile Include="typings\index.d.ts" />
+    <TypeScriptCompile Include="typings\main.d.ts" />
+    <TypeScriptCompile Include="typings\main\ambient\es6-shim\index.d.ts" />
+    <TypeScriptCompile Include="typings\main\ambient\jasmine\index.d.ts" />
+    <TypeScriptCompile Include="typings\main\ambient\node\index.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

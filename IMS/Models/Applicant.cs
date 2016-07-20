@@ -15,8 +15,6 @@ namespace IMS.Models
         public string MedicalCondition { get; set; }
         public string Company { get; set; }
         public DateTime? ApplicationDt { get; set; }
-        public RecruitStatusType RecruitStatusType { get; set; }
-        public int RecruitStatusTypeId { get; set; }
         public Org Org { get; set; }
         public int OrgId { get; set;}
         public User User { get; set; }
