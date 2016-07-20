@@ -8,40 +8,40 @@
 <form role="form" action="/Registration/AddApplicant" method="post">
     <div class="form-group">
         <label for="firstname">First Name</label>
-        <input type="text" class="form-control" id="name" name="firstname" value="@Model.firstname">
+        <input type="text" class="form-control" id="name" name="firstname" value="@Model.Firstname">
     </div>
     <div class="form-group">
         <label for="lastname">Last Name</label>
-        <input type="text" class="form-control" id="name" name="lastname" value="@Model.lastname">
+        <input type="text" class="form-control" id="name" name="lastname" value="@Model.Lastname">
     </div>
     <div class="form-group">
         <label for="kiwiname">Kiwi Name:</label>
-        <input type="text" class="form-control" id="kiwiname" name="kiwiname"  value="@Model.kiwiname">
+        <input type="text" class="form-control" id="kiwiname" name="kiwiname"  value="@Model.Kiwiname">
         
     </div>
     <div class="form-group">
         <label for="email">Email address:</label>
-        <input type="email" class="form-control" id="email" name="email" value="@Model.email">
+        <label type="email" class="form-control" id="email" name="email" value="@Model.Email"></label>
     </div>
     <div class="form-group">
         <label for="mobile">Mobile Number:</label>
-        <input type="text" class="form-control" id="mobile" name="mobile" value="@Model.mobile">
+        <input type="text" class="form-control" id="mobile" name="mobile" value="@Model.Mobile">
     </div>
     <div class="form-group">
         <label for="address">Address:</label>
-        <input type="text" class="form-control" id="address" name="address" value="@Model.address">
+        <input type="text" class="form-control" id="address" name="address" value="@Model.Address">
     </div>
     <div class="form-group">
         <label for="suburb">Suburb:</label>
-        <input type="text" class="form-control" id="suburb" name="suburb" value="@Model.suburb">
+        <input type="text" class="form-control" id="suburb" name="suburb" value="@Model.Suburb">
     </div>
     <div class="form-group">
         <label for="visa">Visa Status:</label>
-        <input type="text" class="form-control" id="visa" name="visaStatus" value="@Model.visaStatus">
+        <input type="text" class="form-control" id="visa" name="visaStatus" value="@Model.VisaStatus">
     </div>
     <div class="form-group">
         <label for="medicalCondition">Medical Condition:</label>
-        <input type="text" class="form-control" id="medicalCondition" name="medicalCondition" value="@Model.medicalCondition">
+        <input type="text" class="form-control" id="medicalCondition" name="medicalCondition" value="@Model.MedicalCondition">
     </div>
     
     <button type="submit" id="submitbtn" class="btn btn-default">Submit</button>

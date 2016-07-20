@@ -454,6 +454,7 @@
     <Content Include="typings.json" />
     <Content Include="Views\Invitation\Index.cshtml" />
     <Content Include="Views\TemplateManage\_NewOrModifyEmail.cshtml" />
+    <Content Include="Views\Registration\InvitationCodeNotExist.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

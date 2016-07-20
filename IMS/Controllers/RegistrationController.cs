@@ -14,11 +14,27 @@ namespace IMS.Controllers
     public class RegistrationController : Controller
     {
         // GET: Contract
-        public ActionResult Index()
+        public ActionResult Index(string InvitationCode)
         {
-            ApplicantInfo model = new ApplicantInfo();     
+            using(var db = new ApplicationDbContext())
+            {
+                var invitation = db.Invitations.Where(x => x.InvitationCode == InvitationCode).SingleOrDefault();
+                if (invitation == null)
+                {
+
+                    return View("InvitationCodeNotExist");
+                }
+                else
+                {
+                    ApplicantInfo model = new ApplicantInfo();
+                    model.Email = invitation.Email;
+
+                    return View(model);
+                }
+
+            }
             
-            return View(model);
+            
         }
 
         [HttpPost]
@@ -30,13 +46,13 @@ namespace IMS.Controllers
 
                 var m = new Applicant
                 {
-                    Firstname = model.firstname,
-                    Lastname = model.lastname,
-                    Mobile = model.mobile,
-                    MedicalCondition = model.medicalCondition,
-                    Address = model.address + ", " + model.suburb,
-                    Email = model.email,
-                    VisaStatus = model.visaStatus,
+                    Firstname = model.Firstname,
+                    Lastname = model.Lastname,
+                    Mobile = model.Mobile,
+                    MedicalCondition = model.MedicalCondition,
+                    Address = model.Address + ", " + model.Suburb,
+                    Email = model.Email,
+                    VisaStatus = model.VisaStatus,
                     IsActive = true,
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
