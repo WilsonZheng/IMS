@@ -243,8 +243,8 @@ var NoticeMainComponent = (function () {
     NoticeMainComponent = __decorate([
         core_1.Component({
             selector: 'inv-notice-main',
-            templateUrl: 'app/invitation/notice-main.component.html',
-            styleUrls: ["app/invitation/notice-main.component.css"],
+            templateUrl: '/app/invitation/notice-main.component.html',
+            styles: ["\n                div[class*=\"col-\"] {\n                    padding:1px;\n                    margin:0px;\n                }\n\n                .recruit-status-stat .label-container{\n                    font-weight:400;\n                    border-radius:8px;\n                    border:1px solid #9cada0;\n                } \n\n                #quick-search-container .recruit-status-stat div[class*=\"col-\"]{\n                    padding:2px;\n                } \n\n                .ims-header-container{\n                    line-height:26px;\n                    height:26px;\n                    text-align:center;\n                }\n\n                .label-container{\n                    display:inline-block;\n                    width:100%;\n                    text-align:center;\n                }\n\n                .ims-iterator{\n                    border-radius:8px;\n                    background-color:#f5f5f5;\n                    margin:4px 0;\n                    padding:5px;\n                }\n            "],
             directives: [primeng_1.DataTable, primeng_1.Column, primeng_1.Button, primeng_1.Header, primeng_1.Menu, notice_editor_component_1.NoticeEditorComponent,
                 invitation_editor_component_1.InvitationEditorComponent, recruit_progress_component_1.RecruitProgressComponent, primeng_1.Tooltip, primeng_1.DataList],
             providers: [template_service_1.TemplateService, invitation_service_1.InvitationService]

@@ -1,5 +1,4 @@
 ﻿using IMS.Common;
-using IMS.Media;
 using IMS.Models;
 using IMS.ViewModels;
 using Microsoft.AspNet.Identity.Owin;
@@ -9,7 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using System.Linq;
 using System.Data.Entity;
 using LinqKit;
 

@@ -1,14 +1,14 @@
 "use strict";
 var router_1 = require('@angular/router');
-var notice_main_component_1 = require('../invitation/notice-main.component');
+var default_main_component_1 = require('../main/default-main.component');
 var routes = [
     {
-        path: '',
-        redirectTo: '/notice'
+        path: '/',
+        component: default_main_component_1.DefaultMainComponent
     },
     {
-        path: 'notice',
-        component: notice_main_component_1.NoticeMainComponent
+        path: '**',
+        redirectTo: '/'
     }
 ];
 exports.appRouterProviders = [

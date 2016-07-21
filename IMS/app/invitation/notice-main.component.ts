@@ -22,16 +22,47 @@ import { RecruitProgressComponent } from './recruit-progress.component';
 
 @Component({
     selector: 'inv-notice-main',
-    templateUrl:'app/invitation/notice-main.component.html',
-    styleUrls: ["app/invitation/notice-main.component.css"],
+    templateUrl: '/app/invitation/notice-main.component.html',
+    styles: [`
+                div[class*="col-"] {
+                    padding:1px;
+                    margin:0px;
+                }
+
+                .recruit-status-stat .label-container{
+                    font-weight:400;
+                    border-radius:8px;
+                    border:1px solid #9cada0;
+                } 
+
+                #quick-search-container .recruit-status-stat div[class*="col-"]{
+                    padding:2px;
+                } 
+
+                .ims-header-container{
+                    line-height:26px;
+                    height:26px;
+                    text-align:center;
+                }
+
+                .label-container{
+                    display:inline-block;
+                    width:100%;
+                    text-align:center;
+                }
+
+                .ims-iterator{
+                    border-radius:8px;
+                    background-color:#f5f5f5;
+                    margin:4px 0;
+                    padding:5px;
+                }
+            `],
     directives: [DataTable, Column, Button, Header, Menu, NoticeEditorComponent
         , InvitationEditorComponent, RecruitProgressComponent, Tooltip, DataList],
     providers: [TemplateService,InvitationService]
 })
 export class NoticeMainComponent implements OnInit {
-
-    
-
     templates: Template[];
     confirmSubscription: Subscription;
 
