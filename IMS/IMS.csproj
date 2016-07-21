@@ -351,26 +351,20 @@
     <Compile Include="ViewModels\UserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\admin\admin-main.component.css" />
     <Content Include="app\invitation\invitation-editor.component.html" />
     <Content Include="app\invitation\notice-editor.component.css" />
     <Content Include="app\invitation\notice-editor.component.html" />
     <Content Include="app\invitation\recruit-progress.component.html" />
     <Content Include="app\invitation\notice-main.component.html" />
-    <Content Include="app\admin\admin-main.component.html" />
+    <Content Include="app\main\admin-main.component.html" />
     <Content Include="app\main\app.component.html" />
-    <Content Include="app\main\default-main.component.html" />
+    <Content Include="app\main\intern-main.component.html" />
+    <Content Include="app\main\staff-main.component.html" />
     <Content Include="app\main\systemjs.config.js" />
-    <Content Include="app\ngsample\editor\systemjs.config.js" />
-    <Content Include="app\ngsample\forms\systemjs.config.js" />
-    <Content Include="app\ngsample\router\systemjs.config.js" />
     <Content Include="ngbin\app.tabs.html" />
     <Content Include="ngbin\tabcontent.tp.html" />
     <Content Include="ngbin\tabs.tp.html" />
     <Content Include="ngbin\tabtitle.tp.html" />
-    <Content Include="app\systemjs.config.js" />
-    <Content Include="app\tooltip\overlay.js" />
-    <Content Include="app\tooltip\tooltip.js" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
@@ -379,7 +373,6 @@
     <Content Include="Content\Site.css" />
     <Content Include="ngsample\editor\index.html" />
     <Content Include="ngsample\forms\index.html" />
-    <Content Include="app\ngsample\forms\hero-form.component.html" />
     <Content Include="ngsample\router\index.html" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
@@ -390,8 +383,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="package.json" />
-    <Content Include="app\tooltip\overlay.js.map" />
-    <Content Include="app\tooltip\tooltip.js.map" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -471,9 +462,9 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="app\admin\admin-main.component.ts" />
-    <TypeScriptCompile Include="app\main\app.route.ts" />
-    <TypeScriptCompile Include="app\app.ts" />
+    <TypeScriptCompile Include="app\main\admin-main.component.ts" />
+    <TypeScriptCompile Include="app\route\admin.route.ts" />
+    <TypeScriptCompile Include="app\route\app.route.ts" />
     <TypeScriptCompile Include="app\invitation\invitation-editor.component.ts" />
     <TypeScriptCompile Include="app\invitation\invitation-batch.transfer.ts" />
     <TypeScriptCompile Include="app\invitation\invitation-batch.model.ts" />
@@ -483,33 +474,17 @@
     <TypeScriptCompile Include="app\invitation\recruit-status.ts" />
     <TypeScriptCompile Include="app\invitation\shared\invitation.service.ts" />
     <TypeScriptCompile Include="app\main\default-main.component.ts" />
+    <TypeScriptCompile Include="app\main\intern-main.component.ts" />
+    <TypeScriptCompile Include="app\route\intern.route.ts" />
+    <TypeScriptCompile Include="app\main\staff-main.component.ts" />
+    <TypeScriptCompile Include="app\route\staff.route.ts" />
     <TypeScriptCompile Include="app\shared\rest-result.ts" />
     <TypeScriptCompile Include="app\invitation\shared\template.service.ts" />
     <TypeScriptCompile Include="app\invitation\template-content.ts" />
     <TypeScriptCompile Include="app\invitation\notice-main.component.ts" />
     <TypeScriptCompile Include="app\invitation\template.ts" />
-    <TypeScriptCompile Include="app\main.ts" />
-    <TypeScriptCompile Include="app\fancybutton.component.ts" />
     <TypeScriptCompile Include="app\main\app.component.ts" />
     <TypeScriptCompile Include="app\main\main.ts" />
-    <TypeScriptCompile Include="app\multi.component.ts" />
-    <TypeScriptCompile Include="app\ngsample\forms\app.ts" />
-    <TypeScriptCompile Include="app\ngsample\forms\main.ts" />
-    <TypeScriptCompile Include="app\ngsample\forms\hero-form.component.ts" />
-    <TypeScriptCompile Include="app\ngsample\forms\hero.ts" />
-    <TypeScriptCompile Include="app\ngsample\router\app.route.ts" />
-    <TypeScriptCompile Include="app\ngsample\router\app.ts" />
-    <TypeScriptCompile Include="app\ngsample\router\main.ts" />
-    <TypeScriptCompile Include="app\ngsample\router\crisis-center.component.ts" />
-    <TypeScriptCompile Include="app\ngsample\router\hero-detail.component.ts" />
-    <TypeScriptCompile Include="app\ngsample\router\hero-home.component.ts" />
-    <TypeScriptCompile Include="app\ngsample\router\hero-list.component.ts" />
-    <TypeScriptCompile Include="app\ngsample\router\index.ts" />
-    <TypeScriptCompile Include="app\panel.component.ts" />
-    <TypeScriptCompile Include="app\ngsample\editor\app.ts" />
-    <TypeScriptCompile Include="app\ngsample\editor\main.ts" />
-    <TypeScriptCompile Include="app\ngsample\editor\message.comp.ts" />
-    <TypeScriptCompile Include="app\ngsample\editor\mylogger.svc.ts" />
     <TypeScriptCompile Include="app\shared\global-constant.ts" />
     <TypeScriptCompile Include="app\shared\message.service.ts" />
     <TypeScriptCompile Include="app\shared\global-message.ts" />
@@ -518,13 +493,6 @@
     <TypeScriptCompile Include="app\shared\user-information.service.ts" />
     <TypeScriptCompile Include="app\shared\user.ts" />
     <TypeScriptCompile Include="app\shared\utility.service.ts" />
-    <TypeScriptCompile Include="app\tabcontent.component.ts" />
-    <TypeScriptCompile Include="app\tabs.component.ts" />
-    <TypeScriptCompile Include="app\tabtitle.component.ts" />
-    <TypeScriptCompile Include="app\textinput.component.ts" />
-    <TypeScriptCompile Include="app\todolist.component.ts" />
-    <TypeScriptCompile Include="app\tooltip\overlay.ts" />
-    <TypeScriptCompile Include="app\tooltip\tooltip.ts" />
     <TypeScriptCompile Include="typings\browser.d.ts" />
     <TypeScriptCompile Include="typings\browser\ambient\es6-shim\index.d.ts" />
     <TypeScriptCompile Include="typings\browser\ambient\jasmine\index.d.ts" />

@@ -10,19 +10,32 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 /// <reference path="../../node_modules/rxjs/add/operator/toPromise.d.ts" />
 var core_1 = require('@angular/core');
+var router_1 = require('@angular/router');
 var user_information_service_1 = require('../shared/user-information.service');
 var message_service_1 = require('../shared/message.service');
-var notice_main_component_1 = require('../invitation/notice-main.component');
+var role_name_1 = require('../shared/role-name');
 //Based upon the user's role, display the corresponding starting page.
 var DefaultMainComponent = (function () {
-    function DefaultMainComponent(userInformationService, messageService) {
+    function DefaultMainComponent(userInformationService, messageService, router) {
         this.userInformationService = userInformationService;
         this.messageService = messageService;
+        this.router = router;
     }
-    DefaultMainComponent.prototype.ngOnInit = function () {
+    DefaultMainComponent.prototype.ngAfterViewInit = function () {
         var _this = this;
+        //Direct user based on their given role.
         this.userInformationService.fetchUser().then(function (user) {
-            _this.user = user;
+            var route = '';
+            if (user.hasRole(role_name_1.RoleName.ADMIN)) {
+                route = "/admin";
+            }
+            else if (user.hasRole(role_name_1.RoleName.STAFF)) {
+                route = "/staff";
+            }
+            else if (user.hasRole(role_name_1.RoleName.INTERN)) {
+                route = "/intern";
+            }
+            _this.router.navigate([route]);
         })
             .catch(function (error) { _this.handleError(error); });
     };
@@ -31,13 +44,10 @@ var DefaultMainComponent = (function () {
     };
     DefaultMainComponent = __decorate([
         core_1.Component({
-            selector: 'default-main',
-            templateUrl: '/app/main/default-main.component.html',
-            styleUrls: [],
-            directives: [notice_main_component_1.NoticeMainComponent],
+            template: '',
             providers: [user_information_service_1.UserInformationService]
         }), 
-        __metadata('design:paramtypes', [user_information_service_1.UserInformationService, message_service_1.MessageService])
+        __metadata('design:paramtypes', [user_information_service_1.UserInformationService, message_service_1.MessageService, router_1.Router])
     ], DefaultMainComponent);
     return DefaultMainComponent;
 }());

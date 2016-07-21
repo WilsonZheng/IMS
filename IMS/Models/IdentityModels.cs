@@ -70,33 +70,37 @@ namespace IMS.Models
             var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var roleManager = HttpContext.Current.GetOwinContext().Get<ApplicationRoleManager>();
             roleManager.Create(new CustomRole("admin"));
-            roleManager.Create(new CustomRole("leader"));
+            roleManager.Create(new CustomRole("staff"));
+            roleManager.Create(new CustomRole("intern"));
             const string password = "111111";
 
             userManager.Create(new User {
-                UserName = "admin@test.com",
-                Email = "admin@test.com",
+                UserName = "admin1@test.com",
+                Email = "admin1@test.com",
                 Org = org
             }, password);
             userManager.Create(new User
             {
-                UserName = "leader@test.com",
-                Email = "leader@test.com",
+                UserName = "staff1@test.com",
+                Email = "staff1@test.com",
                 Org = org
             }, password);
 
             userManager.Create(new User
             {
-                UserName = "intern@test.com",
-                Email = "intern@test.com",
+                UserName = "intern1@test.com",
+                Email = "intern1@test.com",
                 Org = org
-            });
+            },password);
             
-            var user = userManager.FindByName("leader@test.com");
-            userManager.AddToRole(user.Id, "leader");
+            var user = userManager.FindByName("staff1@test.com");
+            userManager.AddToRole(user.Id, "staff");
 
-            user = userManager.FindByName("admin@test.com");
+            user = userManager.FindByName("admin1@test.com");
             userManager.AddToRole(user.Id,"admin");
+            
+            user = userManager.FindByName("intern1@test.com");
+            userManager.AddToRole(user.Id, "intern");
 
             context.ConfigurationTypes.Add(new ConfigurationType { Code = (int)ConfigurationTypeCode.Smtp, Description = "Smtp", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });                   
             context.RecruitStatusType.Add(new RecruitStatusType { Code = (int)RecruitStatusCode.InvitationSent,Description="Sent", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });

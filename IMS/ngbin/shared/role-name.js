@@ -9,6 +9,20 @@ var RoleName = (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(RoleName, "STAFF", {
+        get: function () {
+            return 'staff';
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(RoleName, "INTERN", {
+        get: function () {
+            return 'intern';
+        },
+        enumerable: true,
+        configurable: true
+    });
     return RoleName;
 }());
 exports.RoleName = RoleName;
