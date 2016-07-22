@@ -10,17 +10,40 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
+var primeng_1 = require('primeng/primeng');
 var AdminMainComponent = (function () {
-    function AdminMainComponent() {
+    function AdminMainComponent(router) {
+        this.router = router;
+        this.titles = ["Manage Notice", "Manage Intern"];
+        this.titleIndex = 0;
     }
     AdminMainComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.menuItems = [
+            {
+                label: this.titles[0],
+                command: function (event) {
+                    _this.router.navigate(['/admin']);
+                    _this.titleIndex = 0;
+                }
+            },
+            {
+                label: this.titles[1],
+                command: function (event) {
+                    _this.router.navigate(['/admin/intern']);
+                    _this.titleIndex = 1;
+                }
+            }
+        ];
     };
     AdminMainComponent = __decorate([
         core_1.Component({
             templateUrl: '/app/main/admin-main.component.html',
-            directives: [router_1.ROUTER_DIRECTIVES]
+            styles: ["\n            .ims-body-container{\n                margin-top:4px;\n            }\n            .ims-body-container .panel-body{\n                padding:2px;\n            }\n            .panel-title{\n                font-size:1em;\n                font-weight:700;\n            }\n    "],
+            directives: [router_1.ROUTER_DIRECTIVES, primeng_1.Menubar],
+            providers: []
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [router_1.Router])
     ], AdminMainComponent);
     return AdminMainComponent;
 }());

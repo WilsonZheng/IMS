@@ -26,17 +26,16 @@ namespace IMS.Models
         {
             // Set the database intializer which is run once during application start
             // This seeds the database with admin user credentials and admin role
-            Database.SetInitializer<ApplicationDbContext>(null);//to use current db tables(faster)
-            //Database.SetInitializer<ApplicationDbContext>(new ApplicationDbInitializer());//to generate db tables automatically
+            //Database.SetInitializer<ApplicationDbContext>(null);//to use current db tables(faster)
+            Database.SetInitializer<ApplicationDbContext>(new ApplicationDbInitializer());//to generate db tables automatically
         }
 
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            //base.OnModelCreating(modelBuilder);
+           
             modelBuilder.Configurations.Add(new ApplicantConfiguration());
             modelBuilder.Configurations.Add(new UserConfiguration());
-
             modelBuilder.Configurations.Add(new OrgConfiguration());
             modelBuilder.Configurations.Add(new LookupConfiguration());
             modelBuilder.Configurations.Add(new TemplateConfiguration());
@@ -47,6 +46,13 @@ namespace IMS.Models
             modelBuilder.Configurations.Add(new CustomRoleConfiguration());
             modelBuilder.Configurations.Add(new ConfigurationConfiguration());
             modelBuilder.Configurations.Add(new InvitationConfiguration());
+            modelBuilder.Configurations.Add(new InternshipConfiguration());
+            modelBuilder.Configurations.Add(new SupervisingConfiguration());
+            modelBuilder.Configurations.Add(new TaskConfiguration());
+            modelBuilder.Configurations.Add(new TaskAssignmentConfiguration());
+            modelBuilder.Configurations.Add(new TaskAssignmentHistoryConfiguration());
+            modelBuilder.Configurations.Add(new TaskReportConfiguration());
+            modelBuilder.Configurations.Add(new SupervisingCommentConfiguration());
         }
 
         public DbSet<Applicant> Applicants { get; set; }
@@ -58,6 +64,14 @@ namespace IMS.Models
         public DbSet<Template> Templates { get; set; }
         public DbSet<Configuration> Configurations { get; set; }
         public DbSet<Invitation> Invitations { get; set; }
+        public DbSet<Internship> Internships { get; set; }
+        public DbSet<Supervising> Supervisings { get; set; }
+        public DbSet<TaskToDo> TaskToDos { get; set; }
+        public DbSet<TaskAssignment> TaskAssignments { get; set; }
+        public DbSet<TaskAssignmentHistory> TaskAssignmentHistories { get; set; }
+        public DbSet<TaskReport> TaskReports { get; set; }
+        public DbSet<SupervisingComment> SupervisingComments { get; set; }
+
     }
     
     public class ApplicationDbInitializer : DropCreateDatabaseAlways<ApplicationDbContext>
@@ -79,28 +93,43 @@ namespace IMS.Models
                 Email = "admin1@test.com",
                 Org = org
             }, password);
-            userManager.Create(new User
-            {
-                UserName = "staff1@test.com",
-                Email = "staff1@test.com",
-                Org = org
-            }, password);
+          
 
-            userManager.Create(new User
+            User user;
+            string email;
+            string role;
+            for(var i=0;i<10;i++)
             {
-                UserName = "intern1@test.com",
-                Email = "intern1@test.com",
-                Org = org
-            },password);
-            
-            var user = userManager.FindByName("staff1@test.com");
-            userManager.AddToRole(user.Id, "staff");
+                role = "intern";
+                email = string.Format("{1}{0}@test.com",i,role);
+                userManager.Create(new User
+                {
+                    UserName = email,
+                    Email = email,
+                    Org = org
+                }, password);
+                user = userManager.FindByName(email);
+                userManager.AddToRole(user.Id,role);
+            }
+
+            for (var i = 0; i < 10; i++)
+            {
+                role = "staff";
+                email = string.Format("{1}{0}@test.com", i, role);
+                userManager.Create(new User
+                {
+                    UserName = email,
+                    Email = email,
+                    Org = org
+                }, password);
+                user = userManager.FindByName(email);
+                userManager.AddToRole(user.Id, role);
+            }
+                        
 
             user = userManager.FindByName("admin1@test.com");
             userManager.AddToRole(user.Id,"admin");
-            
-            user = userManager.FindByName("intern1@test.com");
-            userManager.AddToRole(user.Id, "intern");
+                        
 
             context.ConfigurationTypes.Add(new ConfigurationType { Code = (int)ConfigurationTypeCode.Smtp, Description = "Smtp", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });                   
             context.RecruitStatusType.Add(new RecruitStatusType { Code = (int)RecruitStatusCode.InvitationSent,Description="Sent", CreatedBy = user, UpdatedBy = user, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, IsActive = true });

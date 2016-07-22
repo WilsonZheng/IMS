@@ -321,8 +321,22 @@
     <Compile Include="Models\GenerateViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Common\RecruitStatusCode.cs" />
+    <Compile Include="Models\Internship.cs" />
+    <Compile Include="Models\InternshipConfiguration.cs" />
     <Compile Include="Models\Invitation.cs" />
     <Compile Include="Models\InvitationConfiguration.cs" />
+    <Compile Include="Models\Supervising.cs" />
+    <Compile Include="Models\SupervisingComment.cs" />
+    <Compile Include="Models\SupervisingCommentConfiguration.cs" />
+    <Compile Include="Models\SupervisingConfiguration.cs" />
+    <Compile Include="Models\TaskToDo.cs" />
+    <Compile Include="Models\TaskAssignment.cs" />
+    <Compile Include="Models\TaskAssignmentConfiguration.cs" />
+    <Compile Include="Models\TaskAssignmentHistory.cs" />
+    <Compile Include="Models\TaskAssignmentHistoryConfiguration.cs" />
+    <Compile Include="Models\TaskConfiguration.cs" />
+    <Compile Include="Models\TaskReport.cs" />
+    <Compile Include="Models\TaskReportConfiguration.cs" />
     <Compile Include="ViewModels\ApplicantSearchViewModel.cs" />
     <Compile Include="ViewModels\EmailTemplateViewModel.cs" />
     <Compile Include="ViewModels\InvitationSearchViewModel.cs" />
@@ -462,6 +476,7 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="app\internmanage\intern-list.component.ts" />
     <TypeScriptCompile Include="app\main\admin-main.component.ts" />
     <TypeScriptCompile Include="app\route\admin.route.ts" />
     <TypeScriptCompile Include="app\route\app.route.ts" />
