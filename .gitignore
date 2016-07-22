@@ -213,6 +213,4 @@ ModelManifest.xml
 
 # Web.config file
 Web.config
-/IMS/agview
-/IMS/app
 /IMS/typings
