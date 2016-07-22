@@ -375,10 +375,6 @@
     <Content Include="app\main\intern-main.component.html" />
     <Content Include="app\main\staff-main.component.html" />
     <Content Include="app\main\systemjs.config.js" />
-    <Content Include="ngbin\app.tabs.html" />
-    <Content Include="ngbin\tabcontent.tp.html" />
-    <Content Include="ngbin\tabs.tp.html" />
-    <Content Include="ngbin\tabtitle.tp.html" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
@@ -464,6 +460,7 @@
     <Folder Include="app\main\shared\" />
     <Folder Include="App_Data\" />
     <Folder Include="Content\font-awesome-4.6.3\" />
+    <Folder Include="ngbin\" />
     <Folder Include="Views\UserInfo\" />
     <Folder Include="Views\wilsonTest\" />
   </ItemGroup>
