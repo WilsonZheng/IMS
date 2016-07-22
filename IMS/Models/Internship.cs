@@ -9,5 +9,8 @@ namespace IMS.Models
     {
         public int Id { get; set; }
         public User Intern { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public bool IsActive { get; set; }
     }
 }

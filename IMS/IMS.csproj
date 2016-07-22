@@ -287,6 +287,7 @@
     <Compile Include="Common\IMSUserUtil.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ConfigurationController.cs" />
+    <Compile Include="Controllers\InternController.cs" />
     <Compile Include="Controllers\InvitationController.cs" />
     <Compile Include="Controllers\AppMainController.cs" />
     <Compile Include="Controllers\RegistrationController.cs" />
@@ -339,6 +340,7 @@
     <Compile Include="Models\TaskReportConfiguration.cs" />
     <Compile Include="ViewModels\ApplicantSearchViewModel.cs" />
     <Compile Include="ViewModels\EmailTemplateViewModel.cs" />
+    <Compile Include="ViewModels\InternViewModel.cs" />
     <Compile Include="ViewModels\InvitationSearchViewModel.cs" />
     <Compile Include="ViewModels\EmailTemplateContentViewModel.cs" />
     <Compile Include="ViewModels\InvitationBatchViewModel.cs" />
@@ -365,6 +367,7 @@
     <Compile Include="ViewModels\UserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\admin\intern-list.component.html" />
     <Content Include="app\invitation\invitation-editor.component.html" />
     <Content Include="app\invitation\notice-editor.component.css" />
     <Content Include="app\invitation\notice-editor.component.html" />
@@ -460,6 +463,7 @@
     <Folder Include="app\main\shared\" />
     <Folder Include="App_Data\" />
     <Folder Include="Content\font-awesome-4.6.3\" />
+    <Folder Include="Views\Intern\" />
     <Folder Include="Views\UserInfo\" />
     <Folder Include="Views\wilsonTest\" />
   </ItemGroup>
@@ -473,6 +477,8 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app\admin\intern-list.component.ts" />
+    <TypeScriptCompile Include="app\admin\intern.service.ts" />
+    <TypeScriptCompile Include="app\admin\intern.ts" />
     <TypeScriptCompile Include="app\main\admin-main.component.ts" />
     <TypeScriptCompile Include="app\route\admin.route.ts" />
     <TypeScriptCompile Include="app\route\app.route.ts" />

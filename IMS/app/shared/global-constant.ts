@@ -2,4 +2,4 @@
     static get INVITATION_CODE_PLACEHOLDER(): string {
         return "$$$";
     }
-}
+} 

@@ -9,18 +9,23 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
+var primeng_1 = require('primeng/primeng');
+var message_service_1 = require('../shared/message.service');
 var InternListComponent = (function () {
-    function InternListComponent() {
+    function InternListComponent(messageService) {
+        this.messageService = messageService;
     }
     InternListComponent.prototype.ngOnInit = function () {
     };
     InternListComponent = __decorate([
         core_1.Component({
-            template: 'intern list',
+            templateUrl: '/app/admin/intern-list.component.html',
             styles: [""],
-            directives: []
+            directives: [primeng_1.DataTable, primeng_1.Column, primeng_1.Button, primeng_1.Header, primeng_1.Menu,
+                primeng_1.Tooltip, primeng_1.DataList],
+            providers: []
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [message_service_1.MessageService])
     ], InternListComponent);
     return InternListComponent;
 }());
