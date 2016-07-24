@@ -5,14 +5,20 @@ using System.Threading.Tasks;
 using System;
 using System.ComponentModel.DataAnnotations;
 using IMS.Common;
+using System.Collections.Generic;
 
 namespace IMS.Models
 {
     public partial class User : IdentityUser<int, CustomUserLogin, CustomUserRole, CustomUserClaim>
     {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public Org Org { get; set; }
         public int OrgId { get; set;}
        
+        public List<Internship> Internships { get; set; }
+
+
         [Timestamp]
         public byte[] RowVersion { get; set; }
               

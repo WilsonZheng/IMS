@@ -9,5 +9,8 @@ namespace IMS.Common
     {
         public static readonly string OrgId = "OrgId";
         public static readonly string INVITATION_CODE_PLACEHOLER = "$$$";
+        public static readonly string ROLE_ADMIN = "admin";
+        public static readonly string ROLE_STAFF = "staff";
+        public static readonly string ROLE_INTERN = "intern";
     }
 }

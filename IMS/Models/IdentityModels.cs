@@ -26,8 +26,8 @@ namespace IMS.Models
         {
             // Set the database intializer which is run once during application start
             // This seeds the database with admin user credentials and admin role
-            Database.SetInitializer<ApplicationDbContext>(null);//to use current db tables(faster)
-            //Database.SetInitializer<ApplicationDbContext>(new ApplicationDbInitializer());//to generate db tables automatically
+            //Database.SetInitializer<ApplicationDbContext>(null);//to use current db tables(faster)
+            Database.SetInitializer<ApplicationDbContext>(new ApplicationDbInitializer());//to generate db tables automatically
         }
 
 
@@ -47,9 +47,7 @@ namespace IMS.Models
             modelBuilder.Configurations.Add(new ConfigurationConfiguration());
             modelBuilder.Configurations.Add(new InvitationConfiguration());
             modelBuilder.Configurations.Add(new InternshipConfiguration());
-            modelBuilder.Configurations.Add(new SupervisingConfiguration());
-            modelBuilder.Configurations.Add(new TaskConfiguration());
-            modelBuilder.Configurations.Add(new TaskAssignmentConfiguration());
+            modelBuilder.Configurations.Add(new TaskToDoConfiguration());
             modelBuilder.Configurations.Add(new TaskAssignmentHistoryConfiguration());
             modelBuilder.Configurations.Add(new TaskReportConfiguration());
             modelBuilder.Configurations.Add(new SupervisingCommentConfiguration());
@@ -65,9 +63,9 @@ namespace IMS.Models
         public DbSet<Configuration> Configurations { get; set; }
         public DbSet<Invitation> Invitations { get; set; }
         public DbSet<Internship> Internships { get; set; }
-        public DbSet<Supervising> Supervisings { get; set; }
+      
         public DbSet<TaskToDo> TaskToDos { get; set; }
-        public DbSet<TaskAssignment> TaskAssignments { get; set; }
+      
         public DbSet<TaskAssignmentHistory> TaskAssignmentHistories { get; set; }
         public DbSet<TaskReport> TaskReports { get; set; }
         public DbSet<SupervisingComment> SupervisingComments { get; set; }
@@ -106,10 +104,18 @@ namespace IMS.Models
                 {
                     UserName = email,
                     Email = email,
-                    Org = org
+                    Org = org,
+                    FirstName=string.Format("Jhon{0}",i),
+                    LastName= string.Format("Malcome{0}", i)
                 }, password);
                 user = userManager.FindByName(email);
                 userManager.AddToRole(user.Id,role);
+                context.Internships.Add(new Internship
+                {
+                    Id = user.Id,
+                    CommenceAt = DateTime.UtcNow,
+                    ExpiryAt = DateTime.UtcNow.AddDays(90)
+                });
             }
 
             for (var i = 0; i < 10; i++)
@@ -120,6 +126,8 @@ namespace IMS.Models
                 {
                     UserName = email,
                     Email = email,
+                    FirstName = string.Format("JhonStaff{0}", i),
+                    LastName = string.Format("MalStaff{0}", i),
                     Org = org
                 }, password);
                 user = userManager.FindByName(email);

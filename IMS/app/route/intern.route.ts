@@ -5,5 +5,6 @@ export const internRoutes: RouterConfig = [
     {
         path: 'intern',
         component: InternMainComponent
+       
     }
 ];

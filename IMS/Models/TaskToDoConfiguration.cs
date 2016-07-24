@@ -2,9 +2,9 @@
 
 namespace IMS.Models
 {
-    public class TaskConfiguration : EntityTypeConfiguration<TaskToDo>
+    public class TaskToDoConfiguration : EntityTypeConfiguration<TaskToDo>
     {
-        public TaskConfiguration() {
+        public TaskToDoConfiguration() {
             this.HasRequired(x => x.Owner).WithMany().HasForeignKey(x => x.OwnerId).WillCascadeOnDelete(false);
         }
     }

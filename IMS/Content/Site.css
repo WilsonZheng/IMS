@@ -147,3 +147,16 @@ div.search-panel{
     color:blue;
     cursor:pointer;    
 }
+
+
+.ims-panel-title.panel-title{
+    font-size:1em;
+    font-weight:700;
+}
+
+.bg-info.ims-no-record {
+    padding:8px;
+    text-align:center;
+    font-weight:400;
+    border-radius:10px;
+}

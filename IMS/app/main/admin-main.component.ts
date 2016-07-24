@@ -1,7 +1,7 @@
 ﻿import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router }    from '@angular/router';
 import {RestResult} from '../shared/rest-result';
-import { Menubar,MenuItem } from 'primeng/primeng';
+import { Menubar, MenuItem, Breadcrumb } from 'primeng/primeng';
 
 
 @Component({
@@ -13,39 +13,38 @@ import { Menubar,MenuItem } from 'primeng/primeng';
             .ims-body-container .panel-body{
                 padding:2px;
             }
-            .panel-title{
-                font-size:1em;
-                font-weight:700;
-            }
     `],
-    directives: [ROUTER_DIRECTIVES, Menubar],
+    directives: [ROUTER_DIRECTIVES, Menubar, Breadcrumb],
     providers:[]
 })
 export class AdminMainComponent implements OnInit {
-    private titles: string[] = ["Manage Notice", "Manage Intern"];
-    private titleIndex: number = 0;
-
     private menuItems: MenuItem[];
-
+    private title: string = 'Manage Notice';
     constructor(private router:Router) {
        
     }
-        
+
+   
+
+
+
     ngOnInit(){
         this.menuItems = [
             {
-                label: this.titles[0],
+                label: 'Manage Notice',
                 command: (event) => {
-                    this.router.navigate(['/admin']);
-                    this.titleIndex = 0;
+                    this.router.navigate(['/admin'], { queryParams: { } }); this.title = 'Manage Notice';
                 }
             },
             {
-                label: this.titles[1],
-                command: (event) => {
-                    this.router.navigate(['/admin/intern']);
-                    this.titleIndex = 1;
-                } 
+                label: 'Manage Intern',
+                items: [
+                    
+                    { label: "Supervisor"       ,command: (event) => { this.router.navigate(['/admin/intern/Supervisor']); this.title = "Admin>Manage Intern>Supervisors" } },
+                    { label: "Task", command: (event) => { this.router.navigate(['/admin/intern/Task']); this.title = "Admin>Manage Intern>Task" } },
+                    { label: "Comment", command: (event) => { this.router.navigate(['/admin/intern/Comment']); this.title = "Admin>Manage Intern>Comment" } }
+                ]
+               
             }
         ];
 

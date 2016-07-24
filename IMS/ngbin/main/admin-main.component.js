@@ -14,33 +14,33 @@ var primeng_1 = require('primeng/primeng');
 var AdminMainComponent = (function () {
     function AdminMainComponent(router) {
         this.router = router;
-        this.titles = ["Manage Notice", "Manage Intern"];
-        this.titleIndex = 0;
+        this.title = 'Manage Notice';
     }
     AdminMainComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.menuItems = [
             {
-                label: this.titles[0],
+                label: 'Manage Notice',
                 command: function (event) {
-                    _this.router.navigate(['/admin']);
-                    _this.titleIndex = 0;
+                    _this.router.navigate(['/admin'], { queryParams: {} });
+                    _this.title = 'Manage Notice';
                 }
             },
             {
-                label: this.titles[1],
-                command: function (event) {
-                    _this.router.navigate(['/admin/intern']);
-                    _this.titleIndex = 1;
-                }
+                label: 'Manage Intern',
+                items: [
+                    { label: "Supervisor", command: function (event) { _this.router.navigate(['/admin/intern/Supervisor']); _this.title = "Admin>Manage Intern>Supervisors"; } },
+                    { label: "Task", command: function (event) { _this.router.navigate(['/admin/intern/Task']); _this.title = "Admin>Manage Intern>Task"; } },
+                    { label: "Comment", command: function (event) { _this.router.navigate(['/admin/intern/Comment']); _this.title = "Admin>Manage Intern>Comment"; } }
+                ]
             }
         ];
     };
     AdminMainComponent = __decorate([
         core_1.Component({
             templateUrl: '/app/main/admin-main.component.html',
-            styles: ["\n            .ims-body-container{\n                margin-top:4px;\n            }\n            .ims-body-container .panel-body{\n                padding:2px;\n            }\n            .panel-title{\n                font-size:1em;\n                font-weight:700;\n            }\n    "],
-            directives: [router_1.ROUTER_DIRECTIVES, primeng_1.Menubar],
+            styles: ["\n            .ims-body-container{\n                margin-top:4px;\n            }\n            .ims-body-container .panel-body{\n                padding:2px;\n            }\n    "],
+            directives: [router_1.ROUTER_DIRECTIVES, primeng_1.Menubar, primeng_1.Breadcrumb],
             providers: []
         }), 
         __metadata('design:paramtypes', [router_1.Router])

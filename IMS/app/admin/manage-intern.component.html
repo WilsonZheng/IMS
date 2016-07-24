@@ -1,0 +1,37 @@
+﻿    <!--List of the interns to be managed according to the requested function-->
+    <!--The actual job to be executed depends on the component loaded onto the router outlet at the bottom.-->
+    <p-dataTable [value]="interns" [headerRows]="headerRows"
+                 [rows]="10" [paginator]="true" [resizableColumns]="true"
+                 [responsive]="true" selectionMode="single" [(selection)]="selectedIntern"
+                 (onRowSelect)="onInternSelected($event)"
+                 (onRowUnselect)="onInternUnselected($event)">
+
+        <p-column field="FirstName">
+            <template let-intern="rowData">
+                <span>{{intern.FirstName}}</span>
+            </template>
+        </p-column>
+        <p-column field="LastName">
+            <template let-intern="rowData">
+                <span>{{intern.LastName}}</span>
+            </template>
+        </p-column>
+        <p-column field="UserName">
+            <template let-intern="rowData">
+                <span>{{intern.UserName}}</span>
+            </template>
+        </p-column>
+        <p-column>
+            <template let-intern="rowData">
+               <div *ngFor="let supervisor of intern.Supervisors">{{supervisor.FirstName}}</div>
+            </template>
+        </p-column>
+        <p-column>
+            <template let-intern="rowData">
+                <div class="ims-link-label" *ngFor="let task of intern.TaskToDos">{{task.Title}}</div>
+            </template>
+        </p-column>
+    </p-dataTable>
+    
+    <!--Placement for the components to handle detail-->
+    <router-outlet></router-outlet>

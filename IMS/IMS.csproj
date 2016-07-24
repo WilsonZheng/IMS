@@ -326,18 +326,20 @@
     <Compile Include="Models\InternshipConfiguration.cs" />
     <Compile Include="Models\Invitation.cs" />
     <Compile Include="Models\InvitationConfiguration.cs" />
-    <Compile Include="Models\Supervising.cs" />
     <Compile Include="Models\SupervisingComment.cs" />
     <Compile Include="Models\SupervisingCommentConfiguration.cs" />
-    <Compile Include="Models\SupervisingConfiguration.cs" />
+    <Compile Include="ViewModels\SupervisingCommentViewModel.cs" />
+    <Compile Include="ViewModels\SupervisingRequestViewModel.cs" />
+    <Compile Include="ViewModels\SupervisingResponseViewModel.cs" />
+    <Compile Include="ViewModels\SupervisorViewModel.cs" />
     <Compile Include="Models\TaskToDo.cs" />
-    <Compile Include="Models\TaskAssignment.cs" />
-    <Compile Include="Models\TaskAssignmentConfiguration.cs" />
     <Compile Include="Models\TaskAssignmentHistory.cs" />
     <Compile Include="Models\TaskAssignmentHistoryConfiguration.cs" />
-    <Compile Include="Models\TaskConfiguration.cs" />
+    <Compile Include="Models\TaskToDoConfiguration.cs" />
     <Compile Include="Models\TaskReport.cs" />
     <Compile Include="Models\TaskReportConfiguration.cs" />
+    <Compile Include="ViewModels\TaskParticipantRequestViewModel.cs" />
+    <Compile Include="ViewModels\TaskToDoViewModel.cs" />
     <Compile Include="ViewModels\ApplicantSearchViewModel.cs" />
     <Compile Include="ViewModels\EmailTemplateViewModel.cs" />
     <Compile Include="ViewModels\InternViewModel.cs" />
@@ -367,7 +369,10 @@
     <Compile Include="ViewModels\UserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\admin\intern-list.component.html" />
+    <Content Include="app\admin\intern-comment.component.html" />
+    <Content Include="app\admin\manage-intern.component.html" />
+    <Content Include="app\admin\intern-supervisor.component.html" />
+    <Content Include="app\admin\intern-task.component.html" />
     <Content Include="app\invitation\invitation-editor.component.html" />
     <Content Include="app\invitation\notice-editor.component.css" />
     <Content Include="app\invitation\notice-editor.component.html" />
@@ -476,10 +481,21 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="app\admin\intern-list.component.ts" />
+    <TypeScriptCompile Include="app\admin\intern-comment.component.ts" />
+    <TypeScriptCompile Include="app\admin\manage-intern-update-code.ts" />
+    <TypeScriptCompile Include="app\admin\manage-intern.component.ts" />
+    <TypeScriptCompile Include="app\admin\intern-supervisor.component.ts" />
+    <TypeScriptCompile Include="app\admin\intern-task.component.ts" />
     <TypeScriptCompile Include="app\admin\intern.service.ts" />
     <TypeScriptCompile Include="app\admin\intern.ts" />
+    <TypeScriptCompile Include="app\admin\manage-participant-request.ts" />
+    <TypeScriptCompile Include="app\admin\supervising-comment.ts" />
+    <TypeScriptCompile Include="app\admin\supervising-request.ts" />
+    <TypeScriptCompile Include="app\admin\supervising-response.ts" />
+    <TypeScriptCompile Include="app\admin\supervisor.ts" />
+    <TypeScriptCompile Include="app\admin\task-to-do.ts" />
     <TypeScriptCompile Include="app\main\admin-main.component.ts" />
+    <TypeScriptCompile Include="app\route\admin-manage-intern.route.ts" />
     <TypeScriptCompile Include="app\route\admin.route.ts" />
     <TypeScriptCompile Include="app\route\app.route.ts" />
     <TypeScriptCompile Include="app\invitation\invitation-editor.component.ts" />
@@ -495,6 +511,7 @@
     <TypeScriptCompile Include="app\route\intern.route.ts" />
     <TypeScriptCompile Include="app\main\staff-main.component.ts" />
     <TypeScriptCompile Include="app\route\staff.route.ts" />
+    <TypeScriptCompile Include="app\shared\bracket-date-transform.pipe.ts" />
     <TypeScriptCompile Include="app\shared\rest-result.ts" />
     <TypeScriptCompile Include="app\invitation\shared\template.service.ts" />
     <TypeScriptCompile Include="app\invitation\template-content.ts" />

@@ -1,7 +1,9 @@
 "use strict";
 var notice_main_component_1 = require('../invitation/notice-main.component');
-var intern_list_component_1 = require('../admin/intern-list.component');
 var admin_main_component_1 = require('../main/admin-main.component');
+//sub route.
+var admin_manage_intern_route_1 = require('./admin-manage-intern.route');
+//   admin
 exports.adminRoutes = [
     {
         path: 'admin',
@@ -10,12 +12,8 @@ exports.adminRoutes = [
             {
                 path: '',
                 component: notice_main_component_1.NoticeMainComponent
-            },
-            {
-                path: 'intern',
-                component: intern_list_component_1.InternListComponent
             }
-        ]
+        ].concat(admin_manage_intern_route_1.adminManageInternRoutes)
     }
 ];
 //# sourceMappingURL=admin.route.js.map

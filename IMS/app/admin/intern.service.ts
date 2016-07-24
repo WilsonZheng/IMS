@@ -5,6 +5,12 @@ import 'rxjs/add/operator/toPromise';
 
 import { RestResult } from '../shared/rest-result';
 import { Intern } from './intern';
+import { Supervisor } from './supervisor';
+import { SupervisingRequest } from './supervising-request';
+import { SupervisingResponse } from './supervising-response';
+import { SupervisingComment } from './supervising-comment';
+import { TaskToDo } from './task-to-do';
+import { ManageParticipantRequest } from './manage-participant-request';
 
 @Injectable()
 export class InternService {
@@ -34,6 +40,207 @@ export class InternService {
             });
     }
 
+
+    getSupervisors(): Promise<Supervisor[]> {
+        return this.http.post("/Intern/getSupervisors", JSON.stringify({}), { headers: this.headers }).toPromise()
+            .then(response => {
+                var result: RestResult = response.json();
+                if (result.Error) {
+                    return Promise.reject(result.Error);
+                }
+                else {
+                    return result.Data;
+                }
+
+            }).catch((error) => {
+                return Promise.reject(error);
+            });
+    }
+
+    getSupervisorsForIntern(internId:number): Promise<Supervisor[]> {
+        return this.http.post("/Intern/getSupervisorsForIntern", JSON.stringify({ internId:internId}), { headers: this.headers }).toPromise()
+            .then(response => {
+                var result: RestResult = response.json();
+                if (result.Error) {
+                    return Promise.reject(result.Error);
+                }
+                else {
+                    return result.Data;
+                }
+
+            }).catch((error) => {
+                return Promise.reject(error);
+            });
+    }
+
+    handleSupervising(model: SupervisingRequest): Promise<SupervisingResponse> {
+        return this.http.post("/Intern/handleSupervising", JSON.stringify(model), { headers: this.headers }).toPromise()
+            .then(response => {
+                var result: RestResult = response.json();
+                if (result.Error) {
+                    return Promise.reject(result.Error);
+                }
+                else {
+                    return result.Data;
+                }
+
+            }).catch((error) => {
+                return Promise.reject(error);
+            });
+    }  
+
+    getSupervisingComments(internId: number): Promise<SupervisingComment[]> {
+        return this.http.post("/Intern/getSupervisingComments", JSON.stringify({ internId: internId }), { headers: this.headers }).toPromise()
+            .then(response => {
+                var result: RestResult = response.json();
+                if (result.Error) {
+                    return Promise.reject(result.Error);
+                }
+                else {
+                    return result.Data;
+                }
+
+            }).catch((error) => {
+                return Promise.reject(error);
+            });
+
+
+    }
+
+    createComment(comment: SupervisingComment): Promise<SupervisingComment> {
+        return this.http.post("/Intern/createSupervisingComment", JSON.stringify(comment), { headers: this.headers }).toPromise()
+            .then(response => {
+                var result: RestResult = response.json();
+                if (result.Error) {
+                    return Promise.reject(result.Error);
+                }
+                else {
+                    return result.Data;
+                }
+
+            }).catch((error) => {
+                return Promise.reject(error);
+            });
+    }
+
+    deleteComment(comment: SupervisingComment): Promise<void> {
+        return this.http.post("/Intern/deleteSupervisingComment", JSON.stringify(comment), { headers: this.headers }).toPromise()
+            .then(response => {
+                var result: RestResult = response.json();
+                if (result.Error) {
+                    return Promise.reject(result.Error);
+                }
+                else {
+                    return;
+                }
+
+            }).catch((error) => {
+                return Promise.reject(error);
+            });
+    }
+
+
+    updateComment(comment: SupervisingComment): Promise<void> {
+        return this.http.post("/Intern/updateSupervisingComment", JSON.stringify(comment), { headers: this.headers }).toPromise()
+            .then(response => {
+                var result: RestResult = response.json();
+                if (result.Error) {
+                    return Promise.reject(result.Error);
+                }
+                else {
+                    return;
+                }
+
+            }).catch((error) => {
+                return Promise.reject(error);
+            });
+    }
     
+
+    /////////////////////////////Manage Task & Participant//////////////////////////////////////////////////////
+    getTasks(): Promise<TaskToDo[]> {
+        return this.http.post("/Intern/getTasks", JSON.stringify({}), { headers: this.headers }).toPromise()
+            .then(response => {
+                var result: RestResult = response.json();
+                if (result.Error) {
+                    return Promise.reject(result.Error);
+                }
+                else {
+                    return result.Data;
+                }
+
+            }).catch((error) => {
+                return Promise.reject(error);
+            });
+    }
+    
+
+    createTask(task: TaskToDo): Promise<TaskToDo> {
+        return this.http.post("/Intern/createTask", JSON.stringify(task), { headers: this.headers }).toPromise()
+            .then(response => {
+                var result: RestResult = response.json();
+                if (result.Error) {
+                    return Promise.reject(result.Error);
+                }
+                else {
+                    return result.Data;
+                }
+
+            }).catch((error) => {
+                return Promise.reject(error);
+            });
+    }
+
+    deleteTask(task: TaskToDo): Promise<void> {
+        return this.http.post("/Intern/deleteTask", JSON.stringify(task), { headers: this.headers }).toPromise()
+            .then(response => {
+                var result: RestResult = response.json();
+                if (result.Error) {
+                    return Promise.reject(result.Error);
+                }
+                else {
+                    return;
+                }
+
+            }).catch((error) => {
+                return Promise.reject(error);
+            });
+    }
+
+
+    updateTask(task: TaskToDo): Promise<void> {
+        return this.http.post("/Intern/updateTask", JSON.stringify(task), { headers: this.headers }).toPromise()
+            .then(response => {
+                var result: RestResult = response.json();
+                if (result.Error) {
+                    return Promise.reject(result.Error);
+                }
+                else {
+                    return;
+                }
+
+            }).catch((error) => {
+                return Promise.reject(error);
+            });
+    }
+
+    
+
+    manageParticipant(request: ManageParticipantRequest): Promise<void> {
+        return this.http.post("/Intern/manageParticipant", JSON.stringify(request), { headers: this.headers }).toPromise()
+            .then(response => {
+                var result: RestResult = response.json();
+                if (result.Error) {
+                    return Promise.reject(result.Error);
+                }
+                else {
+                    return;
+                }
+
+            }).catch((error) => {
+                return Promise.reject(error);
+            });
+    }
+
 
 }

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace IMS.ViewModels
 {
@@ -9,5 +7,13 @@ namespace IMS.ViewModels
     {
         public int Id { get; set; }
         public string UserName { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        
+        public DateTime CommenceAt { get; set; }
+        public DateTime ExpiryAt { get; set; }
+
+        public List<TaskToDoViewModel> TaskToDos { get; set; }
+        public List<SupervisorViewModel> Supervisors { get; set; }
     }
 }

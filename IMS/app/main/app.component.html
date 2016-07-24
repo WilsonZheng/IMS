@@ -1,16 +1,18 @@
-﻿<router-outlet></router-outlet>
-<!--Common Confirmation Modal-->
-<p-dialog [(visible)]="confirmModal" modal="modal" showEffect="fade" [resizable]="false" [closable]="false">
-    <div>
-        <span class="ui-messages-icon fa fa-2x fa-info-circle"></span>&nbsp;&nbsp;&nbsp;
-        <span>Do you want to proceed?</span>
-    </div>
-    <footer>
-        <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
-            <button type="button" pButton icon="fa-close" label="No" (click)="confirm(0)"></button>
-            <button type="button" pButton icon="fa-check" label="Yes" (click)="confirm(1)"></button>
+﻿<div id="ims-top-container">
+    <router-outlet></router-outlet>
+    <!--Common Confirmation Modal-->
+    <p-dialog [(visible)]="confirmModal" modal="modal" showEffect="fade" [resizable]="false" [closable]="false">
+        <div>
+            <span class="ui-messages-icon fa fa-2x fa-info-circle"></span>&nbsp;&nbsp;&nbsp;
+            <span>Do you want to proceed?</span>
         </div>
-    </footer>
-</p-dialog>
-<!--Message-->
-<p-growl [value]="msgs" sticky="sticky"></p-growl>
+        <footer>
+            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                <button type="button" pButton icon="fa-close" label="No" (click)="confirm(0)"></button>
+                <button type="button" pButton icon="fa-check" label="Yes" (click)="confirm(1)"></button>
+            </div>
+        </footer>
+    </p-dialog>
+    <!--Message-->
+    <p-growl [value]="msgs" sticky="sticky"></p-growl>
+</div>

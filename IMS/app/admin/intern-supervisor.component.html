@@ -1,0 +1,33 @@
+﻿<div class="panel panel-default ims-body-container">
+    <div class="panel-heading">
+        <h3 class="panel-title ims-panel-title">Supervisors</h3>
+    </div>
+    <div class="panel-body">
+        <div class="bg-info ims-no-record" *ngIf="!isValid">No Record Selected</div>
+   
+        <p-dataTable [headerRows]="headerRows" [value]="supervisors" *ngIf="isValid"
+                     [rows]="10" [paginator]="true" [resizableColumns]="true"
+                     [responsive]="true"
+                     selectionMode="multiple" [(selection)]="supervisorsAssigned"
+                    (onRowSelect)="handleSupervising($event.data,true)"
+                    (onRowUnselect)="handleSupervising($event.data,false)">
+            <p-column field="FirstName">
+                <template let-supervisor="rowData">
+                    <span>{{supervisor.FirstName}}</span>
+                </template>
+            </p-column>
+            <p-column field="LastName">
+                <template let-supervisor="rowData">
+                    <span>{{supervisor.LastName}}</span>
+                </template>
+            </p-column>
+            <p-column>
+                <template let-supervisor="rowData">
+                    <div class="ims-link-label">
+                        <div *ngFor="let intern of supervisor.Interns">{{intern.FirstName}}</div>
+                    </div>
+                </template>
+            </p-column>
+        </p-dataTable>
+    </div>
+</div>

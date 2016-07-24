@@ -6,7 +6,7 @@ namespace IMS.Models
     {
         public TaskReportConfiguration() {
             this.HasRequired(x => x.Task).WithMany().HasForeignKey(x => x.TaskId).WillCascadeOnDelete(false);
-            this.HasRequired(x => x.Intern).WithMany().HasForeignKey(x => x.InternId).WillCascadeOnDelete(false);
+            this.HasRequired(x => x.Internship).WithMany().HasForeignKey(x => x.InternshipId).WillCascadeOnDelete(false);
         }
     }
 }
