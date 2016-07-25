@@ -1,6 +1,6 @@
 ﻿import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute }    from '@angular/router';
-import { DataTable, Column, Header, Button } from 'primeng/primeng';
+import { DataTable, Column, Header, Button, Spinner } from 'primeng/primeng';
 import { Subscription } from 'rxjs/Subscription';
 import { MessageService } from '../shared/message.service';
 import { RestResult } from '../shared/rest-result';
@@ -30,8 +30,9 @@ import { InternSearchCondition } from './intern-search-condition';
                 .ims-body-container.panel{
                 margin-bottom:2px;
                 }
+               
     `],
-    directives: [DataTable, Column, Button, Header, ROUTER_DIRECTIVES ],
+    directives: [DataTable, Column, Button, Header, ROUTER_DIRECTIVES, Spinner ],
     providers: [InternService]
 })
 export class ManageInternComponent implements OnInit {
@@ -49,7 +50,6 @@ export class ManageInternComponent implements OnInit {
         private router: Router, private route: ActivatedRoute)
     { }
     ngOnInit() {
-        this.internService.getInterns().then((result) => { this.interns = result; }).catch((error) => { this.handleError(error); });
         this.headerRows = [
             {
                 columns: [
@@ -77,11 +77,27 @@ export class ManageInternComponent implements OnInit {
                 }
             });
               
-
+        this.search();
+    }
+    private search() {
+        this.internService.getInterns(this.internSearchCondition)
+            .then((result) => {
+                this.interns = result;
+                //when the dataset is refreshed after one record has been selected, the selection match will be lost.
+                //Without clearing the global queryParams(internId), the detail child-view would remain as it was.
+                //To avoid this situation, clear all global queryParams which in turn deactivates its detail child-view.
+                this.router.navigate([], {
+                    queryParams: {},
+                    relativeTo: this.route
+                });
+            })
+            .catch((error) => { this.handleError(error); });
     }
 
-
-
+    
+       
+    
+    
     private setSelectFromQueryParam(internId: number) {
         let selectedIntern: Intern = new Intern();
         if (internId == GlobalConstant.NUMBER_NOTHING)
@@ -151,8 +167,5 @@ export class ManageInternComponent implements OnInit {
     }
 
 
-    private test(event: any) {
-        console.log("test");
-    }
-
+   
 }

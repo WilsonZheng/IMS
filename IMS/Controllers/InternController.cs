@@ -7,6 +7,7 @@ using IMS.ViewModels;
 using IMS.Common;
 using System.Web;
 using Microsoft.AspNet.Identity.Owin;
+using System.Collections.Generic;
 
 namespace IMS.Controllers
 {
@@ -32,16 +33,22 @@ namespace IMS.Controllers
 
         
         [HttpPost]
-        public ActionResult getInterns()
+        public ActionResult getInterns(InternSearchConditionViewModel model)
         {
             try
             {
+                //set to the default if not provided.
+                if (!model.DaysSinceExpiry.HasValue) model.DaysToExpiry = 365;
+                if (!model.DaysSinceExpiry.HasValue) model.DaysSinceExpiry = 0;
+                var toDate = DateTime.UtcNow.Date.AddDays((int)model.DaysToExpiry);
+                var fromDate = DateTime.UtcNow.Date.AddDays((int)model.DaysSinceExpiry * -1);
+
                 using (var db = new ApplicationDbContext())
                 {
                     var result=db.Internships.Include(i => i.Intern)
                         .Include (i =>i.Supervisors)
                         .Include (i =>i.Tasks).
-                        Where(x => x.Intern.OrgId == IMSUserUtil.OrgId && x.ExpiryAt >= DateTime.UtcNow).ToList()
+                        Where(x => x.Intern.OrgId == IMSUserUtil.OrgId && (x.ExpiryAt >= fromDate && x.ExpiryAt<=toDate)).ToList()
                         .Select(x => new InternViewModel {
                              Id=x.Id,
                               FirstName=x.Intern.FirstName,
@@ -66,6 +73,46 @@ namespace IMS.Controllers
                 return Json(new IMS.Common.ImsResult { Error=e.Message });
             }
         }
+
+
+        [HttpPost]
+        public ActionResult getDetails(int internId)
+        {
+            try
+            {
+                using (var db = new ApplicationDbContext()) {
+                    var result = db.Internships.Where(x => x.Id == internId && x.Intern.OrgId==IMSUserUtil.OrgId)
+                        .Include(x => x.Intern).Include(x => x.Tasks)
+                        .Include(x => x.Supervisors)
+                        .Select(x => new InternViewModel
+                         {
+                             Id = x.Id,
+                             FirstName = x.Intern.FirstName,
+                             LastName = x.Intern.LastName,
+                             CommenceAt = x.CommenceAt,
+                             ExpiryAt = x.ExpiryAt,
+                             Supervisors = x.Supervisors.Select(s => new SupervisorViewModel
+                             {
+                                 Id = s.Id,
+                                 FirstName = s.FirstName,
+                                 LastName = s.LastName
+                             }).ToList(),
+                             TaskToDos = x.Tasks.Select(t => new TaskToDoViewModel
+                             {
+                                 Id = t.Id,
+                                 Description = t.Description,
+                                 Title = t.Title
+                             }).ToList()
+                         }).Single();
+                    return Json(new ImsResult { Data = result });
+                }
+            }
+            catch (Exception e)
+            {
+                return Json(new IMS.Common.ImsResult { Error = e.Message });
+            }
+        }
+
 
         [HttpPost]
         public ActionResult getSupervisors()
@@ -305,6 +352,7 @@ namespace IMS.Controllers
                     db.TaskToDos.Add(task);
                     db.SaveChanges();
                     model.Id = task.Id;
+                    model.Participants = new List<InternViewModel>();
                     return Json(new ImsResult { Data=model });
                 }
             }
@@ -411,17 +459,20 @@ namespace IMS.Controllers
                         .Include(x => x.Participants.Select(y => y.Intern))
                         .Where(x => x.IsActive && x.Owner.OrgId == IMSUserUtil.OrgId)
                         .ToList()
-                        .Select(x => new TaskToDoViewModel {
+                        .Select(x => new TaskToDoViewModel
+                        {
                             Id = x.Id,
                             Title = x.Title,
                             Description = x.Description,
-                            Participants = x.Participants.Select(y => new InternViewModel {
+                            Participants = x.Participants.Select(y => new InternViewModel
+                            {
                                 Id = y.Id,
                                 FirstName = y.Intern.FirstName,
                                 LastName = y.Intern.LastName,
                                 UserName = y.Intern.UserName
                             }).ToList()
-                        });
+                        }).OrderByDescending(x => x.Id).ToList();
+                        
                     return Json(new ImsResult { Data=result});
                 }
             }
@@ -453,5 +504,29 @@ namespace IMS.Controllers
             }
         }
 
+
+        [HttpPost]
+        public ActionResult adjustExpiry(AdjustExpiryViewModel model)
+        {
+            try
+            {
+                using (var db = new ApplicationDbContext())
+                {
+                    var result = db.Internships.Where(x => x.Id == model.InternId && x.Intern.OrgId == IMSUserUtil.OrgId).SingleOrDefault();
+                    if (result == null) throw new Exception("Not Found");
+                    DateTime adjustedDt=result.ExpiryAt.AddDays(model.Adjustment*(model.IsExtension?1:-1));
+                    if (adjustedDt <= result.CommenceAt) {
+                        throw new Exception("Expiry date needs to come after the commence date.");
+                    }
+                    result.ExpiryAt = adjustedDt;
+                    db.SaveChanges();
+                    return Json(new ImsResult { Data = adjustedDt });
+                }
+            }
+            catch (Exception e)
+            {
+                return Json(new IMS.Common.ImsResult { Error = e.Message });
+            }
+        }
     }
 }

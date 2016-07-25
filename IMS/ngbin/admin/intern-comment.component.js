@@ -119,7 +119,7 @@ var InternCommentComponent = (function () {
     InternCommentComponent = __decorate([
         core_1.Component({
             templateUrl: '/app/admin/intern-comment.component.html',
-            styles: ["\n\n.ims-body-container{\n    margin-bottom:0px;\n}\n\n.ims-comment-container{\n    padding:0px;\n    margin-top:2px;\n}\n\n.ims-comment-container .ims-comment-input{\n     height:8em;\n }\n\n.ims-comment-container .ims-comment-control{\n    padding-top:2px;\n}\n\n.ims-content-display-area{\n    white-space:pre-line;\n}\n\n.ims-comment-date{\n    font-style:italic;\n    font-weight:700;\n}\n\n\n    "],
+            styles: ["\n\n.ims-body-container{\n    margin-bottom:0px;\n}\n\n.ims-comment-container{\n    padding:0px;\n    margin:2px 0px;\n}\n\n.ims-comment-container .ims-comment-input{\n     height:8em;\n }\n\n.ims-comment-container .ims-comment-control{\n    padding-top:2px;\n}\n\n.ims-content-display-area{\n    white-space:pre-line;\n}\n\n.ims-comment-date{\n    font-style:italic;\n    font-weight:700;\n}\n\n\n    "],
             directives: [primeng_1.DataTable, primeng_1.Column, primeng_1.Header, primeng_1.Button, primeng_1.Editor],
             providers: [],
             pipes: [bracket_date_transform_pipe_1.BracketDateTransformPipe]

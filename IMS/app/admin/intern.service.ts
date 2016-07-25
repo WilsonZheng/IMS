@@ -11,6 +11,8 @@ import { SupervisingResponse } from './supervising-response';
 import { SupervisingComment } from './supervising-comment';
 import { TaskToDo } from './task-to-do';
 import { ManageParticipantRequest } from './manage-participant-request';
+import { InternSearchCondition } from './intern-search-condition';
+import { AdjustExpiryRequest } from './adjust-expiry-request';
 
 @Injectable()
 export class InternService {
@@ -23,9 +25,26 @@ export class InternService {
 
     }
 
-    getInterns(): Promise<Intern[]> {
+    getDetails(internId: number): Promise<Intern> {
+        return this.http.post("/Intern/getDetails", JSON.stringify({internId:internId}), { headers: this.headers }).toPromise()
+            .then(response => {
+                var result: RestResult = response.json();
+                if (result.Error) {
+                    return Promise.reject(result.Error);
+                }
+                else {
+                    return result.Data;
+                }
 
-        return this.http.post("/Intern/getInterns", JSON.stringify({}), { headers: this.headers }).toPromise()
+            }).catch((error) => {
+                return Promise.reject(error);
+            });
+    }
+
+
+    getInterns(condition: InternSearchCondition): Promise<Intern[]> {
+
+        return this.http.post("/Intern/getInterns", JSON.stringify(condition), { headers: this.headers }).toPromise()
             .then(response => {
                 var result: RestResult = response.json();
                 if (result.Error) {
@@ -265,5 +284,21 @@ export class InternService {
             });
     }
 
+
+    adjustExpiry(request: AdjustExpiryRequest): Promise<Date> {
+        return this.http.post("/Intern/adjustExpiry", JSON.stringify(request), { headers: this.headers }).toPromise()
+            .then(response => {
+                var result: RestResult = response.json();
+                if (result.Error) {
+                    return Promise.reject(result.Error);
+                }
+                else {
+                    return result.Data;
+                }
+
+            }).catch((error) => {
+                return Promise.reject(error);
+            });
+    }
 
 }

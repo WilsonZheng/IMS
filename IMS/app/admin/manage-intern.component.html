@@ -2,8 +2,11 @@
     <div class="panel-heading">
         <h3 class="panel-title ims-panel-title">Interns</h3>
         <div class="ims-control-container">
-            <p-calendar [(ngModel)]="internSearchCondition.DaysToExpiry"></p-calendar>
-            <button pButton type="text" (click)="refresh()" icon="fa fa-refresh"></button>            
+            Days Since Expiry:
+            <p-spinner size="30" [(ngModel)]="internSearchCondition.DaysSinceExpiry" [min]="0" [max]="365" [size]="1"></p-spinner>
+            Days to Expiry:
+            <p-spinner size="30" [(ngModel)]="internSearchCondition.DaysToExpiry" [min]="0" [max]="365" [size]="1"></p-spinner>
+            <button pButton type="text" (click)="search()" icon="fa fa-search"></button>            
         </div>
     </div>
     <div class="panel-body">

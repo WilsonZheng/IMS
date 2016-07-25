@@ -19,8 +19,22 @@ var InternService = (function () {
             'Content-Type': 'application/json'
         });
     }
-    InternService.prototype.getInterns = function () {
-        return this.http.post("/Intern/getInterns", JSON.stringify({}), { headers: this.headers }).toPromise()
+    InternService.prototype.getDetails = function (internId) {
+        return this.http.post("/Intern/getDetails", JSON.stringify({ internId: internId }), { headers: this.headers }).toPromise()
+            .then(function (response) {
+            var result = response.json();
+            if (result.Error) {
+                return Promise.reject(result.Error);
+            }
+            else {
+                return result.Data;
+            }
+        }).catch(function (error) {
+            return Promise.reject(error);
+        });
+    };
+    InternService.prototype.getInterns = function (condition) {
+        return this.http.post("/Intern/getInterns", JSON.stringify(condition), { headers: this.headers }).toPromise()
             .then(function (response) {
             var result = response.json();
             if (result.Error) {
@@ -210,6 +224,20 @@ var InternService = (function () {
     };
     InternService.prototype.manageParticipant = function (request) {
         return this.http.post("/Intern/manageParticipant", JSON.stringify(request), { headers: this.headers }).toPromise()
+            .then(function (response) {
+            var result = response.json();
+            if (result.Error) {
+                return Promise.reject(result.Error);
+            }
+            else {
+                return result.Data;
+            }
+        }).catch(function (error) {
+            return Promise.reject(error);
+        });
+    };
+    InternService.prototype.adjustExpiry = function (request) {
+        return this.http.post("/Intern/adjustExpiry", JSON.stringify(request), { headers: this.headers }).toPromise()
             .then(function (response) {
             var result = response.json();
             if (result.Error) {

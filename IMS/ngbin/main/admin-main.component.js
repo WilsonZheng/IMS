@@ -29,9 +29,10 @@ var AdminMainComponent = (function () {
             {
                 label: 'Manage Intern',
                 items: [
-                    { label: "Supervisor", command: function (event) { _this.router.navigate(['/admin/intern/Supervisor']); _this.title = "Admin>Manage Intern>Supervisors"; } },
-                    { label: "Task", command: function (event) { _this.router.navigate(['/admin/intern/Task']); _this.title = "Admin>Manage Intern>Task"; } },
-                    { label: "Comment", command: function (event) { _this.router.navigate(['/admin/intern/Comment']); _this.title = "Admin>Manage Intern>Comment"; } }
+                    { label: "Detail", command: function (event) { _this.router.navigate(['/admin/intern/Detail']); _this.title = "Admin > Manage Intern > Detail"; } },
+                    { label: "Supervisor", command: function (event) { _this.router.navigate(['/admin/intern/Supervisor']); _this.title = "Admin > Manage Intern > Supervisors"; } },
+                    { label: "Task", command: function (event) { _this.router.navigate(['/admin/intern/Task']); _this.title = "Admin > Manage Intern > Task"; } },
+                    { label: "Comment", command: function (event) { _this.router.navigate(['/admin/intern/Comment']); _this.title = "Admin > Manage Intern > Comment"; } }
                 ]
             }
         ];

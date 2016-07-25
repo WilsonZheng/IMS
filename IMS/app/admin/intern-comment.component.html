@@ -5,6 +5,18 @@
     <div class="panel-body">
         <div class="bg-info ims-no-record" *ngIf="!isValid">No Record Selected</div>
         <div *ngIf="isValid">
+            <div class="ims-comment-container" *ngIf="commentToBeEditted">
+                <form #form="ngForm">
+                    <textarea [(ngModel)]="commentToBeEditted.Comment" name="Comment" required #comment="ngModel" class="form-control ims-comment-input"></textarea>
+                    <div class="text-right ims-comment-control">
+                        <button pButton type="button" label="Add" *ngIf="!commentToBeEditted.Id" (click)="create()" [disabled]="!form.form.valid"></button>
+                        <button pButton type="button" label="Update" *ngIf="commentToBeEditted.Id" (click)="update()" [disabled]="!form.form.valid"></button>
+                        <button pButton type="button" label="Delete" *ngIf="commentToBeEditted.Id" (click)="delete()" [disabled]="!form.form.valid"></button>
+                    </div>
+
+                </form>
+            </div>
+
             <p-dataTable [headerRows]="headerRows" [value]="supervisingComments"
                          [rows]="5" [paginator]="true" [resizableColumns]="true"
                          [responsive]="true"
@@ -22,19 +34,9 @@
                         </div>
                     </template>
                 </p-column>
-                
             </p-dataTable>
-            <div class="ims-comment-container" *ngIf="commentToBeEditted">
-                <form #form="ngForm">
-                        <textarea [(ngModel)]="commentToBeEditted.Comment"  name="Comment" required #comment="ngModel" class="form-control ims-comment-input"></textarea>
-                        <div class="text-right ims-comment-control">
-                            <button pButton type="button" label="Add" *ngIf="!commentToBeEditted.Id" (click)="create()" [disabled]="!form.form.valid"></button>
-                            <button pButton type="button" label="Update" *ngIf="commentToBeEditted.Id" (click)="update()" [disabled]="!form.form.valid"></button>
-                            <button pButton type="button" label="Delete" *ngIf="commentToBeEditted.Id" (click)="delete()" [disabled]="!form.form.valid"></button>
-                        </div>
-                    
-                </form>
-            </div>
-        </div>
+
+        
+         </div>
     </div>
 </div>

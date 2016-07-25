@@ -1,0 +1,27 @@
+﻿<div class="panel panel-default ims-body-container">
+    <div class="panel-heading">
+        <h3 class="panel-title ims-panel-title">Details</h3>
+    </div>
+    <div class="panel-body">
+        <div class="bg-info ims-no-record" *ngIf="!isValid">No Record Selected</div>
+        <div *ngIf="isValid && intern">
+            <div><span class="ims-detail-name">{{intern.FirstName}} {{intern.LastName}}</span></div>
+            <div class="row">
+                <div class="col-xs-12 ims-title-1st">Internship</div>
+                <div class="col-xs-2">
+                    <div>Start</div>
+                    <div>{{intern.CommenceAt|bracketDateTransform|date :'dd / MM / yyyy'}}</div>
+                </div>
+                <div class="col-xs-2">
+                    <div>End</div>
+                    <div>{{intern.ExpiryAt|bracketDateTransform|date :'dd / MM / yyyy'}}</div>
+                    <div class="ims-adjust-expiry">
+                        <i class="fa fa-minus-square-o ims-link-label" (click)="adjustExpiry(false)"></i>  
+                        <p-spinner [(ngModel)]="adjustExpirtyRequest.Adjustment" [min]="1" [max]="365" [size]="1"></p-spinner>
+                        <i class="fa fa-plus-square-o ims-link-label" (click)="adjustExpiry(true)"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

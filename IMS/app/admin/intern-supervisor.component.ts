@@ -17,7 +17,16 @@ import { GlobalConstant } from '../shared/global-constant';
 
 @Component({
     templateUrl: '/app/admin/intern-supervisor.component.html',
-    styles: [``],
+    styles: [`
+
+ .ims-body-container{
+            margin-bottom:0px;
+        }
+
+ .panel-body{
+            padding:1px;
+        }
+    `],
     directives: [DataTable, Column, Header, Button],
     providers: []
 })

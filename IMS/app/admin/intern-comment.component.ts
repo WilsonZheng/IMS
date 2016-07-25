@@ -27,7 +27,7 @@ import { BracketDateTransformPipe } from '../shared/bracket-date-transform.pipe'
 
 .ims-comment-container{
     padding:0px;
-    margin-top:2px;
+    margin:2px 0px;
 }
 
 .ims-comment-container .ims-comment-input{

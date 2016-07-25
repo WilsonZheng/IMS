@@ -29,7 +29,6 @@ var ManageInternComponent = (function () {
     }
     ManageInternComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.internService.getInterns().then(function (result) { _this.interns = result; }).catch(function (error) { _this.handleError(error); });
         this.headerRows = [
             {
                 columns: [
@@ -54,6 +53,22 @@ var ManageInternComponent = (function () {
                 _this.onUpdate(updatecode);
             }
         });
+        this.search();
+    };
+    ManageInternComponent.prototype.search = function () {
+        var _this = this;
+        this.internService.getInterns(this.internSearchCondition)
+            .then(function (result) {
+            _this.interns = result;
+            //when the dataset is refreshed after one record has been selected, the selection match will be lost.
+            //Without clearing the global queryParams(internId), the detail child-view would remain as it was.
+            //To avoid this situation, clear all global queryParams which in turn deactivates its detail child-view.
+            _this.router.navigate([], {
+                queryParams: {},
+                relativeTo: _this.route
+            });
+        })
+            .catch(function (error) { _this.handleError(error); });
     };
     ManageInternComponent.prototype.setSelectFromQueryParam = function (internId) {
         var selectedIntern = new intern_1.Intern();
@@ -108,14 +123,11 @@ var ManageInternComponent = (function () {
             relativeTo: this.route
         });
     };
-    ManageInternComponent.prototype.test = function (event) {
-        console.log("test");
-    };
     ManageInternComponent = __decorate([
         core_1.Component({
             templateUrl: '/app/admin/manage-intern.component.html',
-            styles: ["\n                .panel-heading{\n                position:relative;\n                }\n\n                .ims-control-container{\n                position:absolute;\n                right:4px;\n                top:4px;\n                }\n\n                .panel-body{\n                padding:1px;\n                }\n\n                .ims-body-container.panel{\n                margin-bottom:2px;\n                }\n    "],
-            directives: [primeng_1.DataTable, primeng_1.Column, primeng_1.Button, primeng_1.Header, router_1.ROUTER_DIRECTIVES],
+            styles: ["\n                .panel-heading{\n                position:relative;\n                }\n\n                .ims-control-container{\n                position:absolute;\n                right:4px;\n                top:4px;\n                }\n\n                .panel-body{\n                padding:1px;\n                }\n\n                .ims-body-container.panel{\n                margin-bottom:2px;\n                }\n               \n    "],
+            directives: [primeng_1.DataTable, primeng_1.Column, primeng_1.Button, primeng_1.Header, router_1.ROUTER_DIRECTIVES, primeng_1.Spinner],
             providers: [intern_service_1.InternService]
         }), 
         __metadata('design:paramtypes', [message_service_1.MessageService, intern_service_1.InternService, router_1.Router, router_1.ActivatedRoute])

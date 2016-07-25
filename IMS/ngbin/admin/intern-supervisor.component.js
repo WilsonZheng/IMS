@@ -100,7 +100,7 @@ var InternSupervisorComponent = (function () {
     InternSupervisorComponent = __decorate([
         core_1.Component({
             templateUrl: '/app/admin/intern-supervisor.component.html',
-            styles: [""],
+            styles: ["\n\n .ims-body-container{\n            margin-bottom:0px;\n        }\n\n .panel-body{\n            padding:1px;\n        }\n    "],
             directives: [primeng_1.DataTable, primeng_1.Column, primeng_1.Header, primeng_1.Button],
             providers: []
         }), 

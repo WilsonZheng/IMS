@@ -39,10 +39,10 @@ export class AdminMainComponent implements OnInit {
             {
                 label: 'Manage Intern',
                 items: [
-                    
-                    { label: "Supervisor"       ,command: (event) => { this.router.navigate(['/admin/intern/Supervisor']); this.title = "Admin>Manage Intern>Supervisors" } },
-                    { label: "Task", command: (event) => { this.router.navigate(['/admin/intern/Task']); this.title = "Admin>Manage Intern>Task" } },
-                    { label: "Comment", command: (event) => { this.router.navigate(['/admin/intern/Comment']); this.title = "Admin>Manage Intern>Comment" } }
+                    { label: "Detail", command: (event) => { this.router.navigate(['/admin/intern/Detail']); this.title = "Admin > Manage Intern > Detail" } },
+                    { label: "Supervisor"       ,command: (event) => { this.router.navigate(['/admin/intern/Supervisor']); this.title = "Admin > Manage Intern > Supervisors" } },
+                    { label: "Task", command: (event) => { this.router.navigate(['/admin/intern/Task']); this.title = "Admin > Manage Intern > Task" } },
+                    { label: "Comment", command: (event) => { this.router.navigate(['/admin/intern/Comment']); this.title = "Admin > Manage Intern > Comment" } }
                 ]
                
             }
