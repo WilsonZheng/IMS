@@ -27,7 +27,7 @@
                 <p-column field="Comment">
                     <template let-row="rowData">
                         <div >
-                            <span class="ims-comment-date">{{row.CreatedAt|bracketDateTransform|date :'dd/MM/yyyy HH:mm:ss'}}</span>
+                            <span class="ims-comment-date">{{row.CreatedAt|bracketDateTransform| date :'dd / MM / yyyy'}}</span>
                         </div>
                         <div class="ims-content-display-area">
                             {{row.Comment}}
