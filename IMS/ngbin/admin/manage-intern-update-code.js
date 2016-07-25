@@ -9,6 +9,13 @@ var ManageInternUpdateCode = (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(ManageInternUpdateCode, "TASK", {
+        get: function () {
+            return 2;
+        },
+        enumerable: true,
+        configurable: true
+    });
     return ManageInternUpdateCode;
 }());
 exports.ManageInternUpdateCode = ManageInternUpdateCode;

@@ -2,14 +2,49 @@
     <div class="panel-heading">
         <h3 class="panel-title ims-panel-title">Tasks</h3>
         <div class="ims-control-container">
-            <button pButton type="text" (click)="loadNotice()" icon="fa fa-refresh"></button>
-            <button pButton type="text" (click)="newNotice()" icon="fa fa-plus-circle"></button>
+            <button pButton type="text" (click)="refreshTasks()" icon="fa fa-refresh"></button>
+            <button pButton type="text" (click)="createTask()" icon="fa fa-plus-circle"></button>
         </div>
     </div>
     <div class="panel-body">
+        <p-dataTable [headerRows]="headerRows" [value]="tasks"
+                     [rows]="5" [paginator]="true" [resizableColumns]="false"
+                     [hidden]="handleTaskEditor">
+            <p-column field="Title">
+                <template let-row="rowData">
+                    <div class="ims-content-display-area row">
+                        <div class="col-xs-12 col-sm-8">
+                            <div class="ims-task-control">
+                                <i class="fa fa-edit ims-link-label" (click)="editTask(row)"></i>
+                                <i class="fa fa-trash-o ims-link-label" (click)="deleteTask(row)"></i>
+                            </div>
+                            <div><span class="ims-inline-title">Title</span></div>
+                            <div>{{row.Title}}</div>
+                            <div><span class="ims-inline-title">Description</span></div>
+                            <div id="ims-description">{{row.Description}}</div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4">
+                            <div class="ims-task-control">
+                                <i class="fa fa-plus-square ims-link-label" (click)="participate(row,true)" *ngIf="isValid && !contain(row.Id)"></i>
+                                <i class="fa fa-minus-square ims-link-label" (click)="participate(row,false)" *ngIf="isValid && contain(row.Id)"></i>
+                            </div>
+                            <div><span class="ims-inline-title">Participants</span></div>
+                            <div>
+                                <div *ngFor="let p of row.Participants">{{p.FirstName}}&nbsp;&nbsp;{{p.LastName}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </p-column>
+        </p-dataTable>
         
-
-
-
+        <admin-task-editor *ngIf="handleTaskEditor" 
+                           [task]="taskSelected"
+                           [isCreateMode]="!isTaskEdit"
+                           (error)="handleError($event)"
+                           (canceled)="taskJobCancelled()"
+                           (created)="taskCreated($event)"
+                           (updated)="taskUpdated($event)">
+        </admin-task-editor>
     </div>
 </div>

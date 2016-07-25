@@ -340,7 +340,9 @@ namespace IMS.Controllers
         {
             try
             {
-                if (!ModelState.IsValid) throw new Exception("Invalid Input");
+                if (!ModelState.IsValid) {
+                    var resu=BindingModelChecker.CheckModelState(ModelState);
+                    throw new Exception("Invalid Input"); }
                 using (var db = new ApplicationDbContext())
                 {
                     var task = db.TaskToDos.Where(x => x.Id == model.Id && x.OwnerId == IMSUserUtil.Id && x.IsActive).SingleOrDefault();
@@ -379,7 +381,15 @@ namespace IMS.Controllers
                         participant.Tasks.Remove(task);
                     }
                     db.SaveChanges();
-                    return Json(new ImsResult { });
+                    var result = db.TaskToDos.Where(x => x.Id == model.TaskId)
+                        .SelectMany(x => x.Participants.Select(y => y.Intern))
+                        .Select(y => new InternViewModel {
+                            Id = y.Id,
+                            FirstName = y.FirstName,
+                            LastName = y.LastName,
+                            UserName = y.UserName
+                        }).ToList();
+                    return Json(new ImsResult {Data=result });
                 }
             }
             catch (Exception e)
@@ -421,7 +431,27 @@ namespace IMS.Controllers
             }
         }
 
-
+        [HttpPost]
+        public ActionResult getTasksForIntern(int id)
+        {
+            try
+            {
+                using (var db = new ApplicationDbContext())
+                {
+                    var result =db.Internships.Where(x => x.Id == id && x.Intern.OrgId == IMSUserUtil.OrgId)
+                        .SelectMany(x => x.Tasks)
+                        .Select(x => new TaskToDoViewModel {
+                                Id=x.Id,
+                                Title=x.Title
+                        }).ToList();
+                    return Json(new ImsResult { Data = result });
+                }
+            }
+            catch (Exception e)
+            {
+                return Json(new IMS.Common.ImsResult { Error = e.Message });
+            }
+        }
 
     }
 }

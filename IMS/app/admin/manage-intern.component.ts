@@ -7,17 +7,37 @@ import { RestResult } from '../shared/rest-result';
 import { InternService } from './intern.service';
 import { Intern } from './intern';
 import { ManageInternUpdateCode } from './manage-intern-update-code';
+import { GlobalConstant } from '../shared/global-constant';
+import { InternSearchCondition } from './intern-search-condition';
 
 @Component({
     templateUrl: '/app/admin/manage-intern.component.html',
-    styles: [``],
-    directives: [DataTable, Column, Button, Header, ROUTER_DIRECTIVES],
+    styles: [`
+                .panel-heading{
+                position:relative;
+                }
+
+                .ims-control-container{
+                position:absolute;
+                right:4px;
+                top:4px;
+                }
+
+                .panel-body{
+                padding:1px;
+                }
+
+                .ims-body-container.panel{
+                margin-bottom:2px;
+                }
+    `],
+    directives: [DataTable, Column, Button, Header, ROUTER_DIRECTIVES ],
     providers: [InternService]
 })
 export class ManageInternComponent implements OnInit {
-
+    private internSearchCondition:InternSearchCondition = new InternSearchCondition();
     private headerRows: any[];
-    private interns: Intern[];
+    private interns: Intern[] = [];
     private selectedIntern: Intern;
 
     private updateSub: Subscription;
@@ -44,8 +64,13 @@ export class ManageInternComponent implements OnInit {
        
         this.updateSub = this.router.routerState.queryParams
             .subscribe((params) => {
-                let version = + (params['internVersion'] || '-1');
-                if (version != -1 && version != this.internVersion) {
+                //Handle the go back & forward operation by user.
+                let internId = + (params['internId'] || GlobalConstant.NUMBER_NOTHING);
+                this.setSelectFromQueryParam(internId);
+                
+                //Check the update.
+                let version = + (params['internVersion'] || GlobalConstant.NUMBER_NOTHING);
+                if (version != GlobalConstant.NUMBER_NOTHING && version != this.internVersion) {
                     this.internVersion = version;
                     let updatecode = + params['updatecode'];
                     this.onUpdate(updatecode);
@@ -56,11 +81,39 @@ export class ManageInternComponent implements OnInit {
     }
 
 
+
+    private setSelectFromQueryParam(internId: number) {
+        let selectedIntern: Intern = new Intern();
+        if (internId == GlobalConstant.NUMBER_NOTHING)
+        {
+            this.selectedIntern = selectedIntern;
+        }
+        if (this.selectedIntern && this.selectedIntern.Id == internId) {
+            return;
+        }
+      
+        for (let i = 0; i < this.interns.length; i++) {
+            if (this.interns[i].Id == internId) {
+                selectedIntern = this.interns[i];
+                break;
+            }
+        }
+        this.selectedIntern = selectedIntern;
+    }
+
+
+
+
+    //Detect any update from the component hosted inside router-outlet.
     private onUpdate(updatecode: number) {
-        
         if (updatecode == ManageInternUpdateCode.SUPERVISOR) {
             this.internService.getSupervisorsForIntern(this.selectedIntern.Id)
                 .then((supervisors) => this.selectedIntern.Supervisors = supervisors)
+                .catch((error) => this.handleError(error));
+        }
+        else if (updatecode == ManageInternUpdateCode.TASK) {
+            this.internService.getTasksForIntern(this.selectedIntern.Id)
+                .then((tasks) => this.selectedIntern.TaskToDos=tasks)
                 .catch((error) => this.handleError(error));
         }
     }

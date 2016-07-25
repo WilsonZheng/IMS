@@ -1,37 +1,47 @@
-﻿    <!--List of the interns to be managed according to the requested function-->
-    <!--The actual job to be executed depends on the component loaded onto the router outlet at the bottom.-->
-    <p-dataTable [value]="interns" [headerRows]="headerRows"
-                 [rows]="10" [paginator]="true" [resizableColumns]="true"
-                 [responsive]="true" selectionMode="single" [(selection)]="selectedIntern"
-                 (onRowSelect)="onInternSelected($event)"
-                 (onRowUnselect)="onInternUnselected($event)">
-
-        <p-column field="FirstName">
-            <template let-intern="rowData">
-                <span>{{intern.FirstName}}</span>
-            </template>
-        </p-column>
-        <p-column field="LastName">
-            <template let-intern="rowData">
-                <span>{{intern.LastName}}</span>
-            </template>
-        </p-column>
-        <p-column field="UserName">
-            <template let-intern="rowData">
-                <span>{{intern.UserName}}</span>
-            </template>
-        </p-column>
-        <p-column>
-            <template let-intern="rowData">
-               <div *ngFor="let supervisor of intern.Supervisors">{{supervisor.FirstName}}</div>
-            </template>
-        </p-column>
-        <p-column>
-            <template let-intern="rowData">
-                <div class="ims-link-label" *ngFor="let task of intern.TaskToDos">{{task.Title}}</div>
-            </template>
-        </p-column>
-    </p-dataTable>
-    
-    <!--Placement for the components to handle detail-->
-    <router-outlet></router-outlet>
+﻿<div class="panel panel-default ims-body-container">
+    <div class="panel-heading">
+        <h3 class="panel-title ims-panel-title">Interns</h3>
+        <div class="ims-control-container">
+            <p-calendar [(ngModel)]="internSearchCondition.DaysToExpiry"></p-calendar>
+            <button pButton type="text" (click)="refresh()" icon="fa fa-refresh"></button>            
+        </div>
+    </div>
+    <div class="panel-body">
+        <!--List of the interns to be managed according to the requested function-->
+        <!--The actual job to be executed depends on the component loaded onto the router outlet at the bottom.-->
+        <p-dataTable [value]="interns" [headerRows]="headerRows"
+                     [rows]="10" [paginator]="true" [resizableColumns]="true"
+                     selectionMode="single" [(selection)]="selectedIntern"
+                     (onRowSelect)="onInternSelected($event)"
+                     (onRowUnselect)="onInternUnselected($event)">
+            <p-column field="FirstName">
+                <template let-intern="rowData">
+                    <span>{{intern.FirstName}}</span>
+                </template>
+            </p-column>
+            <p-column field="LastName">
+                <template let-intern="rowData">
+                    <span>{{intern.LastName}}</span>
+                </template>
+            </p-column>
+            <p-column field="UserName">
+                <template let-intern="rowData">
+                    <span>{{intern.UserName}}</span>
+                </template>
+            </p-column>
+            <p-column>
+                <template let-intern="rowData">
+                    <div *ngFor="let supervisor of intern.Supervisors">{{supervisor.FirstName}}</div>
+                </template>
+            </p-column>
+            <p-column>
+                <template let-intern="rowData">
+                    <div class="ims-link-label" *ngFor="let task of intern.TaskToDos">{{task.Title}}</div>
+                </template>
+            </p-column>
+        </p-dataTable>
+    </div>
+</div>
+       
+<!--Placement for the components to handle detail-->
+<router-outlet></router-outlet>

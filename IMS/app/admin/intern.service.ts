@@ -158,6 +158,23 @@ export class InternService {
     
 
     /////////////////////////////Manage Task & Participant//////////////////////////////////////////////////////
+    getTasksForIntern(internId: number): Promise<TaskToDo[]>{
+        return this.http.post("/Intern/getTasksForIntern", JSON.stringify({ id: internId }), { headers: this.headers }).toPromise()
+            .then(response => {
+                var result: RestResult = response.json();
+                if (result.Error) {
+                    return Promise.reject(result.Error);
+                }
+                else {
+                    return result.Data;
+                }
+
+            }).catch((error) => {
+                return Promise.reject(error);
+            });
+    }
+    
+
     getTasks(): Promise<TaskToDo[]> {
         return this.http.post("/Intern/getTasks", JSON.stringify({}), { headers: this.headers }).toPromise()
             .then(response => {
@@ -192,7 +209,9 @@ export class InternService {
     }
 
     deleteTask(task: TaskToDo): Promise<void> {
-        return this.http.post("/Intern/deleteTask", JSON.stringify(task), { headers: this.headers }).toPromise()
+        let request = new TaskToDo();
+        request.Id = task.Id;
+        return this.http.post("/Intern/deleteTask", JSON.stringify(request), { headers: this.headers }).toPromise()
             .then(response => {
                 var result: RestResult = response.json();
                 if (result.Error) {
@@ -209,7 +228,11 @@ export class InternService {
 
 
     updateTask(task: TaskToDo): Promise<void> {
-        return this.http.post("/Intern/updateTask", JSON.stringify(task), { headers: this.headers }).toPromise()
+        let request = new TaskToDo();
+        request.Id = task.Id;
+        request.Title = task.Title;
+        request.Description = task.Description;
+        return this.http.post("/Intern/updateTask", JSON.stringify(request), { headers: this.headers }).toPromise()
             .then(response => {
                 var result: RestResult = response.json();
                 if (result.Error) {
@@ -226,7 +249,7 @@ export class InternService {
 
     
 
-    manageParticipant(request: ManageParticipantRequest): Promise<void> {
+    manageParticipant(request: ManageParticipantRequest): Promise<Intern[]> {
         return this.http.post("/Intern/manageParticipant", JSON.stringify(request), { headers: this.headers }).toPromise()
             .then(response => {
                 var result: RestResult = response.json();
@@ -234,7 +257,7 @@ export class InternService {
                     return Promise.reject(result.Error);
                 }
                 else {
-                    return;
+                    return result.Data;
                 }
 
             }).catch((error) => {

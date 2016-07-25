@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
 require('rxjs/add/operator/toPromise');
+var task_to_do_1 = require('./task-to-do');
 var InternService = (function () {
     function InternService(http) {
         this.http = http;
@@ -131,6 +132,20 @@ var InternService = (function () {
         });
     };
     /////////////////////////////Manage Task & Participant//////////////////////////////////////////////////////
+    InternService.prototype.getTasksForIntern = function (internId) {
+        return this.http.post("/Intern/getTasksForIntern", JSON.stringify({ id: internId }), { headers: this.headers }).toPromise()
+            .then(function (response) {
+            var result = response.json();
+            if (result.Error) {
+                return Promise.reject(result.Error);
+            }
+            else {
+                return result.Data;
+            }
+        }).catch(function (error) {
+            return Promise.reject(error);
+        });
+    };
     InternService.prototype.getTasks = function () {
         return this.http.post("/Intern/getTasks", JSON.stringify({}), { headers: this.headers }).toPromise()
             .then(function (response) {
@@ -160,7 +175,9 @@ var InternService = (function () {
         });
     };
     InternService.prototype.deleteTask = function (task) {
-        return this.http.post("/Intern/deleteTask", JSON.stringify(task), { headers: this.headers }).toPromise()
+        var request = new task_to_do_1.TaskToDo();
+        request.Id = task.Id;
+        return this.http.post("/Intern/deleteTask", JSON.stringify(request), { headers: this.headers }).toPromise()
             .then(function (response) {
             var result = response.json();
             if (result.Error) {
@@ -174,7 +191,11 @@ var InternService = (function () {
         });
     };
     InternService.prototype.updateTask = function (task) {
-        return this.http.post("/Intern/updateTask", JSON.stringify(task), { headers: this.headers }).toPromise()
+        var request = new task_to_do_1.TaskToDo();
+        request.Id = task.Id;
+        request.Title = task.Title;
+        request.Description = task.Description;
+        return this.http.post("/Intern/updateTask", JSON.stringify(request), { headers: this.headers }).toPromise()
             .then(function (response) {
             var result = response.json();
             if (result.Error) {
@@ -195,7 +216,7 @@ var InternService = (function () {
                 return Promise.reject(result.Error);
             }
             else {
-                return;
+                return result.Data;
             }
         }).catch(function (error) {
             return Promise.reject(error);

@@ -13,13 +13,18 @@ var router_1 = require('@angular/router');
 var primeng_1 = require('primeng/primeng');
 var message_service_1 = require('../shared/message.service');
 var intern_service_1 = require('./intern.service');
+var intern_1 = require('./intern');
 var manage_intern_update_code_1 = require('./manage-intern-update-code');
+var global_constant_1 = require('../shared/global-constant');
+var intern_search_condition_1 = require('./intern-search-condition');
 var ManageInternComponent = (function () {
     function ManageInternComponent(messageService, internService, router, route) {
         this.messageService = messageService;
         this.internService = internService;
         this.router = router;
         this.route = route;
+        this.internSearchCondition = new intern_search_condition_1.InternSearchCondition();
+        this.interns = [];
         this.internVersion = 0;
     }
     ManageInternComponent.prototype.ngOnInit = function () {
@@ -38,19 +43,45 @@ var ManageInternComponent = (function () {
         ];
         this.updateSub = this.router.routerState.queryParams
             .subscribe(function (params) {
-            var version = +(params['internVersion'] || '-1');
-            if (version != -1 && version != _this.internVersion) {
+            //Handle the go back & forward operation by user.
+            var internId = +(params['internId'] || global_constant_1.GlobalConstant.NUMBER_NOTHING);
+            _this.setSelectFromQueryParam(internId);
+            //Check the update.
+            var version = +(params['internVersion'] || global_constant_1.GlobalConstant.NUMBER_NOTHING);
+            if (version != global_constant_1.GlobalConstant.NUMBER_NOTHING && version != _this.internVersion) {
                 _this.internVersion = version;
                 var updatecode = +params['updatecode'];
                 _this.onUpdate(updatecode);
             }
         });
     };
+    ManageInternComponent.prototype.setSelectFromQueryParam = function (internId) {
+        var selectedIntern = new intern_1.Intern();
+        if (internId == global_constant_1.GlobalConstant.NUMBER_NOTHING) {
+            this.selectedIntern = selectedIntern;
+        }
+        if (this.selectedIntern && this.selectedIntern.Id == internId) {
+            return;
+        }
+        for (var i = 0; i < this.interns.length; i++) {
+            if (this.interns[i].Id == internId) {
+                selectedIntern = this.interns[i];
+                break;
+            }
+        }
+        this.selectedIntern = selectedIntern;
+    };
+    //Detect any update from the component hosted inside router-outlet.
     ManageInternComponent.prototype.onUpdate = function (updatecode) {
         var _this = this;
         if (updatecode == manage_intern_update_code_1.ManageInternUpdateCode.SUPERVISOR) {
             this.internService.getSupervisorsForIntern(this.selectedIntern.Id)
                 .then(function (supervisors) { return _this.selectedIntern.Supervisors = supervisors; })
+                .catch(function (error) { return _this.handleError(error); });
+        }
+        else if (updatecode == manage_intern_update_code_1.ManageInternUpdateCode.TASK) {
+            this.internService.getTasksForIntern(this.selectedIntern.Id)
+                .then(function (tasks) { return _this.selectedIntern.TaskToDos = tasks; })
                 .catch(function (error) { return _this.handleError(error); });
         }
     };
@@ -83,7 +114,7 @@ var ManageInternComponent = (function () {
     ManageInternComponent = __decorate([
         core_1.Component({
             templateUrl: '/app/admin/manage-intern.component.html',
-            styles: [""],
+            styles: ["\n                .panel-heading{\n                position:relative;\n                }\n\n                .ims-control-container{\n                position:absolute;\n                right:4px;\n                top:4px;\n                }\n\n                .panel-body{\n                padding:1px;\n                }\n\n                .ims-body-container.panel{\n                margin-bottom:2px;\n                }\n    "],
             directives: [primeng_1.DataTable, primeng_1.Column, primeng_1.Button, primeng_1.Header, router_1.ROUTER_DIRECTIVES],
             providers: [intern_service_1.InternService]
         }), 

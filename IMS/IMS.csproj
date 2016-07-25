@@ -274,6 +274,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Common\BindingModelChecker.cs" />
     <Compile Include="Common\ConfigurationTypeCode.cs" />
     <Compile Include="Common\FixedIsoDateTimeConverter.cs" />
     <Compile Include="Common\ImsGmailProvider.cs" />
@@ -328,6 +329,7 @@
     <Compile Include="Models\InvitationConfiguration.cs" />
     <Compile Include="Models\SupervisingComment.cs" />
     <Compile Include="Models\SupervisingCommentConfiguration.cs" />
+    <Compile Include="Common\ImsErrorMessage.cs" />
     <Compile Include="ViewModels\SupervisingCommentViewModel.cs" />
     <Compile Include="ViewModels\SupervisingRequestViewModel.cs" />
     <Compile Include="ViewModels\SupervisingResponseViewModel.cs" />
@@ -370,6 +372,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\admin\intern-comment.component.html" />
+    <Content Include="app\admin\intern-task-editor.component.html" />
     <Content Include="app\admin\manage-intern.component.html" />
     <Content Include="app\admin\intern-supervisor.component.html" />
     <Content Include="app\admin\intern-task.component.html" />
@@ -482,6 +485,8 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app\admin\intern-comment.component.ts" />
+    <TypeScriptCompile Include="app\admin\intern-search-condition.ts" />
+    <TypeScriptCompile Include="app\admin\intern-task-editor.component.ts" />
     <TypeScriptCompile Include="app\admin\manage-intern-update-code.ts" />
     <TypeScriptCompile Include="app\admin\manage-intern.component.ts" />
     <TypeScriptCompile Include="app\admin\intern-supervisor.component.ts" />

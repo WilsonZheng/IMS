@@ -1,0 +1,27 @@
+﻿<div class="panel panel-primary">
+    <div class="panel-heading">
+        <button type="button" class="close" aria-label="Close" (click)="cancel()"><span aria-hidden="true">&times;</span></button>
+        <h3 class="panel-title">{{mode}} Task</h3>
+    </div>
+    <div class="panel-body">
+        <form #form="ngForm">
+            <div class="form-group">
+                <label>Title</label>
+                <input class="form-control" type="text" [(ngModel)]="task.Title" name="Title" required #title="ngModel" />
+                <div [hidden]="title.valid || title.pristine" class="alert alert-danger">
+                    Title is required.
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea [(ngModel)]="task.Description" class="form-control" name="Description" required #description="ngModel"></textarea>
+                <div [hidden]="description.valid || description.pristine" class="alert alert-danger">
+                    Description is required.
+                </div>
+            </div>
+        </form>
+        <div class="ctrl-panel">
+            <button pButton type="text" (click)="save()" label="Save" icon="fa fa-check" [disabled]="!form.form.valid"></button>
+        </div>
+    </div>
+</div>
