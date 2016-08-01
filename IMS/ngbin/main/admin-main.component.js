@@ -12,27 +12,35 @@ var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
 var primeng_1 = require('primeng/primeng');
 var AdminMainComponent = (function () {
-    function AdminMainComponent(router) {
+    function AdminMainComponent(router, route) {
         this.router = router;
-        this.title = 'Manage Notice';
+        this.route = route;
+        this.title = 'Dashboard';
     }
     AdminMainComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.menuItems = [
             {
+                label: 'Dashboard',
+                command: function (event) {
+                    _this.router.navigate(['.'], { queryParams: {}, relativeTo: _this.route });
+                    _this.title = 'Dashboard';
+                }
+            },
+            {
                 label: 'Manage Notice',
                 command: function (event) {
-                    _this.router.navigate(['/admin'], { queryParams: {} });
+                    _this.router.navigate(['./notice'], { queryParams: {}, relativeTo: _this.route });
                     _this.title = 'Manage Notice';
                 }
             },
             {
                 label: 'Manage Intern',
                 items: [
-                    { label: "Detail", command: function (event) { _this.router.navigate(['/admin/intern/Detail']); _this.title = "Admin > Manage Intern > Detail"; } },
-                    { label: "Supervisor", command: function (event) { _this.router.navigate(['/admin/intern/Supervisor']); _this.title = "Admin > Manage Intern > Supervisors"; } },
-                    { label: "Task", command: function (event) { _this.router.navigate(['/admin/intern/Task']); _this.title = "Admin > Manage Intern > Task"; } },
-                    { label: "Comment", command: function (event) { _this.router.navigate(['/admin/intern/Comment']); _this.title = "Admin > Manage Intern > Comment"; } }
+                    { label: "Detail", command: function (event) { _this.router.navigate(['./intern/Detail'], { relativeTo: _this.route }); _this.title = "Manage Intern > Detail"; } },
+                    { label: "Supervisor", command: function (event) { _this.router.navigate(['./intern/Supervisor'], { relativeTo: _this.route }); _this.title = "Manage Intern > Supervisors"; } },
+                    { label: "Task", command: function (event) { _this.router.navigate(['./intern/Task'], { relativeTo: _this.route }); _this.title = "Manage Intern > Task"; } },
+                    { label: "Comment", command: function (event) { _this.router.navigate(['./intern/Comment'], { relativeTo: _this.route }); _this.title = "Manage Intern > Comment"; } }
                 ]
             }
         ];
@@ -41,10 +49,10 @@ var AdminMainComponent = (function () {
         core_1.Component({
             templateUrl: '/app/main/admin-main.component.html',
             styles: ["\n            .ims-body-container{\n                margin-top:4px;\n            }\n            .ims-body-container .panel-body{\n                padding:2px;\n            }\n    "],
-            directives: [router_1.ROUTER_DIRECTIVES, primeng_1.Menubar, primeng_1.Breadcrumb],
+            directives: [router_1.ROUTER_DIRECTIVES, primeng_1.Menubar],
             providers: []
         }), 
-        __metadata('design:paramtypes', [router_1.Router])
+        __metadata('design:paramtypes', [router_1.Router, router_1.ActivatedRoute])
     ], AdminMainComponent);
     return AdminMainComponent;
 }());

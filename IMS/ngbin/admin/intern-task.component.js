@@ -12,22 +12,41 @@ var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
 var message_service_1 = require('../shared/message.service');
 var intern_service_1 = require('./intern.service');
+var user_information_service_1 = require('../shared/user-information.service');
 var global_constant_1 = require('../shared/global-constant');
 var intern_task_editor_component_1 = require('./intern-task-editor.component');
 var manage_participant_request_1 = require('./manage-participant-request');
 var manage_intern_update_code_1 = require('./manage-intern-update-code');
+var user_1 = require('../shared/user');
 var primeng_1 = require('primeng/primeng');
 var InternTaskComponent = (function () {
-    function InternTaskComponent(messageService, internService, router, route) {
+    function InternTaskComponent(messageService, internService, router, route, userInformationService) {
         this.messageService = messageService;
         this.internService = internService;
         this.router = router;
         this.route = route;
+        this.userInformationService = userInformationService;
+        this.searchKey = "";
+        this.authUser = new user_1.User();
         this.internId = global_constant_1.GlobalConstant.NUMBER_NOTHING;
         this.tasks = [];
         this.handleTaskEditor = false;
         this.isTaskEdit = false;
     }
+    Object.defineProperty(InternTaskComponent.prototype, "filteredTasks", {
+        get: function () {
+            var searchKey = this.searchKey;
+            return this.tasks.filter(function (task) {
+                if (!searchKey)
+                    return true;
+                return (task.Description.includes(searchKey)
+                    || task.SupervisorName.includes(searchKey)
+                    || task.Title.includes(searchKey));
+            });
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(InternTaskComponent.prototype, "isValid", {
         get: function () {
             return this.internId != global_constant_1.GlobalConstant.NUMBER_NOTHING;
@@ -37,13 +56,16 @@ var InternTaskComponent = (function () {
     });
     InternTaskComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.headerRows = [
-            {
-                columns: [
-                    { header: "Search", filter: true, field: "Title", filterMatchMode: "contains" }
-                ]
-            }
-        ];
+        this.userInformationService.fetchUser().then(function (user) { return _this.authUser = user; }).catch(function (error) { return _this.handleError(error); });
+        //this.headerRows = [
+        //    {
+        //        columns: [
+        //            { header: "Search", filter: true, field: "Title", filterMatchMode: "contains" },
+        //            { header: "Search", filter: true, field: "SupervisorName", filterMatchMode: "contains" ,hidden:true},
+        //            { header: "Search", filter: true, field: "Description", filterMatchMode: "contains",hidden:true }
+        //        ]
+        //    }
+        //];
         //fetch all available tasks with its participants information.
         this.internService.getTasks().then(function (tasks) { return _this.tasks = tasks; }).catch(function (error) { return _this.handleError(error); });
         //when selected intern changes, if valid, load a new list of the comments.
@@ -70,14 +92,37 @@ var InternTaskComponent = (function () {
     };
     InternTaskComponent.prototype.deleteTask = function (task) {
         var _this = this;
-        this.internService.deleteTask(task).then(function () {
-            for (var i = 0; i < _this.tasks.length; i++) {
-                if (task.Id == _this.tasks[i].Id) {
-                    _this.tasks.splice(i, 1);
-                    return;
-                }
+        this.messageService.request();
+        this.confirmSubscription = this.messageService.result.subscribe(function (result) {
+            _this.confirmSubscription.unsubscribe();
+            if (result == 1) {
+                _this.internService.deleteTask(task).then(function () {
+                    for (var i = 0; i < _this.tasks.length; i++) {
+                        if (task.Id == _this.tasks[i].Id) {
+                            _this.tasks.splice(i, 1);
+                            return;
+                        }
+                    }
+                }).catch(function (error) { return _this.handleError(error); });
             }
-        }).catch(function (error) { return _this.handleError(error); });
+        });
+    };
+    InternTaskComponent.prototype.closeTask = function (task) {
+        var _this = this;
+        this.messageService.request();
+        this.confirmSubscription = this.messageService.result.subscribe(function (result) {
+            _this.confirmSubscription.unsubscribe();
+            if (result == 1) {
+                _this.internService.closeTask(task).then(function () {
+                    for (var i = 0; i < _this.tasks.length; i++) {
+                        if (task.Id == _this.tasks[i].Id) {
+                            _this.tasks.splice(i, 1);
+                            return;
+                        }
+                    }
+                }).catch(function (error) { return _this.handleError(error); });
+            }
+        });
     };
     InternTaskComponent.prototype.refreshTasks = function () {
         var _this = this;
@@ -136,11 +181,11 @@ var InternTaskComponent = (function () {
     InternTaskComponent = __decorate([
         core_1.Component({
             templateUrl: '/app/admin/intern-task.component.html',
-            styles: ["\n        .ims-body-container{\n            margin-bottom:0px;\n        }\n\n        .panel-heading{\n                position:relative;\n        }\n\n        .ims-control-container{\n            position:absolute;\n            right:4px;\n            top:4px;\n        }\n\n         .ims-task-control{\n            text-align:left;\n            height:14px;\n            line-height:14px;\n        }\n\n        #ims-description{\n            white-space:pre-line;\n        }\n\n        .ims-inline-title{\n             text-decoration: underline;\n            font-weight:600;\n        }\n\n        .panel-body{\n            padding:1px;\n        }\n\n"],
-            directives: [primeng_1.DataTable, primeng_1.Column, primeng_1.Header, primeng_1.Button, intern_task_editor_component_1.InternTaskEditorComponent],
-            providers: []
+            styles: ["\n        .ims-body-container{\n            margin-bottom:0px;\n        }\n\n        .panel-heading{\n                position:relative;\n        }\n\n        .ims-control-container{\n            position:absolute;\n            right:4px;\n            top:4px;\n        }\n\n         .ims-task-control{\n            text-align:left;\n            height:14px;\n            line-height:14px;\n        }\n\n        #ims-description{\n            white-space:pre-line;\n        }\n\n        .ims-inline-title{\n             text-decoration: underline;\n            font-weight:600;\n        }\n\n        .panel-body{\n            padding:1px;\n        }\n\n       \n\n"],
+            directives: [primeng_1.Column, primeng_1.Button, intern_task_editor_component_1.InternTaskEditorComponent, primeng_1.DataList],
+            providers: [user_information_service_1.UserInformationService]
         }), 
-        __metadata('design:paramtypes', [message_service_1.MessageService, intern_service_1.InternService, router_1.Router, router_1.ActivatedRoute])
+        __metadata('design:paramtypes', [message_service_1.MessageService, intern_service_1.InternService, router_1.Router, router_1.ActivatedRoute, user_information_service_1.UserInformationService])
     ], InternTaskComponent);
     return InternTaskComponent;
 }());

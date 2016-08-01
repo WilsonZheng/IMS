@@ -11,7 +11,7 @@
                     <div class="text-right ims-comment-control">
                         <button pButton type="button" label="Add" *ngIf="!commentToBeEditted.Id" (click)="create()" [disabled]="!form.form.valid"></button>
                         <button pButton type="button" label="Update" *ngIf="commentToBeEditted.Id" (click)="update()" [disabled]="!form.form.valid"></button>
-                        <button pButton type="button" label="Delete" *ngIf="commentToBeEditted.Id" (click)="delete()" [disabled]="!form.form.valid"></button>
+                        <button pButton type="button" label="Cancel" *ngIf="commentToBeEditted.Id" (click)="cancel()" [disabled]="!form.form.valid"></button>
                     </div>
 
                 </form>
@@ -19,15 +19,19 @@
 
             <p-dataTable [headerRows]="headerRows" [value]="supervisingComments"
                          [rows]="5" [paginator]="true" [resizableColumns]="true"
-                         [responsive]="true"
-                         selectionMode="single" 
-                         (onRowSelect)="onSelected($event.data)"
-                         (onRowUnselect)="onUnselected($event.data)"
-                         [(selection)]="commentSelected">
+                         [responsive]="true" [hidden]="handleEdit">
                 <p-column field="Comment">
                     <template let-row="rowData">
+                        <div *ngIf="row.SupervisorId==authUser.Id">
+                            <i class="fa fa-edit ims-link-label" (click)="edit(row)"></i>
+                            <i class="fa fa-trash-o ims-link-label" (click)="delete(row)"></i>
+                        </div>
+                       
                         <div >
                             <span class="ims-comment-date">{{row.CreatedAt|bracketDateTransform| date :'dd / MM / yyyy'}}</span>
+                        </div>
+                        <div>
+                            <span class="ims-comment-writer">{{row.SupervisorName}}</span>
                         </div>
                         <div class="ims-content-display-area">
                             {{row.Comment}}

@@ -6,7 +6,7 @@
             <p-spinner [(ngModel)]="internSearchCondition.DaysSinceExpiry" [min]="0" [max]="365" [size]="1"></p-spinner>Days /
             To Expiry
             <p-spinner size="30" [(ngModel)]="internSearchCondition.DaysToExpiry" [min]="0" [max]="365" [size]="1"></p-spinner>Days
-            <button pButton type="text" (click)="search()" icon="fa fa-search"></button>            
+            <button pButton type="text" (click)="search()" icon="fa fa-refresh"></button>            
         </div>
     </div>
     <div class="panel-body">
@@ -39,7 +39,7 @@
             </p-column>
             <p-column>
                 <template let-intern="rowData">
-                    <div class="ims-link-label" *ngFor="let task of intern.TaskToDos">{{task.Title}}</div>
+                    <div *ngFor="let task of intern.TaskToDos">{{task.Title}}</div>
                 </template>
             </p-column>
         </p-dataTable>

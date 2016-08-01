@@ -337,8 +337,6 @@
     <Compile Include="ViewModels\SupervisingResponseViewModel.cs" />
     <Compile Include="ViewModels\SupervisorViewModel.cs" />
     <Compile Include="Models\TaskToDo.cs" />
-    <Compile Include="Models\TaskAssignmentHistory.cs" />
-    <Compile Include="Models\TaskAssignmentHistoryConfiguration.cs" />
     <Compile Include="Models\TaskToDoConfiguration.cs" />
     <Compile Include="Models\TaskReport.cs" />
     <Compile Include="Models\TaskReportConfiguration.cs" />
@@ -373,6 +371,7 @@
     <Compile Include="ViewModels\UserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\admin\admin-dashboard.component.html" />
     <Content Include="app\admin\intern-comment.component.html" />
     <Content Include="app\admin\intern-detail.component.html" />
     <Content Include="app\admin\intern-task-editor.component.html" />
@@ -389,6 +388,7 @@
     <Content Include="app\main\intern-main.component.html" />
     <Content Include="app\main\staff-main.component.html" />
     <Content Include="app\main\systemjs.config.js" />
+    <Content Include="app\staff\staff-dashboard.component.html" />
     <Content Include="Content\bootstrap-3.3.7-dist\css\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-3.3.7-dist\css\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap-3.3.7-dist\css\bootstrap.css" />
@@ -504,6 +504,7 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app\admin\adjust-expiry-request.ts" />
+    <TypeScriptCompile Include="app\admin\admin-dashboard.component.ts" />
     <TypeScriptCompile Include="app\admin\intern-comment.component.ts" />
     <TypeScriptCompile Include="app\admin\intern-detail.component.ts" />
     <TypeScriptCompile Include="app\admin\intern-search-condition.ts" />
@@ -536,6 +537,7 @@
     <TypeScriptCompile Include="app\main\intern-main.component.ts" />
     <TypeScriptCompile Include="app\route\intern.route.ts" />
     <TypeScriptCompile Include="app\main\staff-main.component.ts" />
+    <TypeScriptCompile Include="app\route\staff-manage-intern.route.ts" />
     <TypeScriptCompile Include="app\route\staff.route.ts" />
     <TypeScriptCompile Include="app\shared\bracket-date-transform.pipe.ts" />
     <TypeScriptCompile Include="app\shared\rest-result.ts" />
@@ -553,6 +555,7 @@
     <TypeScriptCompile Include="app\shared\user-information.service.ts" />
     <TypeScriptCompile Include="app\shared\user.ts" />
     <TypeScriptCompile Include="app\shared\utility.service.ts" />
+    <TypeScriptCompile Include="app\staff\staff-dashboard.component.ts" />
     <TypeScriptCompile Include="typings\browser.d.ts" />
     <TypeScriptCompile Include="typings\browser\ambient\es6-shim\index.d.ts" />
     <TypeScriptCompile Include="typings\browser\ambient\jasmine\index.d.ts" />

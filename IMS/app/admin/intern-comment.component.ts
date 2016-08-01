@@ -9,10 +9,11 @@ import { DataTable, Column, Header, Button, Editor } from 'primeng/primeng';
 import { MessageService } from '../shared/message.service';
 import { RestResult } from '../shared/rest-result';
 import { InternService } from './intern.service';
+import { UserInformationService } from '../shared/user-information.service';
 import { SupervisingRequest } from './supervising-request';
 import { ManageInternUpdateCode } from './manage-intern-update-code';
 import { SupervisingComment } from './supervising-comment';
-
+import { User } from '../shared/user';
 import { GlobalConstant } from '../shared/global-constant'
 
 import { BracketDateTransformPipe } from '../shared/bracket-date-transform.pipe';
@@ -50,10 +51,13 @@ import { BracketDateTransformPipe } from '../shared/bracket-date-transform.pipe'
 
     `],
     directives: [DataTable, Column, Header, Button, Editor],
-    providers: [],
+    providers: [UserInformationService],
     pipes: [BracketDateTransformPipe]
 })
 export class InternCommentComponent implements OnInit {
+
+    private confirmSubscription: Subscription;
+
 
     private internIdSub: Subscription;
     private internId: number = GlobalConstant.NUMBER_NOTHING;
@@ -71,21 +75,27 @@ export class InternCommentComponent implements OnInit {
     //global queryParams.
     private queryParams: any;
 
+    private authUser: User = new User();
 
     private headerRows: any[];
 
     private supervisingComments: SupervisingComment[] = [];
     private commentSelected: SupervisingComment;
     private commentToBeEditted: SupervisingComment = new SupervisingComment();
-    
+
+    private handleEdit: boolean = false;
+
+
     constructor(private messageService: MessageService,
         private internService: InternService,
         private router: Router,
-        private route: ActivatedRoute) { }
+        private route: ActivatedRoute,
+        private userInformationService: UserInformationService) { }
 
 
 
     ngOnInit() {
+        this.userInformationService.fetchUser().then((user) => this.authUser=user).catch((error) => this.handleError(error));
         this.headerRows = [
             {
                 columns: [
@@ -129,21 +139,23 @@ export class InternCommentComponent implements OnInit {
         this.messageService.error(error);
     }
 
-    private onSelected(comment: SupervisingComment) {
+    private edit(comment: SupervisingComment) {
+        this.commentSelected = comment;
         let commentToBeEditted = new SupervisingComment();
         commentToBeEditted.Id = comment.Id;
         commentToBeEditted.Comment = comment.Comment;
         this.commentToBeEditted = commentToBeEditted;
+        this.handleEdit = true;
     }
 
-    private onUnselected(comment: SupervisingComment) {
+    private cancel() {
         this.resetCommentInput();
     }
-
 
     //The view for manipulating comment must be in the create mode if no comment is not selected now.
     private resetCommentInput() {
         this.commentToBeEditted = new SupervisingComment();
+        this.handleEdit = false;
     }
     
     private create() {
@@ -156,21 +168,28 @@ export class InternCommentComponent implements OnInit {
         .catch((error) => this.handleError(error));
     }
 
-    private delete() {
-        this.internService.deleteComment(this.commentToBeEditted).then(() => {
-            for (let i = 0; i < this.supervisingComments.length; i++) {
-                if (this.supervisingComments[i].Id == this.commentToBeEditted.Id) {
-                    this.supervisingComments.splice(i, 1);
-                    this.resetCommentInput();
-                    break;
-                }
+    private delete(comment: SupervisingComment) {
+        this.messageService.request();
+        this.confirmSubscription = this.messageService.result.subscribe((result) => {
+            this.confirmSubscription.unsubscribe();
+            if (result == 1) {
+                this.internService.deleteComment(comment).then(() => {
+                    for (let i = 0; i < this.supervisingComments.length; i++) {
+                        if (this.supervisingComments[i].Id == comment.Id) {
+                            this.supervisingComments.splice(i, 1);
+                            this.resetCommentInput();
+                            break;
+                        }
+                    }
+                }).catch((error) => this.handleError(error));
             }
-        }).catch((error) => this.handleError(error));
+        });
     }
     
     private update() {
         this.internService.updateComment(this.commentToBeEditted).then(() => {
             this.commentSelected.Comment = this.commentToBeEditted.Comment;
+            this.resetCommentInput();
         }).catch((error) => this.handleError(error));
     }
 }

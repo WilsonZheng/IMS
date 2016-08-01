@@ -11,5 +11,7 @@ namespace IMS.ViewModels
         public string Title { get; set; }
         public string Description { get; set; }
         public List<InternViewModel> Participants { get; set; }
+        public int SupervisorId { get; set; }
+        public string SupervisorName { get; set; }
     }
 }

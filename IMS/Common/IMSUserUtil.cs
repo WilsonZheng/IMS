@@ -19,11 +19,15 @@ namespace IMS.Common
             this._manager = manager;
         }
 
+        public bool IsInRole(string role) {
+            return this._user.IsInRole(role);
+        }
 
         public int Id
         {
             get
             {
+                
                 return _user.Identity.GetUserId<int>();
             }
         }

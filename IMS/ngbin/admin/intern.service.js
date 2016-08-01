@@ -204,6 +204,22 @@ var InternService = (function () {
             return Promise.reject(error);
         });
     };
+    InternService.prototype.closeTask = function (task) {
+        var request = new task_to_do_1.TaskToDo();
+        request.Id = task.Id;
+        return this.http.post("/Intern/closeTask", JSON.stringify(request), { headers: this.headers }).toPromise()
+            .then(function (response) {
+            var result = response.json();
+            if (result.Error) {
+                return Promise.reject(result.Error);
+            }
+            else {
+                return;
+            }
+        }).catch(function (error) {
+            return Promise.reject(error);
+        });
+    };
     InternService.prototype.updateTask = function (task) {
         var request = new task_to_do_1.TaskToDo();
         request.Id = task.Id;

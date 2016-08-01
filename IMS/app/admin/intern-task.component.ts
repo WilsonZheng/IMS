@@ -4,14 +4,15 @@ import { Subscription } from 'rxjs/Subscription';
 import { MessageService } from '../shared/message.service';
 import { RestResult } from '../shared/rest-result';
 import { InternService } from './intern.service';
-
+import { UserInformationService } from '../shared/user-information.service';
 import { TaskToDo } from './task-to-do';
 import { GlobalConstant } from '../shared/global-constant';
 import { InternTaskEditorComponent } from './intern-task-editor.component';
 import { ManageParticipantRequest } from './manage-participant-request';
 import { ManageInternUpdateCode } from './manage-intern-update-code';
+import { User } from '../shared/user';
 
-import { DataTable, Column, Header, Button} from 'primeng/primeng';
+import { Column, Button, DataList} from 'primeng/primeng';
 @Component({
     templateUrl: '/app/admin/intern-task.component.html',
     styles: [`
@@ -48,12 +49,28 @@ import { DataTable, Column, Header, Button} from 'primeng/primeng';
             padding:1px;
         }
 
+       
+
 `],
-    directives: [DataTable, Column, Header, Button, InternTaskEditorComponent],
-    providers: []
+    directives: [Column, Button, InternTaskEditorComponent, DataList],
+    providers: [UserInformationService]
 })
 export class InternTaskComponent implements OnInit {
+    private searchKey: string = "";
 
+    private get filteredTasks(): TaskToDo[] {
+        let searchKey = this.searchKey;
+        return this.tasks.filter(function (task) {
+            if (!searchKey) return true;
+            return (task.Description.includes(searchKey)
+                || task.SupervisorName.includes(searchKey)
+                || task.Title.includes(searchKey));
+        });
+    }
+    
+    private authUser: User = new User();
+
+    private confirmSubscription: Subscription;
     private internIdSub: Subscription;
     private internId: number = GlobalConstant.NUMBER_NOTHING;
 
@@ -76,17 +93,20 @@ export class InternTaskComponent implements OnInit {
     constructor(private messageService: MessageService,
         private internService: InternService,
         private router: Router,
-        private route: ActivatedRoute)
-    { }
+        private route: ActivatedRoute,
+        private userInformationService: UserInformationService) { }
+    
     ngOnInit() {
-
-        this.headerRows = [
-            {
-                columns: [
-                    { header: "Search", filter: true, field: "Title", filterMatchMode: "contains" }
-                ]
-            }
-        ];
+        this.userInformationService.fetchUser().then((user) => this.authUser = user).catch((error) => this.handleError(error));
+        //this.headerRows = [
+        //    {
+        //        columns: [
+        //            { header: "Search", filter: true, field: "Title", filterMatchMode: "contains" },
+        //            { header: "Search", filter: true, field: "SupervisorName", filterMatchMode: "contains" ,hidden:true},
+        //            { header: "Search", filter: true, field: "Description", filterMatchMode: "contains",hidden:true }
+        //        ]
+        //    }
+        //];
 
         //fetch all available tasks with its participants information.
         this.internService.getTasks().then((tasks) => this.tasks = tasks).catch((error) => this.handleError(error));
@@ -121,15 +141,38 @@ export class InternTaskComponent implements OnInit {
     }
 
     private deleteTask(task: TaskToDo) {
-        this.internService.deleteTask(task).then(() => {
-            for (let i = 0; i < this.tasks.length; i++){
-                if (task.Id == this.tasks[i].Id)
-                {
-                    this.tasks.splice(i, 1);
-                    return;
-                }
+        this.messageService.request();
+        this.confirmSubscription = this.messageService.result.subscribe((result) => {
+            this.confirmSubscription.unsubscribe();
+            if (result == 1) {
+                this.internService.deleteTask(task).then(() => {
+                    for (let i = 0; i < this.tasks.length; i++) {
+                        if (task.Id == this.tasks[i].Id) {
+                            this.tasks.splice(i, 1);
+                            return;
+                        }
+                    }
+                }).catch((error) => this.handleError(error));
             }
-        }).catch((error) => this.handleError(error));
+        });
+    }
+
+
+    private closeTask(task: TaskToDo) {
+        this.messageService.request();
+        this.confirmSubscription = this.messageService.result.subscribe((result) => {
+            this.confirmSubscription.unsubscribe();
+            if (result == 1) {
+                this.internService.closeTask(task).then(() => {
+                    for (let i = 0; i < this.tasks.length; i++) {
+                        if (task.Id == this.tasks[i].Id) {
+                            this.tasks.splice(i, 1);
+                            return;
+                        }
+                    }
+                }).catch((error) => this.handleError(error));
+            }
+        });
     }
        
 

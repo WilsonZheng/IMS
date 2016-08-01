@@ -245,6 +245,23 @@ export class InternService {
             });
     }
 
+    closeTask(task: TaskToDo): Promise<void> {
+        let request = new TaskToDo();
+        request.Id = task.Id;
+        return this.http.post("/Intern/closeTask", JSON.stringify(request), { headers: this.headers }).toPromise()
+            .then(response => {
+                var result: RestResult = response.json();
+                if (result.Error) {
+                    return Promise.reject(result.Error);
+                }
+                else {
+                    return;
+                }
+
+            }).catch((error) => {
+                return Promise.reject(error);
+            });
+    }
 
     updateTask(task: TaskToDo): Promise<void> {
         let request = new TaskToDo();

@@ -9,6 +9,8 @@ namespace IMS.ViewModels
         [Required]
         public string Comment { get; set; }
         public DateTime CreatedAt { get; set; }
+        public string SupervisorName { get; set; }
+        public int SupervisorId { get; set; }
         public int InternshipId { get; set; }
     }
 }

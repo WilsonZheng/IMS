@@ -8,16 +8,14 @@ using IMS.Common;
 using System.Web;
 using Microsoft.AspNet.Identity.Owin;
 using System.Collections.Generic;
+using LinqKit;
 
 namespace IMS.Controllers
 {
+    [Authorize]
     public class InternController : Controller
     {
-
-
-
-
-
+        
         private IMSUserUtil IMSUserUtil
         {
             get
@@ -33,6 +31,7 @@ namespace IMS.Controllers
 
         
         [HttpPost]
+        [Authorize(Roles ="admin,staff")]
         public ActionResult getInterns(InternSearchConditionViewModel model)
         {
             try
@@ -45,10 +44,16 @@ namespace IMS.Controllers
 
                 using (var db = new ApplicationDbContext())
                 {
+                    
+                    var predicate = PredicateBuilder.True<Internship>().And(x => x.Intern.OrgId == IMSUserUtil.OrgId && (x.ExpiryAt >= fromDate && x.ExpiryAt <= toDate));
+                    //for staff, only return the list of interns who have been under their supervision.
+                    if (IMSUserUtil.IsInRole(IMSContants.ROLE_STAFF))
+                    {
+                        predicate = predicate.And(x=>x.Supervisors.Any(y=>y.Id==IMSUserUtil.Id));
+                    }
                     var result=db.Internships.Include(i => i.Intern)
                         .Include (i =>i.Supervisors)
-                        .Include (i =>i.Tasks).
-                        Where(x => x.Intern.OrgId == IMSUserUtil.OrgId && (x.ExpiryAt >= fromDate && x.ExpiryAt<=toDate)).ToList()
+                        .Include (i =>i.Tasks).AsExpandable().Where(predicate).ToList()
                         .Select(x => new InternViewModel {
                              Id=x.Id,
                               FirstName=x.Intern.FirstName,
@@ -61,7 +66,7 @@ namespace IMS.Controllers
                                        FirstName=s.FirstName,
                                        LastName=s.LastName
                                   }).ToList(),
-                                   TaskToDos=x.Tasks.Select(t=>new TaskToDoViewModel {
+                                   TaskToDos=x.Tasks.Where(t=>t.IsActive&&!t.IsClosed).Select(t=>new TaskToDoViewModel {
                                         Id=t.Id,
                                         Title=t.Title
                                    }).ToList()
@@ -97,7 +102,7 @@ namespace IMS.Controllers
                                  FirstName = s.FirstName,
                                  LastName = s.LastName
                              }).ToList(),
-                             TaskToDos = x.Tasks.Select(t => new TaskToDoViewModel
+                             TaskToDos = x.Tasks.Where(t=>t.IsActive).Select(t => new TaskToDoViewModel
                              {
                                  Id = t.Id,
                                  Description = t.Description,
@@ -226,6 +231,7 @@ namespace IMS.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles ="admin,staff")]
         public ActionResult getSupervisingComments(int internId)
         {
             try
@@ -233,15 +239,18 @@ namespace IMS.Controllers
                 using (var db = new ApplicationDbContext())
                 {
                     var result = db.SupervisingComments
+                        .Include(x=>x.Supervisor)
                         .Include(x => x.Internship)
                         .Include(x => x.Internship.Intern)
                         .Where(x =>x.IsActive && x.InternshipId == internId
-                        && x.Internship.Intern.OrgId == IMSUserUtil.OrgId && x.SupervisorId == IMSUserUtil.Id)
+                        && x.Internship.Intern.OrgId == IMSUserUtil.OrgId).ToList()
                         .Select(x => new SupervisingCommentViewModel
                         {
                             Id = x.Id,
                             CreatedAt = x.CreatedAt,
-                            Comment = x.Comment
+                            Comment = x.Comment,
+                            SupervisorId=x.SupervisorId,
+                            SupervisorName=string.Format("{0} {1}",x.Supervisor.FirstName,x.Supervisor.LastName)
                         }).OrderByDescending(x => x.Id)
                         .ToList();
                     return Json(new ImsResult { Data = result });
@@ -269,12 +278,17 @@ namespace IMS.Controllers
                         UpdatedAt = DateTime.UtcNow,
                         InternshipId = model.InternshipId,
                         SupervisorId = IMSUserUtil.Id
+                        
                     };
                     db.SupervisingComments.Add(comment);
                     db.SaveChanges();
 
+                    var supervisor = IMSUserUtil.DetachedUser;
+                    
                     model.Id = comment.Id;
                     model.CreatedAt = comment.CreatedAt;
+                    model.SupervisorId = IMSUserUtil.Id;
+                    model.SupervisorName = string.Format("{0} {1}", supervisor.FirstName, supervisor.LastName);
                     return Json(new ImsResult { Data = model });
                 }
             }
@@ -351,8 +365,11 @@ namespace IMS.Controllers
                     };
                     db.TaskToDos.Add(task);
                     db.SaveChanges();
+                    var supervisor = IMSUserUtil.DetachedUser;
                     model.Id = task.Id;
                     model.Participants = new List<InternViewModel>();
+                    model.SupervisorId = supervisor.Id;
+                    model.SupervisorName = string.Format("{0} {1}",supervisor.FirstName,supervisor.LastName);
                     return Json(new ImsResult { Data=model });
                 }
             }
@@ -448,21 +465,26 @@ namespace IMS.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles ="admin,staff")]
         public ActionResult getTasks()
         {
             try
             {
+                //return the list of tasks which belong to this admin or staff.
                 using (var db = new ApplicationDbContext())
                 {
                     var result = db.TaskToDos
+                        .Include(x=>x.Owner)
                         .Include(x => x.Participants)
                         .Include(x => x.Participants.Select(y => y.Intern))
-                        .Where(x => x.IsActive && x.Owner.OrgId == IMSUserUtil.OrgId)
+                        .Where(x => x.IsActive && !x.IsClosed && x.Owner.OrgId==IMSUserUtil.OrgId)
                         .ToList()
                         .Select(x => new TaskToDoViewModel
                         {
                             Id = x.Id,
                             Title = x.Title,
+                            SupervisorId=x.OwnerId,
+                            SupervisorName= string.Format("{0} {1}",x.Owner.FirstName,x.Owner.LastName),
                             Description = x.Description,
                             Participants = x.Participants.Select(y => new InternViewModel
                             {
@@ -489,8 +511,9 @@ namespace IMS.Controllers
             {
                 using (var db = new ApplicationDbContext())
                 {
+                    //return the all tasks as far as it is not deleted even when the task has been closed.
                     var result =db.Internships.Where(x => x.Id == id && x.Intern.OrgId == IMSUserUtil.OrgId)
-                        .SelectMany(x => x.Tasks)
+                        .SelectMany(x => x.Tasks).Where(x=>x.IsActive && !x.IsClosed)
                         .Select(x => new TaskToDoViewModel {
                                 Id=x.Id,
                                 Title=x.Title
@@ -506,6 +529,31 @@ namespace IMS.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles ="admin,staff")]
+        public ActionResult closeTask(TaskToDoViewModel model)
+        {
+            try
+            {
+                using (var db = new ApplicationDbContext())
+                {
+                    var task=db.TaskToDos.Where(x => x.Id == model.Id && x.OwnerId == IMSUserUtil.Id).SingleOrDefault();
+                    if (task == null) throw new Exception("Not found");
+                    task.IsClosed = true;
+                    task.ClosedAt = DateTime.UtcNow;
+                    db.SaveChanges();
+                    return Json(new ImsResult { });
+                }
+            }
+            catch (Exception e)
+            {
+                return Json(new IMS.Common.ImsResult { Error = e.Message });
+            }
+        }
+        
+
+
+        [HttpPost]
+        [Authorize(Roles ="admin")]
         public ActionResult adjustExpiry(AdjustExpiryViewModel model)
         {
             try

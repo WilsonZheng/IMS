@@ -48,7 +48,7 @@ namespace IMS.Models
             modelBuilder.Configurations.Add(new InvitationConfiguration());
             modelBuilder.Configurations.Add(new InternshipConfiguration());
             modelBuilder.Configurations.Add(new TaskToDoConfiguration());
-            modelBuilder.Configurations.Add(new TaskAssignmentHistoryConfiguration());
+            
             modelBuilder.Configurations.Add(new TaskReportConfiguration());
             modelBuilder.Configurations.Add(new SupervisingCommentConfiguration());
         }
@@ -66,7 +66,7 @@ namespace IMS.Models
       
         public DbSet<TaskToDo> TaskToDos { get; set; }
       
-        public DbSet<TaskAssignmentHistory> TaskAssignmentHistories { get; set; }
+        
         public DbSet<TaskReport> TaskReports { get; set; }
         public DbSet<SupervisingComment> SupervisingComments { get; set; }
 
@@ -89,7 +89,9 @@ namespace IMS.Models
             userManager.Create(new User {
                 UserName = "admin1@test.com",
                 Email = "admin1@test.com",
-                Org = org
+                Org = org,
+                FirstName="Adam",
+                LastName="Sandler"
             }, password);
           
 
