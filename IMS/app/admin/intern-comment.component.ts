@@ -8,11 +8,11 @@ import { DataTable, Column, Header, Button, Editor } from 'primeng/primeng';
 
 import { MessageService } from '../shared/message.service';
 import { RestResult } from '../shared/rest-result';
-import { InternService } from './intern.service';
+import { InternService } from '../shared/intern.service';
 import { UserInformationService } from '../shared/user-information.service';
-import { SupervisingRequest } from './supervising-request';
-import { ManageInternUpdateCode } from './manage-intern-update-code';
-import { SupervisingComment } from './supervising-comment';
+import { SupervisingRequest } from '../shared/supervising-request';
+import { ManageInternUpdateCode } from '../shared/manage-intern-update-code';
+import { SupervisingComment } from '../shared/supervising-comment';
 import { User } from '../shared/user';
 import { GlobalConstant } from '../shared/global-constant'
 

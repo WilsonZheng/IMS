@@ -48,7 +48,7 @@ namespace IMS.Models
             modelBuilder.Configurations.Add(new InvitationConfiguration());
             modelBuilder.Configurations.Add(new InternshipConfiguration());
             modelBuilder.Configurations.Add(new TaskToDoConfiguration());
-            
+            modelBuilder.Configurations.Add(new InternTaskInvolvementConfiguration());
             modelBuilder.Configurations.Add(new TaskReportConfiguration());
             modelBuilder.Configurations.Add(new SupervisingCommentConfiguration());
         }
@@ -63,10 +63,8 @@ namespace IMS.Models
         public DbSet<Configuration> Configurations { get; set; }
         public DbSet<Invitation> Invitations { get; set; }
         public DbSet<Internship> Internships { get; set; }
-      
+        public DbSet<InternTaskInvolvement> InternTaskInvolvements { get; set; }
         public DbSet<TaskToDo> TaskToDos { get; set; }
-      
-        
         public DbSet<TaskReport> TaskReports { get; set; }
         public DbSet<SupervisingComment> SupervisingComments { get; set; }
 

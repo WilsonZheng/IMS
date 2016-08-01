@@ -11,14 +11,11 @@
                      selectionMode="multiple" [(selection)]="supervisorsAssigned"
                     (onRowSelect)="handleSupervising($event.data,true)"
                     (onRowUnselect)="handleSupervising($event.data,false)">
-            <p-column field="FirstName">
+            <p-column field="FullName">
                 <template let-supervisor="rowData">
-                    <span>{{supervisor.FirstName}}</span>
-                </template>
-            </p-column>
-            <p-column field="LastName">
-                <template let-supervisor="rowData">
-                    <span>{{supervisor.LastName}}</span>
+                    <div class="text-center">
+                        <span>{{supervisor.FullName}}</span>
+                    </div>
                 </template>
             </p-column>
             <p-column>

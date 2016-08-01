@@ -12,11 +12,12 @@ var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
 var primeng_1 = require('primeng/primeng');
 var message_service_1 = require('../shared/message.service');
-var intern_service_1 = require('./intern.service');
-var intern_1 = require('./intern');
-var manage_intern_update_code_1 = require('./manage-intern-update-code');
+var intern_service_1 = require('../shared/intern.service');
+var intern_1 = require('../shared/intern');
+var manage_intern_update_code_1 = require('../shared/manage-intern-update-code');
 var global_constant_1 = require('../shared/global-constant');
-var intern_search_condition_1 = require('./intern-search-condition');
+var intern_search_condition_1 = require('../shared/intern-search-condition');
+var bracket_date_transform_pipe_1 = require('../shared/bracket-date-transform.pipe');
 var ManageInternComponent = (function () {
     function ManageInternComponent(messageService, internService, router, route) {
         this.messageService = messageService;
@@ -32,11 +33,17 @@ var ManageInternComponent = (function () {
         this.headerRows = [
             {
                 columns: [
-                    { header: "First Name", filter: true, field: "FirstName", filterMatchMode: "contains", sortable: true },
-                    { header: "Last Name", filter: true, field: "LastName", filterMatchMode: "contains", sortable: true },
-                    { header: "User Name", filter: true, field: "UserName", filterMatchMode: "contains", sortable: true },
-                    { header: "Supervisor", filter: false },
-                    { header: "Task", filter: false }
+                    { header: "Name", field: "FullName", rowspan: 2, filter: true, filterMatchMode: "contains", sortable: true },
+                    { header: "Internship", colspan: 3 },
+                    { header: "Supervisor", rowspan: 2 },
+                    { header: "Current Task", rowspan: 2 }
+                ]
+            },
+            {
+                columns: [
+                    { header: "From", field: "CommenceAt", sortable: true },
+                    { header: "To", field: "ExpiryAt", sortable: true },
+                    { header: "Days left", field: "DaysToExpiry", sortable: true }
                 ]
             }
         ];
@@ -128,7 +135,8 @@ var ManageInternComponent = (function () {
             templateUrl: '/app/admin/manage-intern.component.html',
             styles: ["\n                .panel-heading{\n                position:relative;\n                }\n\n                .ims-control-container{\n                position:absolute;\n                right:4px;\n                top:4px;\n                }\n\n                .panel-body{\n                padding:1px;\n                }\n\n                .ims-body-container.panel{\n                margin-bottom:2px;\n                }\n               \n    "],
             directives: [primeng_1.DataTable, primeng_1.Column, primeng_1.Button, primeng_1.Header, router_1.ROUTER_DIRECTIVES, primeng_1.Spinner],
-            providers: [intern_service_1.InternService]
+            providers: [intern_service_1.InternService],
+            pipes: [bracket_date_transform_pipe_1.BracketDateTransformPipe]
         }), 
         __metadata('design:paramtypes', [message_service_1.MessageService, intern_service_1.InternService, router_1.Router, router_1.ActivatedRoute])
     ], ManageInternComponent);

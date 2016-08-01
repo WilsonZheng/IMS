@@ -4,11 +4,12 @@ import { DataTable, Column, Header, Button, Spinner } from 'primeng/primeng';
 import { Subscription } from 'rxjs/Subscription';
 import { MessageService } from '../shared/message.service';
 import { RestResult } from '../shared/rest-result';
-import { InternService } from './intern.service';
-import { Intern } from './intern';
-import { ManageInternUpdateCode } from './manage-intern-update-code';
+import { InternService } from '../shared/intern.service';
+import { Intern } from '../shared/intern';
+import { ManageInternUpdateCode } from '../shared/manage-intern-update-code';
 import { GlobalConstant } from '../shared/global-constant';
-import { InternSearchCondition } from './intern-search-condition';
+import { InternSearchCondition } from '../shared/intern-search-condition';
+import { BracketDateTransformPipe } from '../shared/bracket-date-transform.pipe';
 
 @Component({
     templateUrl: '/app/admin/manage-intern.component.html',
@@ -33,7 +34,9 @@ import { InternSearchCondition } from './intern-search-condition';
                
     `],
     directives: [DataTable, Column, Button, Header, ROUTER_DIRECTIVES, Spinner ],
-    providers: [InternService]
+    providers: [InternService],
+    pipes: [BracketDateTransformPipe]
+
 })
 export class ManageInternComponent implements OnInit {
     private internSearchCondition:InternSearchCondition = new InternSearchCondition();
@@ -49,15 +52,22 @@ export class ManageInternComponent implements OnInit {
         private internService: InternService,
         private router: Router, private route: ActivatedRoute)
     { }
+
     ngOnInit() {
         this.headerRows = [
             {
                 columns: [
-                    { header: "First Name", filter: true, field: "FirstName", filterMatchMode: "contains", sortable: true },
-                    { header: "Last Name", filter: true, field: "LastName", filterMatchMode: "contains", sortable: true },
-                    { header: "User Name", filter: true, field: "UserName", filterMatchMode: "contains", sortable: true },
-                    { header: "Supervisor", filter: false },
-                    { header: "Task", filter: false }
+                    { header: "Name", field: "FullName", rowspan: 2, filter: true, filterMatchMode: "contains", sortable: true },
+                    { header: "Internship", colspan:3 },
+                    { header: "Supervisor", rowspan:2 },
+                    { header: "Current Task", rowspan:2}
+                ]
+            },
+            {
+                columns: [
+                    { header: "From",field:"CommenceAt",sortable:true},
+                    { header: "To", field: "ExpiryAt", sortable: true },
+                    { header: "Days left", field: "DaysToExpiry", sortable: true }
                 ]
             }
         ];

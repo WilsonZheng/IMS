@@ -19,19 +19,19 @@ import { Menubar, MenuItem } from 'primeng/primeng';
 })
 export class StaffMainComponent implements OnInit {
     private menuItems: MenuItem[];
-    private title: string = 'Dashboard';
+    private title: string = 'Manage Intern > Task';
     constructor(private router: Router, private route: ActivatedRoute) {
 
     }
     
     ngOnInit() {
         this.menuItems = [
-            {
-                label: 'Dashboard',
-                command: (event) => {
-                    this.router.navigate(['.'], { queryParams: {}, relativeTo: this.route }); this.title = 'Dashboard';
-                }
-            },
+            //{
+            //    label: 'Dashboard',
+            //    command: (event) => {
+            //        this.router.navigate(['.'], { queryParams: {}, relativeTo: this.route }); this.title = 'Dashboard';
+            //    }
+            //},
             {
                 label: 'Manage Intern',
                 items: [

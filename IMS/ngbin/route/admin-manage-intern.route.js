@@ -4,6 +4,7 @@ var intern_comment_component_1 = require('../admin/intern-comment.component');
 var intern_task_component_1 = require('../admin/intern-task.component');
 var intern_supervisor_component_1 = require('../admin/intern-supervisor.component');
 var intern_detail_component_1 = require('../admin/intern-detail.component');
+var task_involvement_component_1 = require('../shared/task-involvement.component');
 exports.adminManageInternRoutes = [
     {
         path: 'intern',
@@ -24,6 +25,10 @@ exports.adminManageInternRoutes = [
             {
                 path: 'Supervisor',
                 component: intern_supervisor_component_1.InternSupervisorComponent
+            },
+            {
+                path: 'TaskHistory',
+                component: task_involvement_component_1.TaskInvolvementComponent
             }
         ]
     }

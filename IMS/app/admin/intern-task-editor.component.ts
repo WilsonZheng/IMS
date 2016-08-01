@@ -1,9 +1,9 @@
 ﻿import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { Button, Editor, Header } from 'primeng/primeng';
 
-import { InternService } from './intern.service';
+import { InternService } from '../shared/intern.service';
 import { RestResult } from '../shared/rest-result';
-import { TaskToDo } from './task-to-do';
+import { TaskToDo } from '../shared/task-to-do';
 
 @Component({
     selector: 'admin-task-editor',

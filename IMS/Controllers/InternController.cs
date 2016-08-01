@@ -426,6 +426,7 @@ namespace IMS.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles ="admin,staff")]
         public ActionResult manageParticipant(TaskParticipantRequestViewModel model)
         {
             try
@@ -433,17 +434,32 @@ namespace IMS.Controllers
                 if (!ModelState.IsValid) throw new Exception("Invalid Input");
                 using (var db = new ApplicationDbContext())
                 {
-                    //admin user has the control over the tasks owned by other staff.
-                    var task = db.TaskToDos.Where(x => x.Id == model.TaskId && x.Owner.OrgId == IMSUserUtil.OrgId && x.IsActive).SingleOrDefault();
+                    var task = db.TaskToDos.Where(x => x.Id == model.TaskId && x.Owner.Id == IMSUserUtil.Id && x.IsActive).SingleOrDefault();
                     if (task == null) throw new Exception("Task Not Found");
-                    var participant = db.Internships.Include(x=>x.Tasks).Where(x => x.Id == model.ParticipantId && x.Intern.OrgId==IMSUserUtil.OrgId).SingleOrDefault();
+                    var predicate = PredicateBuilder.True<Internship>().And(x => x.Id==model.ParticipantId && x.Intern.OrgId == IMSUserUtil.OrgId);
+                    //staff have the control over only the interns who are under their supervising. This doesn't apply to admin user.
+                    if (IMSUserUtil.IsInRole(IMSContants.ROLE_STAFF))
+                    {
+                        predicate = predicate.And(x => x.Supervisors.Any(y => y.Id == IMSUserUtil.Id));
+                    }
+                    var participant = db.Internships.Include(x=>x.Tasks).AsExpandable().Where(predicate).SingleOrDefault();
                     if (participant == null) throw new Exception("Participant Not Found");
                     if (model.IsJoining)
                     {
+                        db.InternTaskInvolvements.Add(new InternTaskInvolvement {
+                             InternId=model.ParticipantId,
+                             TaskId=model.TaskId,
+                             JoinAt= DateTime.UtcNow,
+                             IsActive=true
+                        });
                         participant.Tasks.Add(task);
                     }
                     else {
                         participant.Tasks.Remove(task);
+                        var involvement = db.InternTaskInvolvements.Where(x => x.TaskId == model.TaskId && x.InternId == model.ParticipantId && x.IsActive).SingleOrDefault();
+                        if (involvement == null) throw new Exception("Matching Involvement History Record Not Found!");
+                        involvement.IsActive = false;
+                        involvement.LeftAt = DateTime.UtcNow;
                     }
                     db.SaveChanges();
                     var result = db.TaskToDos.Where(x => x.Id == model.TaskId)
@@ -477,7 +493,7 @@ namespace IMS.Controllers
                         .Include(x=>x.Owner)
                         .Include(x => x.Participants)
                         .Include(x => x.Participants.Select(y => y.Intern))
-                        .Where(x => x.IsActive && !x.IsClosed && x.Owner.OrgId==IMSUserUtil.OrgId)
+                        .Where(x => x.IsActive && !x.IsClosed && x.Owner.Id==IMSUserUtil.Id)
                         .ToList()
                         .Select(x => new TaskToDoViewModel
                         {
@@ -511,12 +527,19 @@ namespace IMS.Controllers
             {
                 using (var db = new ApplicationDbContext())
                 {
-                    //return the all tasks as far as it is not deleted even when the task has been closed.
-                    var result =db.Internships.Where(x => x.Id == id && x.Intern.OrgId == IMSUserUtil.OrgId)
-                        .SelectMany(x => x.Tasks).Where(x=>x.IsActive && !x.IsClosed)
-                        .Select(x => new TaskToDoViewModel {
-                                Id=x.Id,
-                                Title=x.Title
+                   
+                    var result = db.TaskToDos.Where(x => x.Participants.Any(p => p.Id == id) && x.IsActive && !x.IsClosed)
+                        .Include(x => x.Owner)
+                        .Include(x => x.Participants)
+                        .Include(x=>x.Participants.Select(p=>p.Intern))
+                        .ToList().Select(x => new TaskToDoViewModel {
+                            Id=x.Id,
+                            Title=x.Title,
+                            Description=x.Description,
+                            SupervisorId=x.OwnerId,
+                            SupervisorName= string.Format("{0} {1}",x.Owner.FirstName,x.Owner.LastName),
+                            IsClosed=x.IsClosed,
+                            Participants=x.Participants.Select(p=>new InternViewModel { Id=p.Id, FirstName=p.Intern.FirstName,LastName=p.Intern.LastName }).ToList()
                         }).ToList();
                     return Json(new ImsResult { Data = result });
                 }
@@ -576,5 +599,156 @@ namespace IMS.Controllers
                 return Json(new IMS.Common.ImsResult { Error = e.Message });
             }
         }
+
+
+
+
+
+        [HttpPost]
+        public ActionResult getReports(TaskReportListRequestViewModel model)
+        {
+            try
+            {
+                //intern can read their own reports only.
+                if (IMSUserUtil.IsInRole(IMSContants.ROLE_INTERN) && model.InternId != IMSUserUtil.Id) {
+                    throw new Exception("Unauthorized access!");
+                }
+                using (var db = new ApplicationDbContext())
+                {
+                    var result=db.TaskReports
+                        .Where(x => x.TaskId == model.TaskId && x.InternshipId == model.InternId && x.IsActive )
+                        .ToList()
+                        .Select(x => new TaskReportViewModel {
+                            Id=x.Id,
+                            TaskId=x.TaskId,
+                            Title=x.Title,
+                            Content=x.Content,
+                            CreatedAt=x.CreatedAt
+                        }).OrderByDescending(x=>x.Id);
+                    return Json(new ImsResult { Data = result });
+                }
+            }
+            catch (Exception e)
+            {
+                return Json(new IMS.Common.ImsResult { Error = e.Message });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult deleteReport(TaskReportViewModel model)
+        {
+            try
+            {
+                using (var db = new ApplicationDbContext())
+                {
+                    var task = db.TaskToDos.Where(x => x.Id == model.TaskId && x.IsActive && !x.IsClosed).SingleOrDefault();
+                    if (task == null) throw new Exception("Task is not active!");
+                    var report = db.TaskReports.Where(x => x.Id == model.Id && x.InternshipId == IMSUserUtil.Id).SingleOrDefault();
+                    if (report == null) throw new Exception("Not Found");
+                    report.IsActive = false;
+                    db.SaveChanges();
+                    return Json(new ImsResult { Data = model });
+                }
+            }
+            catch (Exception e)
+            {
+                return Json(new IMS.Common.ImsResult { Error = e.Message });
+            }
+        }
+
+
+        [HttpPost]
+        public ActionResult updateReport(TaskReportViewModel model)
+        {
+            try
+            {
+                using (var db = new ApplicationDbContext())
+                {
+                    var task = db.TaskToDos.Where(x => x.Id == model.TaskId && x.IsActive && !x.IsClosed).SingleOrDefault();
+                    if (task == null) throw new Exception("Task is not active!");
+                    var report = db.TaskReports.Where(x => x.Id == model.Id && x.InternshipId == IMSUserUtil.Id).SingleOrDefault();
+                    if (report == null) throw new Exception("Not Found");
+                    report.Title = model.Title;
+                    report.Content = model.Content;
+                    db.SaveChanges();
+                    return Json(new ImsResult { Data = model });
+                }
+            }
+            catch (Exception e)
+            {
+                return Json(new IMS.Common.ImsResult { Error = e.Message });
+            }
+        }
+
+
+        [HttpPost]
+        public ActionResult createReport(TaskReportViewModel model)
+        {
+            try
+            {
+
+                using (var db = new ApplicationDbContext())
+                {
+                    var task=db.TaskToDos.Where(x => x.Id == model.TaskId && x.IsActive && !x.IsClosed).SingleOrDefault();
+                    if (task == null) throw new Exception("Task is not active!");
+                    var report = new TaskReport {
+                            Content=model.Content,
+                            Title=model.Title,
+                            CreatedAt=DateTime.UtcNow,
+                            InternshipId=IMSUserUtil.Id,
+                            TaskId=model.TaskId,
+                            IsActive =true
+                    };
+                    db.TaskReports.Add(report);
+                    db.SaveChanges();
+                    model.Id = report.Id;
+                    model.CreatedAt = report.CreatedAt;
+                    return Json(new ImsResult { Data = model });
+                }
+            }
+            catch (Exception e)
+            {
+                return Json(new IMS.Common.ImsResult { Error = e.Message });
+            }
+        }
+
+
+        [HttpPost]
+        public ActionResult getTaskHistoryForIntern(int internId)
+        {
+            try
+            {
+                using (var db = new ApplicationDbContext())
+                {
+                    var model = db.InternTaskInvolvements
+                        .Where(x => x.InternId == internId && x.Task.IsActive)
+                        .Include(x => x.Task)
+                        .Include(x => x.Task.Owner)
+                        .ToList()
+                        .Select(x => new TaskInvolvemenViewModel {
+                                 TaskId=x.TaskId,
+                                 TaskName=x.Task.Title,
+                                  SuperVisorId=x.Task.OwnerId,
+                                  SupervisorName= string.Format("{0} {1}",x.Task.Owner.FirstName,x.Task.Owner.LastName),
+                                  JoinAt=x.JoinAt,
+                                  LeftAt=x.LeftAt,
+                                  IsClosed=x.Task.IsClosed,
+                                  TaskClosedAt=x.Task.ClosedAt
+                        }).OrderBy(x=>x.TaskName).ThenByDescending(x=>x.JoinAt);
+                    return Json(new ImsResult { Data = model });
+                }
+            }
+            catch (Exception e)
+            {
+                return Json(new IMS.Common.ImsResult { Error = e.Message });
+            }
+        }
+
+
+
+
+
+
+
     }
 }

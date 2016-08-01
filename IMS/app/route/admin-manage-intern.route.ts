@@ -4,6 +4,7 @@ import { InternCommentComponent } from '../admin/intern-comment.component';
 import { InternTaskComponent } from '../admin/intern-task.component';
 import { InternSupervisorComponent } from '../admin/intern-supervisor.component';
 import { InternDetailComponent } from '../admin/intern-detail.component';
+import { TaskInvolvementComponent } from '../shared/task-involvement.component';
 
 export const adminManageInternRoutes: RouterConfig = [
     {
@@ -25,6 +26,10 @@ export const adminManageInternRoutes: RouterConfig = [
             {
                 path: 'Supervisor',
                 component: InternSupervisorComponent
+            },
+            {
+                path: 'TaskHistory',
+                component: TaskInvolvementComponent
             }
         ]
     }

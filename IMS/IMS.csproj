@@ -325,6 +325,8 @@
     <Compile Include="Common\RecruitStatusCode.cs" />
     <Compile Include="Models\Internship.cs" />
     <Compile Include="Models\InternshipConfiguration.cs" />
+    <Compile Include="Models\InternTaskInvolvement.cs" />
+    <Compile Include="Models\InternTaskInvolvementConfiguration.cs" />
     <Compile Include="Models\Invitation.cs" />
     <Compile Include="Models\InvitationConfiguration.cs" />
     <Compile Include="Models\SupervisingComment.cs" />
@@ -340,7 +342,10 @@
     <Compile Include="Models\TaskToDoConfiguration.cs" />
     <Compile Include="Models\TaskReport.cs" />
     <Compile Include="Models\TaskReportConfiguration.cs" />
+    <Compile Include="ViewModels\TaskInvolvemenViewModel.cs" />
     <Compile Include="ViewModels\TaskParticipantRequestViewModel.cs" />
+    <Compile Include="ViewModels\TaskReportListRequestViewModel.cs" />
+    <Compile Include="ViewModels\TaskReportViewModel.cs" />
     <Compile Include="ViewModels\TaskToDoViewModel.cs" />
     <Compile Include="ViewModels\ApplicantSearchViewModel.cs" />
     <Compile Include="ViewModels\EmailTemplateViewModel.cs" />
@@ -375,9 +380,15 @@
     <Content Include="app\admin\intern-comment.component.html" />
     <Content Include="app\admin\intern-detail.component.html" />
     <Content Include="app\admin\intern-task-editor.component.html" />
+    <Content Include="app\admin\list-invitation.component.html" />
     <Content Include="app\admin\manage-intern.component.html" />
     <Content Include="app\admin\intern-supervisor.component.html" />
     <Content Include="app\admin\intern-task.component.html" />
+    <Content Include="app\intern\intern-dashboard.component.html" />
+    <Content Include="app\shared\intern-report-editor.component.html" />
+    <Content Include="app\shared\intern-report-viewer.component.html" />
+    <Content Include="app\intern\manage-task.component.html" />
+    <Content Include="app\shared\task-report.component.html" />
     <Content Include="app\invitation\invitation-editor.component.html" />
     <Content Include="app\invitation\notice-editor.component.css" />
     <Content Include="app\invitation\notice-editor.component.html" />
@@ -388,6 +399,7 @@
     <Content Include="app\main\intern-main.component.html" />
     <Content Include="app\main\staff-main.component.html" />
     <Content Include="app\main\systemjs.config.js" />
+    <Content Include="app\shared\task-involvement.component.html" />
     <Content Include="app\staff\staff-dashboard.component.html" />
     <Content Include="Content\bootstrap-3.3.7-dist\css\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-3.3.7-dist\css\bootstrap-theme.min.css" />
@@ -487,7 +499,6 @@
     <Content Include="Views\AppMain\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="app\main\shared\" />
     <Folder Include="App_Data\" />
     <Folder Include="Content\font-awesome-4.6.3\" />
     <Folder Include="Views\Intern\" />
@@ -503,24 +514,35 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="app\admin\adjust-expiry-request.ts" />
+    <TypeScriptCompile Include="app\admin\list-invitation.component.ts" />
+    <TypeScriptCompile Include="app\shared\intern-report-editor.component.ts" />
+    <TypeScriptCompile Include="app\shared\intern-report-viewer.component.ts" />
+    <TypeScriptCompile Include="app\shared\adjust-expiry-request.ts" />
     <TypeScriptCompile Include="app\admin\admin-dashboard.component.ts" />
     <TypeScriptCompile Include="app\admin\intern-comment.component.ts" />
     <TypeScriptCompile Include="app\admin\intern-detail.component.ts" />
-    <TypeScriptCompile Include="app\admin\intern-search-condition.ts" />
+    <TypeScriptCompile Include="app\shared\intern-search-condition.ts" />
     <TypeScriptCompile Include="app\admin\intern-task-editor.component.ts" />
-    <TypeScriptCompile Include="app\admin\manage-intern-update-code.ts" />
+    <TypeScriptCompile Include="app\shared\manage-intern-update-code.ts" />
     <TypeScriptCompile Include="app\admin\manage-intern.component.ts" />
     <TypeScriptCompile Include="app\admin\intern-supervisor.component.ts" />
     <TypeScriptCompile Include="app\admin\intern-task.component.ts" />
-    <TypeScriptCompile Include="app\admin\intern.service.ts" />
-    <TypeScriptCompile Include="app\admin\intern.ts" />
-    <TypeScriptCompile Include="app\admin\manage-participant-request.ts" />
-    <TypeScriptCompile Include="app\admin\supervising-comment.ts" />
-    <TypeScriptCompile Include="app\admin\supervising-request.ts" />
-    <TypeScriptCompile Include="app\admin\supervising-response.ts" />
-    <TypeScriptCompile Include="app\admin\supervisor.ts" />
-    <TypeScriptCompile Include="app\admin\task-to-do.ts" />
+    <TypeScriptCompile Include="app\intern\manage-task.component.ts" />
+    <TypeScriptCompile Include="app\route\intern-manage-task.route.ts" />
+    <TypeScriptCompile Include="app\shared\intern.service.ts" />
+    <TypeScriptCompile Include="app\shared\intern.ts" />
+    <TypeScriptCompile Include="app\shared\manage-participant-request.ts" />
+    <TypeScriptCompile Include="app\shared\supervising-comment.ts" />
+    <TypeScriptCompile Include="app\shared\supervising-request.ts" />
+    <TypeScriptCompile Include="app\shared\supervising-response.ts" />
+    <TypeScriptCompile Include="app\shared\supervisor.ts" />
+    <TypeScriptCompile Include="app\shared\task-involvement.component.ts" />
+    <TypeScriptCompile Include="app\shared\task-involvement.ts" />
+    <TypeScriptCompile Include="app\shared\task-report-list-request.ts" />
+    <TypeScriptCompile Include="app\shared\task-report.ts" />
+    <TypeScriptCompile Include="app\shared\task-to-do.ts" />
+    <TypeScriptCompile Include="app\intern\intern-dashboard.component.ts" />
+    <TypeScriptCompile Include="app\shared\task-report.component.ts" />
     <TypeScriptCompile Include="app\main\admin-main.component.ts" />
     <TypeScriptCompile Include="app\route\admin-manage-intern.route.ts" />
     <TypeScriptCompile Include="app\route\admin.route.ts" />

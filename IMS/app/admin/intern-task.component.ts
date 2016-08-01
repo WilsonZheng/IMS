@@ -3,14 +3,17 @@ import { ROUTER_DIRECTIVES, Router, ActivatedRoute }    from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { MessageService } from '../shared/message.service';
 import { RestResult } from '../shared/rest-result';
-import { InternService } from './intern.service';
+import { InternService } from '../shared/intern.service';
 import { UserInformationService } from '../shared/user-information.service';
-import { TaskToDo } from './task-to-do';
+import { TaskToDo } from '../shared/task-to-do';
 import { GlobalConstant } from '../shared/global-constant';
 import { InternTaskEditorComponent } from './intern-task-editor.component';
-import { ManageParticipantRequest } from './manage-participant-request';
-import { ManageInternUpdateCode } from './manage-intern-update-code';
+import { ManageParticipantRequest } from '../shared/manage-participant-request';
+import { ManageInternUpdateCode } from '../shared/manage-intern-update-code';
 import { User } from '../shared/user';
+import { Intern } from '../shared/intern';
+import { TaskReportComponent } from '../shared/task-report.component';
+
 
 import { Column, Button, DataList} from 'primeng/primeng';
 @Component({
@@ -49,10 +52,30 @@ import { Column, Button, DataList} from 'primeng/primeng';
             padding:1px;
         }
 
+        .row{
+            margin:0px;
+         }
+        
+        .ims-content-display-area{
+            position:relative;
+            border:1px solid #f1f0fa;
+            margin: 4px 0px;
+            padding: 4px 2px;
+            border-radius:8px;
+
+        }
        
+        .ims-filter-container{
+            padding: 4px 2px;
+
+        }
+        .ims-participant .imsselected{
+            color: blue;
+            font-size:1.2em;
+        }
 
 `],
-    directives: [Column, Button, InternTaskEditorComponent, DataList],
+    directives: [Column, Button, InternTaskEditorComponent, DataList, TaskReportComponent],
     providers: [UserInformationService]
 })
 export class InternTaskComponent implements OnInit {
@@ -73,6 +96,7 @@ export class InternTaskComponent implements OnInit {
     private confirmSubscription: Subscription;
     private internIdSub: Subscription;
     private internId: number = GlobalConstant.NUMBER_NOTHING;
+    private taskId: number = GlobalConstant.NUMBER_NOTHING;
 
     //global queryParams.
     private queryParams: any;
@@ -98,16 +122,7 @@ export class InternTaskComponent implements OnInit {
     
     ngOnInit() {
         this.userInformationService.fetchUser().then((user) => this.authUser = user).catch((error) => this.handleError(error));
-        //this.headerRows = [
-        //    {
-        //        columns: [
-        //            { header: "Search", filter: true, field: "Title", filterMatchMode: "contains" },
-        //            { header: "Search", filter: true, field: "SupervisorName", filterMatchMode: "contains" ,hidden:true},
-        //            { header: "Search", filter: true, field: "Description", filterMatchMode: "contains",hidden:true }
-        //        ]
-        //    }
-        //];
-
+        
         //fetch all available tasks with its participants information.
         this.internService.getTasks().then((tasks) => this.tasks = tasks).catch((error) => this.handleError(error));
         
@@ -116,6 +131,7 @@ export class InternTaskComponent implements OnInit {
             .subscribe((params) => {
                 this.queryParams = params || {};
                 this.internId = (params['internId'] || GlobalConstant.NUMBER_NOTHING);
+                this.taskId = (params['taskId'] || GlobalConstant.NUMBER_NOTHING);
             });
     }
 
@@ -131,7 +147,23 @@ export class InternTaskComponent implements OnInit {
         this.isTaskEdit = false;
         this.handleTaskEditor = true;
     }
-     
+
+    private cloneTask(task: TaskToDo) {
+        this.messageService.request();
+        this.confirmSubscription = this.messageService.result.subscribe((result) => {
+            this.confirmSubscription.unsubscribe();
+            if (result == 1) {
+                let cloned: TaskToDo = new TaskToDo();
+                cloned.Description = task.Description;
+                cloned.Title = task.Title;
+                this.internService.createTask(cloned)
+                    .then((response) => {
+                        this.tasks.splice(0, 0, response);
+                    })
+                    .catch((error) => this.handleError(error));
+            }
+        });
+    }
 
     private editTask(task: TaskToDo) {
         this.taskSelected = task;
@@ -219,24 +251,81 @@ export class InternTaskComponent implements OnInit {
         return contained;
      }
 
+    private removeParticipant(task: TaskToDo, participant: Intern) {
+        this.messageService.request();
+        this.confirmSubscription = this.messageService.result.subscribe((result) => {
+            this.confirmSubscription.unsubscribe();
+            if (result == 1) {
+                let request = new ManageParticipantRequest();
+                request.TaskId = task.Id;
+                request.ParticipantId = participant.Id;
+                request.IsJoining = false;
+                this.internService.manageParticipant(request).then((participants) => {
+                    task.Participants = participants;
+                    //update version.
+                    this.queryParams.internVersion = Date.now();
+                    this.queryParams.updatecode = ManageInternUpdateCode.TASK;
+                    this.queryParams.internId = participant.Id;
+                    this.router.navigate([], {
+                        queryParams: this.queryParams,
+                        relativeTo: this.route
+                    });
+
+                }).catch((error) => this.handleError(error));
+            }
+        });
+      
+    }
+
 
     private participate(task: TaskToDo, isJoining: boolean) {
-        let request = new ManageParticipantRequest();
-        request.TaskId = task.Id;
-        request.ParticipantId = this.internId;
-        request.IsJoining = isJoining;
-        this.internService.manageParticipant(request).then((participants) => {
-            task.Participants = participants;
-            
-            //update version.
-            this.queryParams.internVersion = Date.now();
-            this.queryParams.updatecode = ManageInternUpdateCode.TASK;
-            this.router.navigate([], {
-                queryParams: this.queryParams,
-                relativeTo: this.route
-            });
+        this.messageService.request();
+        this.confirmSubscription = this.messageService.result.subscribe((result) => {
+            this.confirmSubscription.unsubscribe();
+            if (result == 1) {
+                let request = new ManageParticipantRequest();
+                request.TaskId = task.Id;
+                request.ParticipantId = this.internId;
+                request.IsJoining = isJoining;
+                this.internService.manageParticipant(request).then((participants) => {
+                    task.Participants = participants;
 
-        }).catch((error) => this.handleError(error));
+                    //update version.
+                    this.queryParams.internVersion = Date.now();
+                    this.queryParams.updatecode = ManageInternUpdateCode.TASK;
+                    this.router.navigate([], {
+                        queryParams: this.queryParams,
+                        relativeTo: this.route
+                    });
+
+                }).catch((error) => this.handleError(error));
+            }
+        });
     }
-  
+
+    
+    
+    
+    private taskReport(task: TaskToDo, reporter: Intern) {
+        let taskIdOrg = this.queryParams['taskId'] || GlobalConstant.NUMBER_NOTHING;
+        let internIdOrg = this.queryParams['internId'] || GlobalConstant.NUMBER_NOTHING;
+        if (taskIdOrg == task.Id && internIdOrg == reporter.Id) {
+            this.clearParams();
+        }
+        else {
+            this.queryParams['taskId'] = task.Id;
+            this.queryParams['internId'] = reporter.Id;
+            this.applyParams();
+        }
+    }
+
+    private clearParams() {
+        this.queryParams['taskId'] = GlobalConstant.NUMBER_NOTHING;
+        this.queryParams['internId'] = GlobalConstant.NUMBER_NOTHING;
+        this.applyParams();
+    }
+
+    private applyParams() {
+        this.router.navigate([], { relativeTo: this.route, queryParams: this.queryParams });
+    }
 }

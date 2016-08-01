@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace IMS.ViewModels
 {
@@ -13,5 +10,6 @@ namespace IMS.ViewModels
         public List<InternViewModel> Participants { get; set; }
         public int SupervisorId { get; set; }
         public string SupervisorName { get; set; }
+        public bool IsClosed { get; set; }
     }
 }

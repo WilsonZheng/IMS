@@ -2,7 +2,7 @@
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute }    from '@angular/router';
 import {RestResult} from '../shared/rest-result';
 import { Menubar, MenuItem } from 'primeng/primeng';
-
+import { GlobalConstant } from '../shared/global-constant';
 
 @Component({
     templateUrl: '/app/main/admin-main.component.html',
@@ -19,32 +19,33 @@ import { Menubar, MenuItem } from 'primeng/primeng';
 })
 export class AdminMainComponent implements OnInit {
     private menuItems: MenuItem[];
-    private title: string = 'Dashboard';
+    private title: string = 'Manage Intern > Assign Task';
     constructor(private router: Router, private route: ActivatedRoute) {
        
     }
     
     ngOnInit(){
         this.menuItems = [
-            {
-                label: 'Dashboard',
-                command: (event) => {
-                    this.router.navigate(['.'], { queryParams: {}, relativeTo: this.route }); this.title = 'Dashboard';
-                }
-            },
+            //{
+            //    label: 'Dashboard',
+            //    command: (event) => {
+            //        this.router.navigate(['.'], { queryParams: {}, relativeTo: this.route }); this.title = 'Dashboard';
+            //    }
+            //},
             {
                 label: 'Manage Notice',
                 command: (event) => {
-                    this.router.navigate(['./notice'], { queryParams: {}, relativeTo: this.route }); this.title = 'Manage Notice';
+                    this.router.navigate(['notice/invitation'], { queryParams: {}, relativeTo: this.route }); this.title = 'Manage Notice';
                 }
             },
             {
                 label: 'Manage Intern',
                 items: [
                     { label: "Detail", command: (event) => { this.router.navigate(['./intern/Detail'], { relativeTo: this.route }); this.title = "Manage Intern > Detail" } },
-                    { label: "Supervisor", command: (event) => { this.router.navigate(['./intern/Supervisor'], { relativeTo: this.route }); this.title = "Manage Intern > Supervisors" } },
-                    { label: "Task", command: (event) => { this.router.navigate(['./intern/Task'], { relativeTo: this.route }); this.title = "Manage Intern > Task" } },
-                    { label: "Comment", command: (event) => { this.router.navigate(['./intern/Comment'], { relativeTo: this.route }); this.title = "Manage Intern > Comment" } }
+                    { label: "Assign Supervisor", command: (event) => { this.router.navigate(['./intern/Supervisor'], { relativeTo: this.route }); this.title = "Manage Intern > Supervisors" } },
+                    { label: "Assign Task", command: (event) => { this.router.navigate(['./intern/Task'], { relativeTo: this.route }); this.title = "Manage Intern > Assign Task" } },
+                    { label: "Assign Task History", command: (event) => { this.router.navigate(['./intern/TaskHistory'], { relativeTo: this.route }); this.title = "Manage Intern > Task History" } },
+                    { label: "Leave Comment", command: (event) => { this.router.navigate(['./intern/Comment'], { relativeTo: this.route }); this.title = "Manage Intern > Comment" } }
                 ]
                
             }

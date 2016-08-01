@@ -2,6 +2,7 @@
 import { NoticeMainComponent } from '../invitation/notice-main.component';
 import { AdminMainComponent } from '../main/admin-main.component';
 import { AdminDashboardComponent } from '../admin/admin-dashboard.component';
+import { ListInvitationComponent } from '../admin/list-invitation.component';
 
 //sub route.
 import { adminManageInternRoutes } from './admin-manage-intern.route';
@@ -15,11 +16,18 @@ export const adminRoutes: RouterConfig = [
         children: [
             {
                 path: '',
-                component: AdminDashboardComponent
+                redirectTo:'intern/Task'
+                //component: AdminDashboardComponent
             },
             {
                 path: 'notice',
-                component: NoticeMainComponent
+                component: NoticeMainComponent,
+                children: [
+                    {
+                        path:'invitation',
+                        component:ListInvitationComponent
+                    }
+                ]
             },
             ...adminManageInternRoutes
         ]

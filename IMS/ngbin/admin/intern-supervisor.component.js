@@ -13,9 +13,9 @@ var router_1 = require('@angular/router');
 require('rxjs/add/operator/map');
 var primeng_1 = require('primeng/primeng');
 var message_service_1 = require('../shared/message.service');
-var intern_service_1 = require('./intern.service');
-var supervising_request_1 = require('./supervising-request');
-var manage_intern_update_code_1 = require('./manage-intern-update-code');
+var intern_service_1 = require('../shared/intern.service');
+var supervising_request_1 = require('../shared/supervising-request');
+var manage_intern_update_code_1 = require('../shared/manage-intern-update-code');
 var global_constant_1 = require('../shared/global-constant');
 var InternSupervisorComponent = (function () {
     function InternSupervisorComponent(messageService, internService, router, route) {
@@ -42,9 +42,8 @@ var InternSupervisorComponent = (function () {
         this.headerRows = [
             {
                 columns: [
-                    { header: "First Name", filter: true, field: "FirstName", filterMatchMode: "contains", sortable: true },
-                    { header: "Last Name", filter: true, field: "LastName", filterMatchMode: "contains", sortable: true },
-                    { header: "Supervised Interns" }
+                    { header: "Supervisor", filter: true, field: "FullName", filterMatchMode: "contains", sortable: true },
+                    { header: "Intern" }
                 ]
             }
         ];

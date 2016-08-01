@@ -3,12 +3,12 @@ import { ROUTER_DIRECTIVES, Router, ActivatedRoute }    from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { MessageService } from '../shared/message.service';
 import { RestResult } from '../shared/rest-result';
-import { InternService } from './intern.service';
+import { InternService } from '../shared/intern.service';
 
-import { AdjustExpiryRequest } from './adjust-expiry-request';
-import { Intern } from './intern';
+import { AdjustExpiryRequest } from '../shared/adjust-expiry-request';
+import { Intern } from '../shared/intern';
 import { GlobalConstant } from '../shared/global-constant';
-import { ManageInternUpdateCode } from './manage-intern-update-code';
+import { ManageInternUpdateCode } from '../shared/manage-intern-update-code';
 import { BracketDateTransformPipe } from '../shared/bracket-date-transform.pipe';
 import { DataTable, Column, Header, Button, Spinner } from 'primeng/primeng';
 @Component({

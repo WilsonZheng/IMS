@@ -9,7 +9,8 @@ export const staffRoutes: RouterConfig = [
         children: [
             {
                 path: '',
-                component: StaffDashboardComponent
+                redirectTo:'intern/Task'
+                //component: StaffDashboardComponent
             },
             ...staffManageInternRoutes
         ]

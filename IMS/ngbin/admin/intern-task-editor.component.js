@@ -10,8 +10,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var primeng_1 = require('primeng/primeng');
-var intern_service_1 = require('./intern.service');
-var task_to_do_1 = require('./task-to-do');
+var intern_service_1 = require('../shared/intern.service');
+var task_to_do_1 = require('../shared/task-to-do');
 var InternTaskEditorComponent = (function () {
     function InternTaskEditorComponent(internService) {
         this.internService = internService;

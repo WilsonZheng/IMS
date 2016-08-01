@@ -15,18 +15,17 @@ var StaffMainComponent = (function () {
     function StaffMainComponent(router, route) {
         this.router = router;
         this.route = route;
-        this.title = 'Dashboard';
+        this.title = 'Manage Intern > Task';
     }
     StaffMainComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.menuItems = [
-            {
-                label: 'Dashboard',
-                command: function (event) {
-                    _this.router.navigate(['.'], { queryParams: {}, relativeTo: _this.route });
-                    _this.title = 'Dashboard';
-                }
-            },
+            //{
+            //    label: 'Dashboard',
+            //    command: (event) => {
+            //        this.router.navigate(['.'], { queryParams: {}, relativeTo: this.route }); this.title = 'Dashboard';
+            //    }
+            //},
             {
                 label: 'Manage Intern',
                 items: [

@@ -8,10 +8,10 @@ import { DataTable, Column, Header, Button } from 'primeng/primeng';
 
 import { MessageService } from '../shared/message.service';
 import { RestResult } from '../shared/rest-result';
-import { InternService } from './intern.service';
-import { Supervisor } from './supervisor';
-import { SupervisingRequest } from './supervising-request';
-import { ManageInternUpdateCode } from './manage-intern-update-code';
+import { InternService } from '../shared/intern.service';
+import { Supervisor } from '../shared/supervisor';
+import { SupervisingRequest } from '../shared/supervising-request';
+import { ManageInternUpdateCode } from '../shared/manage-intern-update-code';
 
 import { GlobalConstant } from '../shared/global-constant';
 
@@ -60,9 +60,8 @@ export class InternSupervisorComponent implements OnInit {
         this.headerRows = [
             {
                 columns: [
-                    { header: "First Name", filter: true, field: "FirstName", filterMatchMode: "contains", sortable: true },
-                    { header: "Last Name", filter: true, field: "LastName", filterMatchMode: "contains", sortable: true },
-                    { header: "Supervised Interns"}
+                    { header: "Supervisor", filter: true, field: "FullName", filterMatchMode: "contains", sortable: true },
+                    { header: "Intern"}
                 ]
             }
         ];

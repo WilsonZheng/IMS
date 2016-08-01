@@ -1,5 +1,6 @@
 ﻿/// <reference path="../../node_modules/rxjs/add/operator/toPromise.d.ts" />
 import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
+import {ROUTER_DIRECTIVES, Router, ActivatedRoute }    from '@angular/router';
 import { DataTable, Column, Header, Button, Menu, MenuItem, Tooltip, DataList } from 'primeng/primeng';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -8,6 +9,8 @@ import { TemplateService } from './shared/template.service';
 import { InvitationService } from './shared/invitation.service';
 import { MessageService } from '../shared/message.service';
 
+
+import { GlobalConstant } from '../shared/global-constant';
 
 //Custom Models.
 import { Template } from './template';
@@ -35,14 +38,10 @@ import { RecruitProgressComponent } from './recruit-progress.component';
                     border:1px solid #9cada0;
                 } 
 
-                #quick-search-container .recruit-status-stat div[class*="col-"]{
-                    padding:2px;
-                } 
-
                 .ims-header-container{
                     line-height:26px;
                     height:26px;
-                    text-align:center;
+                    text-align:left;
                 }
 
                 .label-container{
@@ -57,43 +56,84 @@ import { RecruitProgressComponent } from './recruit-progress.component';
                     margin:4px 0;
                     padding:5px;
                 }
+
+                .badge.imsselected{
+                    color: red;
+                    background-color:yellow;
+                 }
             `],
     directives: [DataTable, Column, Button, Header, Menu, NoticeEditorComponent
-        , InvitationEditorComponent, RecruitProgressComponent, Tooltip, DataList],
+        , InvitationEditorComponent, RecruitProgressComponent, Tooltip, DataList, ROUTER_DIRECTIVES],
     providers: [TemplateService,InvitationService]
 })
 export class NoticeMainComponent implements OnInit {
+
+
+    ///////////////////////// RecruitStatusCode constant/////////////////////////
+    private get CODE_SENT():number {
+        return RecruitStatusCode.InvitationSent;
+    }
+
+    private get CODE_REPLIED():number {
+        return RecruitStatusCode.ContractReceived;
+    }
+
+    private get CODE_APPROVED(): number {
+        return RecruitStatusCode.Approved;
+    }
+
+    private get CODE_ALL(): number {
+        return GlobalConstant.NUMBER_NOTHING;
+    }
+
+
+    private isSelected(notice: Template, status: number) {
+        return this.noticeId == notice.Id && this.recruitStatusCode == status;
+    }
+
+
+    private noticeId: number = GlobalConstant.NUMBER_NOTHING;
+    private recruitStatusCode: number = GlobalConstant.NUMBER_NOTHING;
+    
     templates: Template[];
     confirmSubscription: Subscription;
-
+    private queryParamSub: Subscription;
     constructor(private templateService: TemplateService,
-        private messageService: MessageService, private invitationService: InvitationService)
+        private messageService: MessageService,
+        private invitationService: InvitationService,
+        private router: Router,
+        private route: ActivatedRoute)
     { }
 
 
     headerRows: any[];
 
-    private menuItems: MenuItem[];
 
+    
+    
     ngOnInit() {
         this.loadNotice();
+        
         this.headerRows = [
-           // {
-           //     columns: [{ header: "Title", rowspan: 2, filter: true, field: "Name", filterMatchMode:"contains", sortable:true}, {header:"Progress", colspan:4 }]
-           // },
-            { columns: [{ header: "Title", filter: true, field: "Name", filterMatchMode: "contains", sortable: true }] }
-            
+            {
+                columns: [
+                            { header: "Title", filter: true, field: "Name", filterMatchMode: "contains", sortable: true },
+                            { header: "Progress"},
+                            { header: "Manage"}
+                ]
+            }
         ];
 
-        this.menuItems = [
-                        { label: 'Send Invitation', icon: 'fa-envelope-o', command: (event) => { this.writeEmail(); } },
-                        { label: 'Edit', icon: 'fa-edit', command: (event) => { this.editNotice(); } },
-                        { label: 'Archive', icon: 'fa-archive', command: (event) => { this.deleteNotice(); }}
-        ];
+        this.queryParamSub = this.router.routerState.queryParams.subscribe(params => {
+            this.noticeId = (params['noticeId'] || GlobalConstant.NUMBER_NOTHING);
+            this.recruitStatusCode = (params['recruitStatusCode'] || GlobalConstant.NUMBER_NOTHING);
+        });
     }
-    
-    @ViewChild(Menu)
-    private menuComponent: Menu;
+
+
+    ngOnDestroy() {
+        this.queryParamSub.unsubscribe();
+    }
 
     //Edit Notice (A Notice is actually A Template). 
     //Notice control properties.
@@ -110,7 +150,7 @@ export class NoticeMainComponent implements OnInit {
         this.templateService.getTemplates()
             .then(templates => {
                 this.templates = templates;
-                
+                this.clearParams();
             })
             .catch(error => { this.handleError(error); });
     }
@@ -128,6 +168,12 @@ export class NoticeMainComponent implements OnInit {
                 this.showInformModal("Updated");
     }
 
+
+    private clearParams() {
+        this.router.navigate([], { queryParams: {}, relativeTo: this.route });
+    }
+
+
     noticeCreated(notice: Template) {
         this.templates.splice(0, 0, notice);
         this.closeNotice();
@@ -140,7 +186,8 @@ export class NoticeMainComponent implements OnInit {
     }
 
     //notice manipuation function.
-    editNotice() {
+    editNotice(notice: Template) {
+        this.notice = notice;
         this.isCreatNotice = false;
         this.handleNotice = true;
     }
@@ -150,8 +197,8 @@ export class NoticeMainComponent implements OnInit {
         this.handleNotice = false;
     }
 
-    deleteNotice() {
-        
+    deleteNotice(notice: Template) {
+        this.notice = notice;
         this.messageService.request();
         this.confirmSubscription= this.messageService.result.subscribe((result) => {
             this.confirmSubscription.unsubscribe();
@@ -189,18 +236,15 @@ export class NoticeMainComponent implements OnInit {
     handleError(message: string) {
         this.messageService.error(message);
     }
-    
-    //Listing invitation by condition.
-    listInvitation() {
-        //Not implemented yet.
-    }
+      
         
     //Write Invitation
     handleInvitation: boolean = false;
     invitationOption = {
         resizable:false
     }
-    writeEmail() {
+    private writeEmail(notice: Template) {
+        this.notice = notice;
         //Fetch the default email subject & content which have been stored for the notice(=template).
         this.templateService.getEmailTemplateContent(this.notice.Id)
             .then((templateContent) => {
@@ -224,101 +268,33 @@ export class NoticeMainComponent implements OnInit {
     private invitationCancelled() {
         this.handleInvitation = false;
     }
-    
-    manageNotice(event: Event, notice: Template) {
-        this.notice = notice;
-        this.menuComponent.hide();
-        this.menuComponent.toggle(event);
-    }
-    
-    //Search Intivation.
-    
+        
     private invitations: Invitation[];
-    progressTotal(event: Event, notice: Template) {
-        this.invitationService.getInvitations([notice.Id], []).then((result) => {
-            this.invitations = result;
-        })
-        .catch(error => { this.handleError(error); });
+    private progressTotal(notice: Template) {
+        this.router.navigate(['invitation'], { queryParams: {noticeId: notice.Id}, relativeTo: this.route });
     }
     
-    progressSent(event: Event, notice: Template) {
-        this.invitationService.getInvitations([notice.Id], [RecruitStatusCode.InvitationSent]).then((result) => {
-            this.invitations = result;
-        })
-            .catch(error => { this.handleError(error); });
+    private progressSent(notice: Template) {
+        let queryParams = {
+            noticeId: notice.Id,
+            recruitStatusCode: RecruitStatusCode.InvitationSent
+        };
+        this.router.navigate(['invitation'], { queryParams: queryParams, relativeTo: this.route });
     }
 
-    progressReplied(event: Event, notice: Template) {
-        this.invitationService.getInvitations([notice.Id], [RecruitStatusCode.ContractReceived]).then((result) => {
-            this.invitations = result;
-        })
-            .catch(error => { this.handleError(error); });
-    }
-
-
-    progressApproved(event: Event, notice: Template) {
-        this.invitationService.getInvitations([notice.Id], [RecruitStatusCode.Approved]).then((result) => {
-            this.invitations = result;
-        })
-            .catch(error => { this.handleError(error); });
+    private progressReplied(notice: Template) {
+        let queryParams = {
+            noticeId: notice.Id,
+            recruitStatusCode: RecruitStatusCode.ContractReceived
+        };
+        this.router.navigate(['invitation'], { queryParams: queryParams, relativeTo: this.route });
     }
     
-    private resend(invitation: Invitation) {
-        this.messageService.request();
-        this.confirmSubscription = this.messageService.result.subscribe((result) => {
-            this.confirmSubscription.unsubscribe();
-            if (result == 1) {
-                this.proceedResend(invitation);
-            }
-        });
-        
+    private progressApproved(notice: Template) {
+        let queryParams = {
+            noticeId: notice.Id,
+            recruitStatusCode: RecruitStatusCode.Approved
+        };
+        this.router.navigate(['invitation'], { queryParams: queryParams,relativeTo: this.route });
     }
-    
-    private proceedResend(invitation: Invitation) {
-        this.invitationService.resendInvitation(invitation)
-            .then(() => {
-                this.showInformModal("Completed");
-            })
-            .catch(error => { this.handleError(error); });
-    }
-
-
-
-    private deleteInvitation(invitation: Invitation) {
-        
-        this.messageService.request();
-        this.confirmSubscription = this.messageService.result.subscribe((result) => {
-            this.confirmSubscription.unsubscribe();
-            if (result == 1) {
-                this.proceedDeleteInvitation(invitation);
-            }
-        });
-    }
-
-    private proceedDeleteInvitation(invitation: Invitation) {
-        this.invitationService.deleteInvitation(invitation)
-            .then(() => {
-                for (var i = 0; i < this.invitations.length; i++) {
-                    if (this.invitations[i].Email == invitation.Email && this.invitations[i].NoticeId == invitation.NoticeId) {
-                        this.invitations.splice(i, 1);
-                        this.showInformModal("Deleted");
-
-                        //Refresh the status information for the corresponding notice which owned this deleted invitation.
-                        this.templateService.getRecruitStatus(invitation.NoticeId)
-                            .then((status) => {
-                                let notice = this.templates.find(function (template) {
-                                    return template.Id == invitation.NoticeId
-                                });
-                                if (notice) {
-                                    notice.RecruitStatus = status;
-                                }
-                            })
-                            .catch(error => { this.handleError(error); });
-                        return;
-                    }
-                }
-            })
-            .catch(error => { this.handleError(error); });
-    }
-   
 }
