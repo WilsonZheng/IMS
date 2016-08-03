@@ -11,6 +11,7 @@ namespace IMS.ViewModels
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string FullName { get { return FirstName + " " + LastName; } }
+        public bool IsLockedout { get; set; }
         public List<InternViewModel> Interns { get; set; }
     }
 }

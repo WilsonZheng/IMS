@@ -2,6 +2,7 @@
 var notice_main_component_1 = require('../invitation/notice-main.component');
 var admin_main_component_1 = require('../main/admin-main.component');
 var list_invitation_component_1 = require('../admin/list-invitation.component');
+var manage_account_component_1 = require('../admin/manage-account.component');
 //sub route.
 var admin_manage_intern_route_1 = require('./admin-manage-intern.route');
 //   admin
@@ -13,6 +14,10 @@ exports.adminRoutes = [
             {
                 path: '',
                 redirectTo: 'intern/Task'
+            },
+            {
+                path: 'account',
+                component: manage_account_component_1.ManageAccountComponent
             },
             {
                 path: 'notice',

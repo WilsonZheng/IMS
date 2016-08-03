@@ -288,9 +288,11 @@
     <Compile Include="Common\IMSUserUtil.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ConfigurationController.cs" />
+    <Compile Include="Controllers\ImsAccountController.cs" />
     <Compile Include="Controllers\InternController.cs" />
     <Compile Include="Controllers\InvitationController.cs" />
     <Compile Include="Controllers\AppMainController.cs" />
+    <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\RegistrationController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TemplateManageController.cs" />
@@ -331,6 +333,7 @@
     <Compile Include="Models\SupervisingComment.cs" />
     <Compile Include="Models\SupervisingCommentConfiguration.cs" />
     <Compile Include="Common\ImsErrorMessage.cs" />
+    <Compile Include="ViewModels\AccountUserViewModel.cs" />
     <Compile Include="ViewModels\AdjustExpiryViewModel.cs" />
     <Compile Include="ViewModels\InternSearchConditionViewModel.cs" />
     <Compile Include="ViewModels\SupervisingCommentViewModel.cs" />
@@ -380,6 +383,7 @@
     <Content Include="app\admin\intern-detail.component.html" />
     <Content Include="app\admin\intern-task-editor.component.html" />
     <Content Include="app\admin\list-invitation.component.html" />
+    <Content Include="app\admin\manage-account.component.html" />
     <Content Include="app\admin\manage-intern.component.html" />
     <Content Include="app\admin\intern-supervisor.component.html" />
     <Content Include="app\admin\intern-task.component.html" />
@@ -496,11 +500,15 @@
     <Content Include="Views\TemplateManage\_NewOrModifyEmail.cshtml" />
     <Content Include="Views\Registration\InvitationCodeNotExist.cshtml" />
     <Content Include="Views\AppMain\Index.cshtml" />
+    <Content Include="Views\Home\Registered.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\font-awesome-4.6.3\" />
+    <Folder Include="Views\Admin\" />
+    <Folder Include="Views\ImsAccount\" />
     <Folder Include="Views\Intern\" />
+    <Folder Include="Views\Supervisor\" />
     <Folder Include="Views\UserInfo\" />
     <Folder Include="Views\wilsonTest\" />
   </ItemGroup>
@@ -514,6 +522,9 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app\admin\list-invitation.component.ts" />
+    <TypeScriptCompile Include="app\admin\manage-account.component.ts" />
+    <TypeScriptCompile Include="app\shared\account-user.ts" />
+    <TypeScriptCompile Include="app\shared\account.service.ts" />
     <TypeScriptCompile Include="app\shared\intern-report-editor.component.ts" />
     <TypeScriptCompile Include="app\shared\intern-report-viewer.component.ts" />
     <TypeScriptCompile Include="app\shared\adjust-expiry-request.ts" />

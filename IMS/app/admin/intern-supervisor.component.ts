@@ -12,7 +12,6 @@ import { InternService } from '../shared/intern.service';
 import { Supervisor } from '../shared/supervisor';
 import { SupervisingRequest } from '../shared/supervising-request';
 import { ManageInternUpdateCode } from '../shared/manage-intern-update-code';
-
 import { GlobalConstant } from '../shared/global-constant';
 
 @Component({
@@ -122,6 +121,7 @@ export class InternSupervisorComponent implements OnInit {
             })
             .catch((error) => this.handleError(error));
     }
- 
+
+   
    
 }

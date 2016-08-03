@@ -3,6 +3,7 @@ import { NoticeMainComponent } from '../invitation/notice-main.component';
 import { AdminMainComponent } from '../main/admin-main.component';
 import { AdminDashboardComponent } from '../admin/admin-dashboard.component';
 import { ListInvitationComponent } from '../admin/list-invitation.component';
+import { ManageAccountComponent } from '../admin/manage-account.component';
 
 //sub route.
 import { adminManageInternRoutes } from './admin-manage-intern.route';
@@ -18,6 +19,10 @@ export const adminRoutes: RouterConfig = [
                 path: '',
                 redirectTo:'intern/Task'
                 //component: AdminDashboardComponent
+            },
+            {
+                path: 'account',
+                component: ManageAccountComponent
             },
             {
                 path: 'notice',

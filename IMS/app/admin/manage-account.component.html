@@ -1,0 +1,43 @@
+﻿<div class="panel panel-default ims-body-container">
+    <div class="panel-heading">
+        <h3 class="panel-title ims-panel-title">Users</h3>
+        <div class="ims-control-container">
+            <button pButton type="text" (click)="refresh()" icon="fa fa-refresh"></button>
+        </div>
+    </div>
+    <div class="panel-body">
+        <p-dataTable [value]="users" [headerRows]="headerRows"
+                     [rows]="10" [paginator]="true" [resizableColumns]="true">
+            <p-column field="FullName">
+                <template let-row="rowData">
+                    <div class="text-center">
+                        <span>{{row.FullName}}</span>
+                    </div>
+                </template>
+            </p-column>
+            <p-column field="UserName">
+                <template let-row="rowData">
+                    <div class="text-center">
+                        <span>{{row.UserName}}</span>
+                    </div>
+                </template>
+            </p-column>
+            <p-column>
+                <template let-row="rowData">
+                    <div class="text-center">
+                        <span *ngFor="let role of row.Roles">{{role}}</span>
+                    </div>
+                </template>
+            </p-column>
+            <p-column>
+                <template let-row="rowData">
+                    <div class="text-center">
+                        <button pButton type="text" (click)="resetPassword(row)" label="Reset" icon="fa fa-flash"></button>
+                        <button pButton type="text" (click)="lock(row)" label="Lock" icon="fa fa-user-times" *ngIf="!row.Locked"></button>
+                        <button pButton type="text" (click)="release(row)" label="Release" icon="fa fa-user-times" *ngIf="row.Locked"></button>
+                    </div>
+                </template>
+            </p-column>
+        </p-dataTable>
+    </div>
+</div>

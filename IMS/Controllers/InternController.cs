@@ -137,12 +137,14 @@ namespace IMS.Controllers
                             Id = x.Id,
                             FirstName = x.FirstName,
                             LastName = x.LastName,
+                            IsLockedout=(x.LockoutEnabled && x.LockoutEndDateUtc.HasValue && x.LockoutEndDateUtc>DateTime.UtcNow),
                             Interns = x.Internships.Where(y=>y.ExpiryAt>=DateTime.UtcNow).Select(y=>y.Intern)  //only include interns before expiry.
                                         .Select(y=>new InternViewModel {
                                                    Id=y.Id,
                                                    FirstName=y.FirstName,
                                                    LastName=y.LastName,
                                                    UserName=y.UserName
+                                                   
                             }).ToList()                        
                         }).OrderBy(x=>x.FirstName).ToList();
                     return Json(new ImsResult { Data = result });
@@ -734,7 +736,7 @@ namespace IMS.Controllers
                                   LeftAt=x.LeftAt,
                                   IsClosed=x.Task.IsClosed,
                                   TaskClosedAt=x.Task.ClosedAt
-                        }).OrderBy(x=>x.TaskName).ThenByDescending(x=>x.JoinAt);
+                        }).OrderByDescending(x=>x.JoinAt);
                     return Json(new ImsResult { Data = model });
                 }
             }

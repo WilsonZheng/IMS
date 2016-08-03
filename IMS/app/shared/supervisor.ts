@@ -7,4 +7,5 @@ export class Supervisor {
     public LastName: string;
     public FullName: string;
     public Interns: Intern[];
+    public IsLockedout: boolean;
 }

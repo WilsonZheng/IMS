@@ -12,6 +12,15 @@
     <h4>Create a new account.</h4>
     <hr />
     @Html.ValidationSummary("", new { @class = "text-danger" })
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.FirstName, new { @class = "control-label" })
+        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.LastName, new { @class = "control-label" })
+        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+    </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Email, new { @class = "control-label" })
         @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
@@ -26,6 +35,10 @@
         @Html.LabelFor(m => m.ConfirmPassword, new { @class = "control-label" })
         @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
         
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.OrgId, new { @class = "control-label" })
+        @Html.DropDownList("OrgId",ViewBag.OrgOptions as IEnumerable<SelectListItem>, new { @class = "form-control" })
     </div>
     <div class="form-group">
             <input type="submit" class="btn btn-default" value="Register" />
