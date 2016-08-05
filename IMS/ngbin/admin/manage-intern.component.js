@@ -1,3 +1,6 @@
+//Description: List the registred interns. Can limit the search result by specifying the number of days since and by the expiry dates. 
+//This components is the starting point to go for the other detailed management functions in that other operation will be done based upon
+//the selection made on this component.
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;

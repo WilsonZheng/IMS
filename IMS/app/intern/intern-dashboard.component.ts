@@ -1,4 +1,7 @@
-﻿import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+﻿//Description: Dashboard for a signed in intern.
+//Detail Not implemented.
+
+import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router }    from '@angular/router';
 
 @Component({

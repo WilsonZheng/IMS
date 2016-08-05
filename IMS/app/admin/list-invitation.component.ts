@@ -1,4 +1,6 @@
-﻿/// <reference path="../../node_modules/rxjs/add/operator/toPromise.d.ts" />
+﻿//Description: list the invitations which have been sent. Can resend or delete the invitation.
+
+/// <reference path="../../node_modules/rxjs/add/operator/toPromise.d.ts" />
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute }    from '@angular/router';
 import { DataTable, Column, Header, Button } from 'primeng/primeng';
@@ -17,7 +19,7 @@ import { Invitation } from '../invitation/invitation';
 import { GlobalConstant } from '../shared/global-constant';
 
 //Custom Component
-import { RecruitProgressComponent } from '../invitation/recruit-progress.component';
+//import { RecruitProgressComponent } from '../invitation/recruit-progress.component';
 
 @Component({
     templateUrl: '/app/admin/list-invitation.component.html',
@@ -26,8 +28,7 @@ import { RecruitProgressComponent } from '../invitation/recruit-progress.compone
                     text-align:left;
                 }
             `],
-    directives: [DataTable, Column, Button, Header
-        , RecruitProgressComponent],
+    directives: [DataTable, Column, Button, Header],
     providers: [InvitationService]
 })
 export class ListInvitationComponent implements OnInit {

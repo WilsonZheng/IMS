@@ -1,4 +1,6 @@
-﻿import { Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
+﻿//Description: Display the list of supervisor comments, and Create, Delete, Update comment
+
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute }    from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';

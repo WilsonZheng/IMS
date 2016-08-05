@@ -1,3 +1,4 @@
+//Description : Display the current matching between intern & supervisor and change those matchings if need be.
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -99,7 +100,7 @@ var InternSupervisorComponent = (function () {
     InternSupervisorComponent = __decorate([
         core_1.Component({
             templateUrl: '/app/admin/intern-supervisor.component.html',
-            styles: ["\n\n .ims-body-container{\n            margin-bottom:0px;\n        }\n\n .panel-body{\n            padding:1px;\n        }\n    "],
+            styles: ["\n\n            .ims-body-container{\n            margin-bottom:0px;\n            }\n\n            .panel-body{\n            padding:1px;\n            }\n    "],
             directives: [primeng_1.DataTable, primeng_1.Column, primeng_1.Header, primeng_1.Button],
             providers: []
         }), 

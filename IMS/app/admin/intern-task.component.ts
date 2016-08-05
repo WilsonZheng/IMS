@@ -1,4 +1,6 @@
-﻿import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+﻿//Description: Display the current task assignment information and provide the tool to manage them.
+
+import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute }    from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { MessageService } from '../shared/message.service';

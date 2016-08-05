@@ -395,7 +395,6 @@
     <Content Include="app\invitation\invitation-editor.component.html" />
     <Content Include="app\invitation\notice-editor.component.css" />
     <Content Include="app\invitation\notice-editor.component.html" />
-    <Content Include="app\invitation\recruit-progress.component.html" />
     <Content Include="app\invitation\notice-main.component.html" />
     <Content Include="app\main\admin-main.component.html" />
     <Content Include="app\main\app.component.html" />
@@ -562,7 +561,6 @@
     <TypeScriptCompile Include="app\invitation\invitation-batch.model.ts" />
     <TypeScriptCompile Include="app\invitation\invitation.ts" />
     <TypeScriptCompile Include="app\invitation\notice-editor.component.ts" />
-    <TypeScriptCompile Include="app\invitation\recruit-progress.component.ts" />
     <TypeScriptCompile Include="app\invitation\recruit-status.ts" />
     <TypeScriptCompile Include="app\invitation\shared\invitation.service.ts" />
     <TypeScriptCompile Include="app\main\default-main.component.ts" />

@@ -1,4 +1,8 @@
-﻿import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+﻿//Description: List the registred interns. Can limit the search result by specifying the number of days since and by the expiry dates. 
+//This components is the starting point to go for the other detailed management functions in that other operation will be done based upon
+//the selection made on this component.
+
+import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute }    from '@angular/router';
 import { DataTable, Column, Header, Button, Spinner } from 'primeng/primeng';
 import { Subscription } from 'rxjs/Subscription';

@@ -1,4 +1,6 @@
-﻿import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+﻿//Display the list of registred task reports.
+
+import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute }    from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { MessageService } from '../shared/message.service';

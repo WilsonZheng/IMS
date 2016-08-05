@@ -1,3 +1,4 @@
+//Description: list the invitations which have been sent. Can resend or delete the invitation.
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -17,7 +18,7 @@ var invitation_service_1 = require('../invitation/shared/invitation.service');
 var message_service_1 = require('../shared/message.service');
 var global_constant_1 = require('../shared/global-constant');
 //Custom Component
-var recruit_progress_component_1 = require('../invitation/recruit-progress.component');
+//import { RecruitProgressComponent } from '../invitation/recruit-progress.component';
 var ListInvitationComponent = (function () {
     function ListInvitationComponent(messageService, router, route, invitationService) {
         this.messageService = messageService;
@@ -111,8 +112,7 @@ var ListInvitationComponent = (function () {
         core_1.Component({
             templateUrl: '/app/admin/list-invitation.component.html',
             styles: ["\n                .ims-header-container{\n                    text-align:left;\n                }\n            "],
-            directives: [primeng_1.DataTable, primeng_1.Column, primeng_1.Button, primeng_1.Header,
-                recruit_progress_component_1.RecruitProgressComponent],
+            directives: [primeng_1.DataTable, primeng_1.Column, primeng_1.Button, primeng_1.Header],
             providers: [invitation_service_1.InvitationService]
         }), 
         __metadata('design:paramtypes', [message_service_1.MessageService, router_1.Router, router_1.ActivatedRoute, invitation_service_1.InvitationService])
