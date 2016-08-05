@@ -214,3 +214,4 @@ ModelManifest.xml
 # Web.config file
 Web.config
 /IMS/typings
+*.pdf

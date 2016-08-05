@@ -16,10 +16,12 @@ namespace IMS.Media
         public static void Pdf(string pHTML,string pdfPath)
         {
             Document document = new Document();
-            PdfWriter writer = PdfWriter.GetInstance(document,new  FileStream(pdfPath,FileMode.Create));
+            var fs = new FileStream(pdfPath, FileMode.Create);
+            PdfWriter writer = PdfWriter.GetInstance(document,fs);
             document.Open();
             XMLWorkerHelper.GetInstance().ParseXHtml(writer, document, new StringReader(pHTML));
             document.Close();
+            fs.Close();
         }
     }
 }
