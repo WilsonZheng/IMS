@@ -12,7 +12,7 @@ namespace IMS.Controllers
         [Authorize(Roles = "admin")]
         public ActionResult Index()
         {
-            return View();
+            return View("");
         }
     }
 }
