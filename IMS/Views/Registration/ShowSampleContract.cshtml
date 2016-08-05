@@ -1,53 +1,59 @@
-﻿<html>
-<head>
+﻿
+@{
+    Layout = null;
+}
 
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
 </head>
 <body>
 
     <h2><span style="text-decoration: underline;">VOLUNTEER INTERN/AGREEMENT</span></h2>
     <h3>Personal/Volunteer Intern Details</h3>
-    <table style="height: 384px;" width="500" ; border="1">
+    <table style="height: 384px;" width="500" ; border="0">
         <tbody>
             <tr>
                 <td>
-                    <p>Name</p>
+                    <p>Name:</p>
                     <p>(As on your passport)</p>
                 </td>
-                <td>@Model.Firstname @Model.Lastname</td>
+                <td></td>
             </tr>
+            @*<tr>
+                <td>
+                    <p>Name</p>
+                    <p>(Kiwi name)</p>
+                </td>
+                <td></td>
+            </tr>*@
             <tr>
                 <td>
-                    <p>Kiwi Name</p>
+                    <p>Home Address:</p>
 
                 </td>
-                <td>@Model.Kiwiname</td>
-            </tr>
-            <tr>
-                <td>
-                    <p>Home Address</p>
-
-                </td>
-                <td>@Model.Address</td>
+                <td></td>
             </tr>
 
             <tr>
-                <td>Email</td>
-                <td>@Model.Email</td>
+                <td>Email:</td>
+                <td></td>
             </tr>
             <tr>
-                <td>Mobile</td>
-                <td>@Model.Mobile</td>
+                <td>Mobile:</td>
+                <td></td>
             </tr>
             <tr>
-                <td>Visa Status</td>
-                <td>@Model.VisaStatus</td>
+                <td>Visa Status:</td>
+                <td></td>
             </tr>
             <tr>
                 <td>
-                    <p>Medical Condition</p>
+                    <p>Medical Condition:</p>
                     <p>(Conditions we should be aware of for your safety)</p>
                 </td>
-                <td>@Model.MedicalCondition</td>
+                <td></td>
             </tr>
         </tbody>
     </table>
@@ -79,19 +85,19 @@
     <p>1. Your Personal Information corect and true.</p>
     <p>2. That you understand and accept the Position of Engagement</p>
     <p>3. That you understand and accept the Terms of Engagement</p>
-    <table style="height: 59px;" width="110" ; border="1">
+    <table style="height: 59px;" width="110" ; border="0">
         <tbody>
             <tr>
-                <td>Signature</td>
-                <td><img alt="Embedded Image" src="@Model.SignPath" style="width:200% " /></td>
+                <td>Signature:</td>
+                <td></td>
             </tr>
             <tr>
-                <td>Name</td>
-                <td>@Model.Firstname @Model.Lastname</td>
+                <td>Name:</td>
+                <td></td>
             </tr>
             <tr>
-                <td>Date</td>
-                <td>@DateTime.Now</td>
+                <td>Date:</td>
+                <td></td>
             </tr>
         </tbody>
     </table>
@@ -103,4 +109,5 @@
 
 </body>
 </html>
+
 

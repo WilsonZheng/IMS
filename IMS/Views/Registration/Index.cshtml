@@ -1,52 +1,231 @@
-﻿
+﻿<!DOCTYPE html>
+<html>
 @{
     ViewBag.Title = "Index";
+
 }
 @model IMS.ViewModels.ApplicantInfo
-<h2>Registration Form</h2>
+<head>
 
-<form role="form" action="/Registration/AddApplicant" method="post">
-    <div class="form-group">
-        <label for="firstname">First Name</label>
-        <input type="text" class="form-control" id="name" name="firstname" value="@Model.Firstname">
-    </div>
-    <div class="form-group">
-        <label for="lastname">Last Name</label>
-        <input type="text" class="form-control" id="name" name="lastname" value="@Model.Lastname">
-    </div>
-    <div class="form-group">
-        <label for="kiwiname">Kiwi Name:</label>
-        <input type="text" class="form-control" id="kiwiname" name="kiwiname"  value="@Model.Kiwiname">
-        
-    </div>
-    <div class="form-group">
-        <label for="email">Email address:</label>
-        <label type="email" class="form-control" id="email" name="email" value="@Model.Email"></label>
-    </div>
-    <div class="form-group">
-        <label for="mobile">Mobile Number:</label>
-        <input type="text" class="form-control" id="mobile" name="mobile" value="@Model.Mobile">
-    </div>
-    <div class="form-group">
-        <label for="address">Address:</label>
-        <input type="text" class="form-control" id="address" name="address" value="@Model.Address">
-    </div>
-    <div class="form-group">
-        <label for="suburb">Suburb:</label>
-        <input type="text" class="form-control" id="suburb" name="suburb" value="@Model.Suburb">
-    </div>
-    <div class="form-group">
-        <label for="visa">Visa Status:</label>
-        <input type="text" class="form-control" id="visa" name="visaStatus" value="@Model.VisaStatus">
-    </div>
-    <div class="form-group">
-        <label for="medicalCondition">Medical Condition:</label>
-        <input type="text" class="form-control" id="medicalCondition" name="medicalCondition" value="@Model.MedicalCondition">
-    </div>
-    
-    <button type="submit" id="submitbtn" class="btn btn-default">Submit</button>
-</form>
 
-<script>
 
-</script>
+</head>
+<body>
+    <h2>Register your details below</h2>
+    <h5 style="color: red">* : compulsory</h5>
+
+
+    <form name="registerForm" role="form" action="/Registration/GetSign" method="post" style="text-align:center;" enctype="multipart/form-data">
+        <input type="hidden" name="email" value="@Model.Email" />
+        <input type="hidden" name="templateId" value="@Model.TemplateId" />
+        <input type="hidden" name="invitationCode" value="@Model.InvitationCode" />
+        <div class="form-group">
+            <div class="col-md-5">
+                <label for="email">Email address:</label>
+            </div>
+            <div class="col-md-5">
+                <label><span>@Model.Email</span> </label>
+
+            </div>
+
+        </div>
+        <div class="form-group">
+                <div class="col-md-5">
+                    <label for="file">Upload your Passport copy(PDF format):*</label>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <input type="file" id="file_input" name="file">
+                        
+                    </div>
+                </div>
+            </div>
+
+        <div class="form-group">
+            <div class="col-md-5">
+                <label for="firstname">First Name:*</label>
+            </div>
+
+            <div class="col-md-5">
+                <input type="text" class="form-control" id="firstname" name="firstname" value="@Model.Firstname">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-5">
+                <label for="lastname">Last Name:*</label>
+            </div>
+            <div class="col-md-5">
+                <input type="text" class="form-control" id="lastname" name="lastname" value="@Model.Lastname">
+            </div>
+
+        </div>
+        <div class="form-group">
+                <div class="col-md-5">
+                    <label for="kiwiname">Kiwi Name:*</label>
+                </div>
+
+                <div class="col-md-5">
+                    <input type="text" class="form-control" id="kiwiname" placeholder="type in first name if you don't have" name="kiwiname" value="@Model.Kiwiname">
+                </div>
+
+
+            </div>
+
+        <div class="form-group">
+            <div class="col-md-5">
+                <label for="mobile">Mobile Number:*</label>
+            </div>
+            <div class="col-md-5">
+                <input type="text" class="form-control" id="mobile" name="mobile" value="@Model.Mobile">
+            </div>
+
+        </div>
+        <div class="form-group">
+            <div class="col-md-5">
+                <label for="address">Address:*</label>
+            </div>
+            <div class="col-md-5">
+                <input type="text" class="form-control" id="address" name="address" value="@Model.Address">
+            </div>
+
+        </div>
+        <div class="form-group">
+            <div class="col-md-5">
+                <label for="suburb">Suburb:*</label>
+            </div>
+            <div class="col-md-5">
+                <input type="text" class="form-control" id="suburb" name="suburb" value="@Model.Suburb">
+            </div>
+
+        </div>
+        <div class="form-group">
+            <div class="col-md-5">
+                <label for="visa">Visa Status:*</label>
+            </div>
+            <div class="col-md-5">
+                <input type="text" class="form-control" id="visa" name="visaStatus" value="@Model.VisaStatus">
+            </div>
+
+        </div>
+        <div class="form-group">
+            <div class="col-md-5">
+                <label for="medicalCondition">Medical Condition:*</label>
+            </div>
+
+            <div class="col-md-5">
+                <input type="text" class="form-control" id="medicalCondition" placeholder="type in NONE if you don't have any" name="medicalCondition" value="@Model.MedicalCondition">
+            </div>
+
+        </div>
+        <div class="form-group">
+            <div class="col-md-5">
+
+            </div>
+            <div class="col-md-5">
+                <div class="form-group">
+
+
+                    <label><input type="checkbox" name="agreeCheckbox" id="agreeCheckbox"><a href="~/Registration/ShowSampleContract">I have read and agree to The internship agreement/terms and conditions.</a></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+
+        </div>
+        <div class="col-md-5" id="submit">
+            <input type="submit" id="submitbtn" value="Submit"  />
+            
+
+        </div>
+
+    </form>
+
+
+   
+
+
+    <script>
+      
+        //checking all fields in the form
+        $(document).ready(function () {
+            $("form").on("submit", function () {
+                //check uploaded file extension is pdf or not:
+                // get the file name, possibly with path (depends on browser)
+                var filename = $("#file_input").val();
+                //define a boolean
+                var validFile;
+                // Use a regular expression to trim everything before final dot
+                var extension = filename.replace(/^.*\./, '');
+
+                // Iff there is no dot anywhere in filename, we would have extension == filename,
+                // so we account for this possibility now
+                if (extension == filename) {
+                    extension = '';
+                } else {
+                    // if there is an extension, we convert to lower case
+                    // (N.B. this conversion will not effect the value of the extension
+                    // on the file upload.)
+                    extension = extension.toLowerCase();
+                }
+
+                switch (extension) {
+                    case 'pdf':
+                        validFile= true;
+                        break;
+                        
+                                
+
+                    default:
+                        validFile = false;
+                }
+                
+
+
+                //check checkbox
+                var notChecked;
+                $('input[type=checkbox]').each(function () {
+                    if ($(this).is(':checked')) {
+                        notChecked = false;
+                    } else {
+                        notChecked = true;
+                    }
+                });
+                //check textbox fields
+                var anyFieldIsEmpty = $("form input").filter(function () {
+                    return $.trim(this.value).length === 0;
+                }).length > 0;
+
+                if (anyFieldIsEmpty || notChecked) {
+                    
+
+                    alert("Please fill up all the infomation,upload a file and accept the term.");
+                    return false;
+                } else {
+                    if (validFile) {
+                        return true;
+                    } else {
+                        alert("Please submit a pdf file.");
+                        return false;
+                    }
+                    
+                }
+
+                
+            });
+            
+            
+
+        });
+    </script>
+
+
+    <style>
+        form {
+            text-align: center;
+        }
+    </style>
+
+
+</body>
+</html>

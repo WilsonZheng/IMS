@@ -1,0 +1,146 @@
+﻿
+@{
+    ViewBag.Title = "GetSign";
+}
+@model IMS.ViewModels.ApplicantInfo
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Signature Pad</title>
+    <meta name="description" content="Signature Pad - HTML5 canvas based smooth signature drawing using variable width spline interpolation.">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="~/Css/signature-pad.css">
+</head>
+<body onselectstart="return false">
+
+    <form role="form" action="/Registration/Index" method="post" style="text-align:center;" id="dataform" enctype="multipart/form-data">
+        <input type="hidden" name="SignImgData" value="" id="SignImgData" />
+        <input type="hidden" name="email" value="@Model.Email" />
+        <input type="hidden" name="templateId" value="@Model.TemplateId" />
+        <input type="hidden" name="firstname" value="@Model.Firstname" />
+        <input type="hidden" name="lastname" value="@Model.Lastname" />
+        <input type="hidden" name="kiwiname" value="@Model.Kiwiname" />
+        <input type="hidden" name="mobile" value="@Model.Mobile" />
+        <input type="hidden" name="address" value="@Model.Address" />
+        <input type="hidden" name="suburb" value="@Model.Suburb" />
+        <input type="hidden" name="visaStatus" value="@Model.VisaStatus" />
+        <input type="hidden" name="medicalCondition" value="@Model.MedicalCondition" />
+        <input type="hidden" name="invitationCode" value="@Model.InvitationCode" />
+        <input type="hidden" name="PassportFileLocation" value="@Model.PassportFileLocation" />
+        <div id="signature-pad" class="m-signature-pad">
+            <div class="m-signature-pad--body">
+                <canvas></canvas>
+            </div>
+            <div class="m-signature-pad--footer">
+                <div class="description">Sign above</div>
+                <button type="button" class="button clear" data-action="clear">Clear</button>
+                @*<button type="button" class="button save" data-action="save">Save</button>*@
+                <input type="button" id="submitbtn" class="btn-default" value="Submit" /> @*cannot use submit type ,otherwise have conflict with ajx*@
+            </div>
+        </div>
+    </form>
+
+    <script src="~/Scripts/signature_pad.js"></script>
+    <script>
+        var wrapper = document.getElementById("signature-pad"),
+        clearButton = wrapper.querySelector("[data-action=clear]"),
+        //saveButton = wrapper.querySelector("[data-action=save]"),
+        canvas = wrapper.querySelector("canvas"),
+        signaturePad;
+
+        // Adjust canvas coordinate space taking into account pixel ratio,
+        // to make it look crisp on mobile devices.
+        // This also causes canvas to be cleared.
+        function resizeCanvas() {
+            // When zoomed out to less than 100%, for some very strange reason,
+            // some browsers report devicePixelRatio as less than 1
+            // and only part of the canvas is cleared then.
+            var ratio = Math.max(window.devicePixelRatio || 1, 1);
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext("2d").scale(ratio, ratio);
+        }
+
+        window.onresize = resizeCanvas;
+        resizeCanvas();
+
+        signaturePad = new SignaturePad(canvas);
+
+        clearButton.addEventListener("click", function (event) {
+            signaturePad.clear();
+        });
+
+        //saveButton.addEventListener("click", function (event) {
+        //    if (signaturePad.isEmpty()) {
+        //        alert("Please provide signature first.");
+        //    } else {
+        //        window.open(signaturePad.toDataURL());
+        //    }
+        //});
+
+
+
+        $("#submitbtn").click(function () {
+            if (signaturePad.isEmpty()) {
+                alert("Please provide signature first.");
+            } else {
+                //alert(signaturePad.toDataURL())
+                $("#SignImgData").val(signaturePad.toDataURL());
+
+                $.ajax(
+                {
+                    type: "POST", //HTTP POST Method
+                    url: "/Registration/AddApplicant", // Controller/View
+                    data: $("#dataform").serialize(),
+                    success: function (response) {
+                        if (response.Result == 1) {
+                            //alert('success');
+                            window.location.href = '@Url.Action("AddApplicantSuccess", "Registration")';
+                        } else {
+                            alert('Unsuccessfully registered. Exceptions occurs.Please try again.');
+                            $("#dataform").submit();
+                            //window.location.href = '@Url.Action("Index", "Registration",@Model)';
+
+                        }
+
+                    },
+                    error: function (response) {
+                        alert('error ajx response,unsuccessful.');
+                        window.location.href = '@Url.Action("Index", "Home")';
+                    }
+
+
+                });
+            }
+
+
+        });
+
+
+
+    </script>
+
+    <script>
+        //if user close the page during the signature page,delete the uploaded file in the system
+        window.onunload = confirmExit;
+        function confirmExit() {
+            $.ajax(
+                 {
+                     type: "POST", //HTTP POST Method
+                     url: "/Registration/DeleteUploadedFile", // Controller/View
+                     data: $("#dataform").serialize(),
+                 });
+
+
+
+        }
+    </script>
+
+
+    <style>
+    </style>
+</body>
+</html>
