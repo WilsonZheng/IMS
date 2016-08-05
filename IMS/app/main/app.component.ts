@@ -13,6 +13,11 @@ import { GlobalMessage } from '../shared/global-message';
 @Component({
     selector: 'ims-app',
     templateUrl: '/app/main/app.component.html',
+    styles: [`
+#ims-top-container{
+    margin-top:4px;
+}
+`],
     directives: [Dialog, Footer, Header, Button, Growl, ROUTER_DIRECTIVES],
     providers: [HTTP_PROVIDERS, MessageService]
 })

@@ -1,76 +1,53 @@
 ﻿<div id="ims-template-manage"  [hidden]="handleNotice||handleInvitation">
-    <p-menu popup="popup" [model]="menuItems"></p-menu>
     <div class="clearfix"></div>
     <!--Quick Search Link-->
-    <div class="xs-col-12 col-sm-4" id="quick-search-container">
-        <p-dataList [value]="templates" [paginator]="true" [rows]="10">
+    <div class="xs-col-12" id="quick-search-container">
+        <p-dataTable [value]="templates" [headerRows]="headerRows"
+                     [rows]="10" [paginator]="true" [resizableColumns]="true">
             <header>
                 <div class="ims-header-container">
-                    Notice
+                    <span>Notice</span>
                     <div class="pull-right">
                         <button pButton type="text" (click)="loadNotice()" icon="fa fa-refresh"></button>
                         <button pButton type="text" (click)="newNotice()" icon="fa fa-plus-circle"></button>
                     </div>
                 </div>
             </header>
-            <template let-notice>
-                <div class="ims-iterator">
-                    <div><i class="fa fa-bars ims-link-label" (click)="manageNotice($event,notice)"></i>&nbsp;<span>{{notice.Name}}</span></div>
-                    <div class="recruit-status-stat">
-                        <div class="col-xs-3">
-                            <span class="ims-link-label label-container" (click)="progressTotal($event,notice)" pTooltip="Total" tooltipPosition="top">{{notice.RecruitStatus.Total}}</span>
-                        </div>
-                        <div class="col-xs-3">
-                            <span class="ims-link-label label-container" (click)="progressSent($event,notice)" pTooltip="Sent" tooltipPosition="top">{{notice.RecruitStatus.Sent}}</span>
-                        </div>
-                        <div class="col-xs-3">
-                            <span class="ims-link-label label-container" (click)="progressReplied($event,notice)" pTooltip="Replied" tooltipPosition="top">{{notice.RecruitStatus.Received}}</span>
-                        </div>
-                        <div class="col-xs-3">
-                            <span class="ims-link-label label-container" (click)="progressApproved($event,notice)" pTooltip="Approved" tooltipPosition="top">{{notice.RecruitStatus.Approved}}</span>
-                        </div>
-                        <div class="clearfix"></div>
+            <p-column field="Name">
+                <template let-row="rowData">
+                    <div class="text-center">
+                        <span>{{row.Name}}</span>
                     </div>
-                </div>
-            </template>
-        </p-dataList>
-        
-
-        
+                </template>
+            </p-column>
+            <p-column>
+                <template let-row="rowData">
+                    <div class="text-center">
+                        <span class="badge ims-link-label" (click)="progressTotal(row)"  [ngClass]="{imsselected: isSelected(row,CODE_ALL)}">T</span>
+                        <span>{{row.RecruitStatus.Total}}</span> 
+                        <span class="badge ims-link-label" (click)="progressSent(row)" [ngClass]="{imsselected: isSelected(row,CODE_SENT)}">S</span>
+                        <span >{{row.RecruitStatus.Sent}}</span> 
+                        <span class="badge ims-link-label" (click)="progressReplied(row)" [ngClass]="{imsselected: isSelected(row,CODE_REPLIED)}">R</span>
+                        <span >{{row.RecruitStatus.Received}}</span> 
+                        <span class="badge ims-link-label" (click)="progressApproved(row)" [ngClass]="{imsselected: isSelected(row,CODE_APPROVED)}">A</span>
+                        <span >{{row.RecruitStatus.Approved}}</span>
+                    </div>
+                </template>
+            </p-column>
+            <p-column>
+                <template let-row="rowData">
+                    <div class="text-center">
+                        <i class="fa fa-envelope-o" (click)="writeEmail(row)"></i>
+                        <i class="fa fa-edit" (click)="editNotice(row)"></i>
+                        <i class="fa fa-archive" (click)="deleteNotice(row)"></i>
+                    </div>
+                </template>
+            </p-column>
+        </p-dataTable>
     </div>
     <!--Quick Search Link-->
     <!--Invitation Search Result-->
-    <div class="col-xs-12 col-sm-8">
-        <p-dataList [value]="invitations" [paginator]="true" [rows]="10">
-            <header><div class="ims-header-container">Invitation</div></header>
-            <template let-invitation>
-                <li>
-                    <div class="ims-iterator row">
-                        <div class="col-xs-12">{{invitation.NoticeName}}</div>
-                        <div class="col-xs-12 col-sm-8"> {{invitation.Email}}</div>
-                        <div class="col-xs-12 col-sm-1">
-                            <span [ngSwitch]="invitation.RecruitStatusCode">
-                                <template [ngSwitchCase]="1">
-                                    <span class="badge" pTooltip="Sent" tooltipPosition="left">S</span>
-                                </template>
-                                <template [ngSwitchCase]="2">
-                                    <span class="badge" pTooltip="Replied" tooltipPosition="left">R</span>
-                                </template>
-                                <template ngSwitchDefault>
-                                    <span class="badge" pTooltip="Approved" tooltipPosition="left">A</span>
-                                </template>
-                            </span>
-          
-                        </div>
-                        <div class="col-xs-12 col-sm-3">
-                            <i class="fa fa-envelope-o ims-link-label" *ngIf="invitation.RecruitStatusCode==1" (click)="resend(invitation)"></i>
-                            <i class="fa fa-trash-o ims-link-label" *ngIf="invitation.RecruitStatusCode==1" (click)="deleteInvitation(invitation)"></i>
-                        </div>
-                    </div>
-                </li>
-            </template>
-        </p-dataList>
-    </div>
+    <router-outlet></router-outlet>
     <!--Invitation Search Result-->
 </div>
 

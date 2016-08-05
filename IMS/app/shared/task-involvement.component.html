@@ -1,0 +1,45 @@
+﻿<div class="panel panel-default ims-body-container">
+    <div class="panel-heading">
+        <span class="panel-title ims-panel-title">History</span>
+    </div>
+    <div class="panel-body">
+        <div class="bg-info ims-no-record" *ngIf="!isValid">No Record Selected</div>
+        <div *ngIf="isValid">
+               <p-dataTable [value]="list" [headerRows]="headerRows"
+                         [rows]="5" [paginator]="true" [resizableColumns]="true"
+                         [responsive]="fasle">
+                   <p-column field="TaskName">
+                       <template let-row="rowData">
+                           <span>{{row.TaskName}}</span>
+                       </template>
+                   </p-column>
+                   <p-column field="SupervisorName">
+                       <template let-row="rowData">
+                           <span>{{row.SupervisorName}}</span>
+                       </template>
+                   </p-column>
+                   <p-column field="IsClosed">
+                       <template let-row="rowData">
+                           <div class="text-center">
+                               <i class="fa fa-check-square-o" *ngIf="row.IsClosed"></i>
+                           </div>
+                       </template>
+                   </p-column>
+                   <p-column field="JoinAt">
+                       <template let-row="rowData">
+                           <div class="text-center">
+                               <span>{{row.JoinAt|bracketDateTransform| date :'dd / MM / yyyy'}}</span>
+                           </div>
+                       </template>
+                   </p-column>
+                   <p-column field="LeftAt">
+                       <template let-row="rowData">
+                           <div class="text-center">
+                               <span>{{(row.LeftAt||row.TaskClosedAt)?((row.LeftAt||row.TaskClosedAt)| bracketDateTransform| date :'dd / MM / yyyy'):''}}</span>
+                           </div>
+                       </template>
+                   </p-column>
+            </p-dataTable>
+        </div>
+    </div>
+</div>

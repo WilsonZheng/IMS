@@ -1,0 +1,47 @@
+﻿<p-dataTable [value]="invitations" [headerRows]="headerRows"
+             [rows]="10" [paginator]="true" [resizableColumns]="true" *ngIf="isValid">
+    <header>
+        <div class="ims-header-container">
+            <span>Invitation</span>
+        </div>
+    </header>
+    <p-column field="NoticeName">
+        <template let-row="rowData">
+            <div class="text-center">
+                <span>{{row.NoticeName}}</span>
+            </div>
+        </template>
+    </p-column>
+    <p-column field="Email">
+        <template let-row="rowData">
+            <div class="text-center">
+                <span>{{row.Email}}</span>
+            </div>
+        </template>
+    </p-column>
+    <p-column>
+        <template let-row="rowData">
+            <div class="text-center">
+                <span [ngSwitch]="row.RecruitStatusCode">
+                    <template [ngSwitchCase]="1">
+                        <span class="badge">S</span>
+                    </template>
+                    <template [ngSwitchCase]="2">
+                        <span class="badge">R</span>
+                    </template>
+                    <template ngSwitchDefault>
+                        <span class="badge">A</span>
+                    </template>
+                </span>
+            </div>
+        </template>
+    </p-column>
+    <p-column>
+        <template let-row="rowData">
+            <div class="text-center">
+                <i class="fa fa-envelope-o ims-link-label" *ngIf="row.RecruitStatusCode==1" (click)="resend(row)"></i>
+                <i class="fa fa-trash-o ims-link-label" *ngIf="row.RecruitStatusCode==1" (click)="deleteInvitation(row)"></i>
+            </div>
+        </template>
+    </p-column>
+</p-dataTable>

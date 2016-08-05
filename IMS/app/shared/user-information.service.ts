@@ -9,20 +9,25 @@ import { RestResult } from '../shared/rest-result';
 @Injectable()
 export class UserInformationService {
 
-  
+
+    private user: User;
+
+    get User(): User {
+        return this.user;
+    }
+
 
     private headers: Headers = new Headers({
         'Content-Type': 'application/json'
     });
-
-  
+      
     
     constructor(private http: Http) {
 
     }
     
     fetchUser(): Promise<User> {
-        return this.http.post("/UserInfo/GetUser", JSON.stringify({}), { headers: this.headers }).toPromise()
+       return this.http.post("/UserInfo/GetUser", JSON.stringify({}), { headers: this.headers }).toPromise()
             .then(response => {
                 var result: RestResult = response.json();
                 if (result.Error) {
@@ -34,6 +39,7 @@ export class UserInformationService {
                     user.Id = data.Id;
                     user.Roles = data.Roles;
                     user.UserName = data.UserName;
+                    this.user = user;
                     return user;
                 }
             })

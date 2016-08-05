@@ -1,0 +1,50 @@
+﻿<div class="panel panel-default ims-body-container">
+    <div class="panel-heading">
+        <h3 class="panel-title ims-panel-title">Report</h3>
+        <div class="ims-control-container" *ngIf="isValid" [hidden]="handleEditor || handleViewer">
+            <button pButton type="text" (click)="refresh()" icon="fa fa-refresh"></button>
+            <button pButton type="text" (click)="create()" icon="fa fa-plus-circle"  *ngIf="authUser.Id==internId"></button>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="bg-info ims-no-record" *ngIf="!isValid">No Record Selected</div>
+        <p-dataTable [value]="reports" [headerRows]="headerRows"
+                     [rows]="10" [paginator]="true" [resizableColumns]="true"
+                     *ngIf="isValid" [hidden]="handleEditor || handleViewer">
+            <p-column field="CreatedAt">
+                <template let-row="rowData">
+                    <div class="text-center">{{row.CreatedAt |bracketDateTransform| date :'dd / MM / yyyy'}}</div>
+                </template>
+            </p-column>
+            <p-column field="Title">
+                <template let-row="rowData">
+                    <div><span>{{row.Title}}</span></div>
+                </template>
+            </p-column>
+            <p-column>
+                <template let-row="rowData">
+                    <div class="text-center">
+                        <i class="fa fa-eye ims-link-label" (click)="view(row)"></i>
+                        <i class="fa fa-edit ims-link-label" (click)="edit(row)" *ngIf="authUser.Id==internId"></i>
+                        <i class="fa fa-trash-o ims-link-label" (click)="delete(row)" *ngIf="authUser.Id==internId"></i>
+                    </div>
+                </template>
+            </p-column>
+        </p-dataTable>
+
+        <intern-report-editor *ngIf="isValid && handleEditor"
+                                [report]="reportSelected"
+                                [taskId]="taskId"
+                                [isCreateMode]="!isEditting"
+                                (error)="handleError($event)"
+                                (canceled)="cancelled()"
+                                (created)="created($event)"
+                                (updated)="updated($event)">
+        </intern-report-editor>
+
+        <intern-report-viewer *ngIf="isValid && handleViewer"
+                                [report]="reportSelected"
+                                (viewCancelled)="viewCancelled()">
+        </intern-report-viewer>
+</div>
+</div>

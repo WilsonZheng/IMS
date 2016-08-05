@@ -8,8 +8,6 @@
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    <link rel="stylesheet"  type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.12/datatables.min.css" String />
-    <script type="text/javascript"  src="https://cdn.datatables.net/v/bs/dt-1.10.12/datatables.min.js"></script>
     <script type="text/javascript" src="~/Scripts/app.js"></script>
 </head>
 <body>
@@ -89,12 +87,17 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Settings<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Contract Template", "Index", "TemplateManage")</li>
-                        </ul>
-                    </li>
+                   @{
+                       if (User.IsInRole("admin"))
+                       {
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Settings<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Contract Template", "Index", "TemplateManage")</li>
+                            </ul>
+                        </li>
+                       }
+                    }
                     <li>@Html.ActionLink("Main", "Index", "AppMain")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")

@@ -1,8 +1,8 @@
 ﻿import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import { ROUTER_DIRECTIVES, Router }    from '@angular/router';
+import { ROUTER_DIRECTIVES, Router, ActivatedRoute }    from '@angular/router';
 import {RestResult} from '../shared/rest-result';
-import { Menubar,MenuItem } from 'primeng/primeng';
-
+import { Menubar, MenuItem } from 'primeng/primeng';
+import { GlobalConstant } from '../shared/global-constant';
 
 @Component({
     templateUrl: '/app/main/admin-main.component.html',
@@ -13,39 +13,47 @@ import { Menubar,MenuItem } from 'primeng/primeng';
             .ims-body-container .panel-body{
                 padding:2px;
             }
-            .panel-title{
-                font-size:1em;
-                font-weight:700;
-            }
     `],
-    directives: [ROUTER_DIRECTIVES, Menubar],
+    directives: [ROUTER_DIRECTIVES, Menubar ],
     providers:[]
 })
 export class AdminMainComponent implements OnInit {
-    private titles: string[] = ["Manage Notice", "Manage Intern"];
-    private titleIndex: number = 0;
-
     private menuItems: MenuItem[];
-
-    constructor(private router:Router) {
+    private title: string = 'Manage Intern > Task';
+    constructor(private router: Router, private route: ActivatedRoute) {
        
     }
-        
+    
     ngOnInit(){
         this.menuItems = [
+            //{
+            //    label: 'Dashboard',
+            //    command: (event) => {
+            //        this.router.navigate(['.'], { queryParams: {}, relativeTo: this.route }); this.title = 'Dashboard';
+            //    }
+            //},
             {
-                label: this.titles[0],
+                label: 'Manage Account',
                 command: (event) => {
-                    this.router.navigate(['/admin']);
-                    this.titleIndex = 0;
+                    this.router.navigate(['account'], { queryParams: {}, relativeTo: this.route }); this.title = 'Manage Account';
                 }
             },
             {
-                label: this.titles[1],
+                label: 'Manage Notice',
                 command: (event) => {
-                    this.router.navigate(['/admin/intern']);
-                    this.titleIndex = 1;
-                } 
+                    this.router.navigate(['notice/invitation'], { queryParams: {}, relativeTo: this.route }); this.title = 'Manage Notice';
+                }
+            },
+            {
+                label: 'Manage Intern',
+                items: [
+                    { label: "Detail", command: (event) => { this.router.navigate(['./intern/Detail'], { relativeTo: this.route }); this.title = "Manage Intern > Detail" } },
+                    { label: "Supervisor", command: (event) => { this.router.navigate(['./intern/Supervisor'], { relativeTo: this.route }); this.title = "Manage Intern > Supervisors" } },
+                    { label: "Task", command: (event) => { this.router.navigate(['./intern/Task'], { relativeTo: this.route }); this.title = "Manage Intern > Task" } },
+                    { label: "Task History", command: (event) => { this.router.navigate(['./intern/TaskHistory'], { relativeTo: this.route }); this.title = "Manage Intern > Task History" } },
+                    { label: "Comment", command: (event) => { this.router.navigate(['./intern/Comment'], { relativeTo: this.route }); this.title = "Manage Intern > Comment" } }
+                ]
+               
             }
         ];
 

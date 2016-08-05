@@ -1,1 +1,9 @@
-﻿I am staff
+﻿<p-menubar [model]="menuItems"></p-menubar>
+<div class="panel panel-default ims-body-container">
+    <div class="panel-heading">
+        <h3 class="panel-title ims-panel-title">{{title}}</h3>
+    </div>
+    <div class="panel-body">
+        <router-outlet></router-outlet>
+    </div>
+</div>

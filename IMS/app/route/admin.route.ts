@@ -1,8 +1,15 @@
 ﻿import { RouterConfig }  from '@angular/router';
 import { NoticeMainComponent } from '../invitation/notice-main.component';
-import { InternListComponent } from '../admin/intern-list.component';
 import { AdminMainComponent } from '../main/admin-main.component';
+import { AdminDashboardComponent } from '../admin/admin-dashboard.component';
+import { ListInvitationComponent } from '../admin/list-invitation.component';
+import { ManageAccountComponent } from '../admin/manage-account.component';
 
+//sub route.
+import { adminManageInternRoutes } from './admin-manage-intern.route';
+
+
+//   admin
 export const adminRoutes: RouterConfig = [
     {
         path: 'admin',
@@ -10,12 +17,24 @@ export const adminRoutes: RouterConfig = [
         children: [
             {
                 path: '',
-                component: NoticeMainComponent
+                redirectTo:'intern/Task'
+                //component: AdminDashboardComponent
             },
             {
-                path: 'intern',
-                component: InternListComponent
-            }
+                path: 'account',
+                component: ManageAccountComponent
+            },
+            {
+                path: 'notice',
+                component: NoticeMainComponent,
+                children: [
+                    {
+                        path:'invitation',
+                        component:ListInvitationComponent
+                    }
+                ]
+            },
+            ...adminManageInternRoutes
         ]
     }
 ];

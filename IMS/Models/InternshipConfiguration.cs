@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity.ModelConfiguration;
-using System.Linq;
-using System.Web;
+﻿using System.Data.Entity.ModelConfiguration;
 
 namespace IMS.Models
 {
@@ -10,7 +6,20 @@ namespace IMS.Models
     {
         public InternshipConfiguration() {
             this.HasRequired(x => x.Intern).WithOptional();
-            this.HasKey(x => x.Id);
+            this.HasMany(x => x.Tasks).WithMany(x=>x.Participants)
+            .Map(m =>
+             {
+                 m.ToTable("InternshipTask");
+                 m.MapLeftKey("InternshipId");
+                 m.MapRightKey("TaskId");
+             });
+             this.HasMany(x => x.Supervisors).WithMany(x=>x.Internships)
+                 .Map(m =>
+                 {
+                     m.ToTable("InternshipSupervisor");
+                     m.MapLeftKey("InternshipId");
+                     m.MapRightKey("SupervisorId");
+                 });
         }
     }
 }

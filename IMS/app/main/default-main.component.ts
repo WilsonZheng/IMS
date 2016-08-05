@@ -9,7 +9,7 @@ import { RoleName } from '../shared/role-name';
 
 //Based upon the user's role, display the corresponding starting page.
 @Component({
-    template:'',
+    template: '',
     providers: [UserInformationService]
 })
 

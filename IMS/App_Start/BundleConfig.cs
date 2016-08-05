@@ -20,12 +20,17 @@ namespace IMS
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js",
+                      "~/Content/bootstrap-3.3.7-dist/js/bootstrap.min.js",
                       "~/Scripts/respond.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
+                      "~/Content/bootstrap-3.3.7-dist/css/bootstrap.min.css",
                       "~/Content/site.css"));
+
+
+
+
+
         }
     }
 }

@@ -1,7 +1,11 @@
 "use strict";
 var notice_main_component_1 = require('../invitation/notice-main.component');
-var intern_list_component_1 = require('../admin/intern-list.component');
 var admin_main_component_1 = require('../main/admin-main.component');
+var list_invitation_component_1 = require('../admin/list-invitation.component');
+var manage_account_component_1 = require('../admin/manage-account.component');
+//sub route.
+var admin_manage_intern_route_1 = require('./admin-manage-intern.route');
+//   admin
 exports.adminRoutes = [
     {
         path: 'admin',
@@ -9,13 +13,23 @@ exports.adminRoutes = [
         children: [
             {
                 path: '',
-                component: notice_main_component_1.NoticeMainComponent
+                redirectTo: 'intern/Task'
             },
             {
-                path: 'intern',
-                component: intern_list_component_1.InternListComponent
+                path: 'account',
+                component: manage_account_component_1.ManageAccountComponent
+            },
+            {
+                path: 'notice',
+                component: notice_main_component_1.NoticeMainComponent,
+                children: [
+                    {
+                        path: 'invitation',
+                        component: list_invitation_component_1.ListInvitationComponent
+                    }
+                ]
             }
-        ]
+        ].concat(admin_manage_intern_route_1.adminManageInternRoutes)
     }
 ];
 //# sourceMappingURL=admin.route.js.map

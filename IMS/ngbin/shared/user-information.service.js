@@ -19,7 +19,15 @@ var UserInformationService = (function () {
             'Content-Type': 'application/json'
         });
     }
+    Object.defineProperty(UserInformationService.prototype, "User", {
+        get: function () {
+            return this.user;
+        },
+        enumerable: true,
+        configurable: true
+    });
     UserInformationService.prototype.fetchUser = function () {
+        var _this = this;
         return this.http.post("/UserInfo/GetUser", JSON.stringify({}), { headers: this.headers }).toPromise()
             .then(function (response) {
             var result = response.json();
@@ -32,6 +40,7 @@ var UserInformationService = (function () {
                 user.Id = data.Id;
                 user.Roles = data.Roles;
                 user.UserName = data.UserName;
+                _this.user = user;
                 return user;
             }
         })

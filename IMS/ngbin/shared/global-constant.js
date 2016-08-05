@@ -9,6 +9,13 @@ var GlobalConstant = (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(GlobalConstant, "NUMBER_NOTHING", {
+        get: function () {
+            return -1;
+        },
+        enumerable: true,
+        configurable: true
+    });
     return GlobalConstant;
 }());
 exports.GlobalConstant = GlobalConstant;

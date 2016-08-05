@@ -1,0 +1,30 @@
+﻿<div class="panel panel-default ims-body-container">
+    <div class="panel-heading">
+        <h3 class="panel-title ims-panel-title">Tasks</h3>
+        <div class="ims-control-container">
+            <button pButton type="text" (click)="refresh()" icon="fa fa-refresh"></button>
+        </div>
+    </div>
+   
+    <div class="panel-body">
+          <!--The actual job to be executed depends on the component loaded onto the router outlet at the bottom.-->
+        <p-dataTable [value]="tasks" [headerRows]="headerRows"
+                     [rows]="10" [paginator]="true" [resizableColumns]="true"
+                     selectionMode="single" [(selection)]="taskSelected" 
+                     (onRowSelect)="onSelected($event.data)"
+                     (onRowUnselect)="onUnselected($event.data)">
+            <p-column field="Title">
+                <template let-row="rowData">
+                    <div>{{row.Title}}</div>
+                </template>
+            </p-column>
+            <p-column field="SupervisorName">
+                <template let-row="rowData">
+                    <div>{{row.SupervisorName}}</div>
+                </template>
+            </p-column>
+        </p-dataTable>
+    </div>
+</div>
+<!--Placement for the components to handle detail-->
+<router-outlet></router-outlet>

@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
 require('rxjs/add/operator/toPromise');
+var task_to_do_1 = require('./task-to-do');
 var InternService = (function () {
     function InternService(http) {
         this.http = http;
@@ -18,8 +19,241 @@ var InternService = (function () {
             'Content-Type': 'application/json'
         });
     }
-    InternService.prototype.getInterns = function () {
-        return this.http.post("/Intern/getInterns", JSON.stringify({}), { headers: this.headers }).toPromise()
+    InternService.prototype.getDetails = function (internId) {
+        return this.http.post("/Intern/getDetails", JSON.stringify({ internId: internId }), { headers: this.headers }).toPromise()
+            .then(function (response) {
+            var result = response.json();
+            if (result.Error) {
+                return Promise.reject(result.Error);
+            }
+            else {
+                return result.Data;
+            }
+        }).catch(function (error) {
+            return Promise.reject(error);
+        });
+    };
+    InternService.prototype.getInterns = function (condition) {
+        return this.http.post("/Intern/getInterns", JSON.stringify(condition), { headers: this.headers }).toPromise()
+            .then(function (response) {
+            var result = response.json();
+            if (result.Error) {
+                return Promise.reject(result.Error);
+            }
+            else {
+                return result.Data;
+            }
+        }).catch(function (error) {
+            return Promise.reject(error);
+        });
+    };
+    InternService.prototype.getSupervisors = function () {
+        return this.http.post("/Intern/getSupervisors", JSON.stringify({}), { headers: this.headers }).toPromise()
+            .then(function (response) {
+            var result = response.json();
+            if (result.Error) {
+                return Promise.reject(result.Error);
+            }
+            else {
+                return result.Data;
+            }
+        }).catch(function (error) {
+            return Promise.reject(error);
+        });
+    };
+    InternService.prototype.getSupervisorsForIntern = function (internId) {
+        return this.http.post("/Intern/getSupervisorsForIntern", JSON.stringify({ internId: internId }), { headers: this.headers }).toPromise()
+            .then(function (response) {
+            var result = response.json();
+            if (result.Error) {
+                return Promise.reject(result.Error);
+            }
+            else {
+                return result.Data;
+            }
+        }).catch(function (error) {
+            return Promise.reject(error);
+        });
+    };
+    InternService.prototype.handleSupervising = function (model) {
+        return this.http.post("/Intern/handleSupervising", JSON.stringify(model), { headers: this.headers }).toPromise()
+            .then(function (response) {
+            var result = response.json();
+            if (result.Error) {
+                return Promise.reject(result.Error);
+            }
+            else {
+                return result.Data;
+            }
+        }).catch(function (error) {
+            return Promise.reject(error);
+        });
+    };
+    InternService.prototype.getSupervisingComments = function (internId) {
+        return this.http.post("/Intern/getSupervisingComments", JSON.stringify({ internId: internId }), { headers: this.headers }).toPromise()
+            .then(function (response) {
+            var result = response.json();
+            if (result.Error) {
+                return Promise.reject(result.Error);
+            }
+            else {
+                return result.Data;
+            }
+        }).catch(function (error) {
+            return Promise.reject(error);
+        });
+    };
+    InternService.prototype.createComment = function (comment) {
+        return this.http.post("/Intern/createSupervisingComment", JSON.stringify(comment), { headers: this.headers }).toPromise()
+            .then(function (response) {
+            var result = response.json();
+            if (result.Error) {
+                return Promise.reject(result.Error);
+            }
+            else {
+                return result.Data;
+            }
+        }).catch(function (error) {
+            return Promise.reject(error);
+        });
+    };
+    InternService.prototype.deleteComment = function (comment) {
+        return this.http.post("/Intern/deleteSupervisingComment", JSON.stringify(comment), { headers: this.headers }).toPromise()
+            .then(function (response) {
+            var result = response.json();
+            if (result.Error) {
+                return Promise.reject(result.Error);
+            }
+            else {
+                return;
+            }
+        }).catch(function (error) {
+            return Promise.reject(error);
+        });
+    };
+    InternService.prototype.updateComment = function (comment) {
+        return this.http.post("/Intern/updateSupervisingComment", JSON.stringify(comment), { headers: this.headers }).toPromise()
+            .then(function (response) {
+            var result = response.json();
+            if (result.Error) {
+                return Promise.reject(result.Error);
+            }
+            else {
+                return;
+            }
+        }).catch(function (error) {
+            return Promise.reject(error);
+        });
+    };
+    /////////////////////////////Manage Task & Participant//////////////////////////////////////////////////////
+    InternService.prototype.getTasksForIntern = function (internId) {
+        return this.http.post("/Intern/getTasksForIntern", JSON.stringify({ id: internId }), { headers: this.headers }).toPromise()
+            .then(function (response) {
+            var result = response.json();
+            if (result.Error) {
+                return Promise.reject(result.Error);
+            }
+            else {
+                return result.Data;
+            }
+        }).catch(function (error) {
+            return Promise.reject(error);
+        });
+    };
+    InternService.prototype.getTasks = function () {
+        return this.http.post("/Intern/getTasks", JSON.stringify({}), { headers: this.headers }).toPromise()
+            .then(function (response) {
+            var result = response.json();
+            if (result.Error) {
+                return Promise.reject(result.Error);
+            }
+            else {
+                return result.Data;
+            }
+        }).catch(function (error) {
+            return Promise.reject(error);
+        });
+    };
+    InternService.prototype.createTask = function (task) {
+        return this.http.post("/Intern/createTask", JSON.stringify(task), { headers: this.headers }).toPromise()
+            .then(function (response) {
+            var result = response.json();
+            if (result.Error) {
+                return Promise.reject(result.Error);
+            }
+            else {
+                return result.Data;
+            }
+        }).catch(function (error) {
+            return Promise.reject(error);
+        });
+    };
+    InternService.prototype.deleteTask = function (task) {
+        var request = new task_to_do_1.TaskToDo();
+        request.Id = task.Id;
+        return this.http.post("/Intern/deleteTask", JSON.stringify(request), { headers: this.headers }).toPromise()
+            .then(function (response) {
+            var result = response.json();
+            if (result.Error) {
+                return Promise.reject(result.Error);
+            }
+            else {
+                return;
+            }
+        }).catch(function (error) {
+            return Promise.reject(error);
+        });
+    };
+    InternService.prototype.closeTask = function (task) {
+        var request = new task_to_do_1.TaskToDo();
+        request.Id = task.Id;
+        return this.http.post("/Intern/closeTask", JSON.stringify(request), { headers: this.headers }).toPromise()
+            .then(function (response) {
+            var result = response.json();
+            if (result.Error) {
+                return Promise.reject(result.Error);
+            }
+            else {
+                return;
+            }
+        }).catch(function (error) {
+            return Promise.reject(error);
+        });
+    };
+    InternService.prototype.updateTask = function (task) {
+        var request = new task_to_do_1.TaskToDo();
+        request.Id = task.Id;
+        request.Title = task.Title;
+        request.Description = task.Description;
+        return this.http.post("/Intern/updateTask", JSON.stringify(request), { headers: this.headers }).toPromise()
+            .then(function (response) {
+            var result = response.json();
+            if (result.Error) {
+                return Promise.reject(result.Error);
+            }
+            else {
+                return;
+            }
+        }).catch(function (error) {
+            return Promise.reject(error);
+        });
+    };
+    InternService.prototype.manageParticipant = function (request) {
+        return this.http.post("/Intern/manageParticipant", JSON.stringify(request), { headers: this.headers }).toPromise()
+            .then(function (response) {
+            var result = response.json();
+            if (result.Error) {
+                return Promise.reject(result.Error);
+            }
+            else {
+                return result.Data;
+            }
+        }).catch(function (error) {
+            return Promise.reject(error);
+        });
+    };
+    InternService.prototype.adjustExpiry = function (request) {
+        return this.http.post("/Intern/adjustExpiry", JSON.stringify(request), { headers: this.headers }).toPromise()
             .then(function (response) {
             var result = response.json();
             if (result.Error) {

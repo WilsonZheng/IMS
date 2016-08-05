@@ -1,0 +1,64 @@
+﻿<div class="panel panel-default ims-body-container">
+    <div class="panel-heading">
+        <h3 class="panel-title ims-panel-title">Interns</h3>
+        <div class="ims-control-container">
+            Since Expiry
+            <p-spinner [(ngModel)]="internSearchCondition.DaysSinceExpiry" [min]="0" [max]="365" [size]="1"></p-spinner>Days /
+            To Expiry
+            <p-spinner size="30" [(ngModel)]="internSearchCondition.DaysToExpiry" [min]="0" [max]="365" [size]="1"></p-spinner>Days
+            <button pButton type="text" (click)="search()" icon="fa fa-refresh"></button>            
+        </div>
+    </div>
+    <div class="panel-body">
+        <!--List of the interns to be managed according to the requested function-->
+        <!--The actual job to be executed depends on the component loaded onto the router outlet at the bottom.-->
+        <p-dataTable [value]="interns" [headerRows]="headerRows"
+                     [rows]="10" [paginator]="true" [resizableColumns]="true"
+                     selectionMode="single" [(selection)]="selectedIntern"
+                     (onRowSelect)="onInternSelected($event)"
+                     (onRowUnselect)="onInternUnselected($event)">
+            <p-column field="FullName">
+                <template let-intern="rowData">
+                    <div class="text-center">
+                        <span>{{intern.FullName}}</span>
+                    </div>
+                   
+                </template>
+            </p-column>
+            <p-column field="CommenceAt">
+                <template let-intern="rowData">
+                    <div class="text-center">
+                        <span>{{intern.CommenceAt|bracketDateTransform|date :'dd / MM / yyyy'}}</span>
+                    </div>
+                </template>
+            </p-column>
+            <p-column field="ExpiryAt">
+                <template let-intern="rowData">
+                    <div class="text-center">
+                        <span>{{intern.ExpiryAt|bracketDateTransform|date :'dd / MM / yyyy'}}</span>
+                    </div>
+                </template>
+            </p-column>
+            <p-column field="DaysToExpiry">
+                <template let-intern="rowData">
+                    <div class="text-center">
+                        <span>{{intern.DaysToExpiry}}</span>
+                    </div>
+                </template>
+            </p-column>
+            <p-column>
+                <template let-intern="rowData">
+                    <div *ngFor="let supervisor of intern.Supervisors">{{supervisor.FirstName}}</div>
+                </template>
+            </p-column>
+            <p-column>
+                <template let-intern="rowData">
+                    <div *ngFor="let task of intern.TaskToDos">{{task.Title}}</div>
+                </template>
+            </p-column>
+        </p-dataTable>
+    </div>
+</div>
+       
+<!--Placement for the components to handle detail-->
+<router-outlet></router-outlet>

@@ -44,6 +44,7 @@ var AppComponent = (function () {
         core_1.Component({
             selector: 'ims-app',
             templateUrl: '/app/main/app.component.html',
+            styles: ["\n#ims-top-container{\n    margin-top:4px;\n}\n"],
             directives: [primeng_1.Dialog, primeng_1.Footer, primeng_1.Header, primeng_1.Button, primeng_1.Growl, router_1.ROUTER_DIRECTIVES],
             providers: [http_1.HTTP_PROVIDERS, message_service_1.MessageService]
         }), 
