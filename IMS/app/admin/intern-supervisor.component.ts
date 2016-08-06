@@ -1,4 +1,6 @@
-﻿import { Component, OnInit,OnDestroy, Input, Output, EventEmitter} from '@angular/core';
+﻿//Description : Display the current matching between intern & supervisor and change those matchings if need be.
+
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute }    from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -18,13 +20,13 @@ import { GlobalConstant } from '../shared/global-constant';
     templateUrl: '/app/admin/intern-supervisor.component.html',
     styles: [`
 
- .ims-body-container{
+            .ims-body-container{
             margin-bottom:0px;
-        }
+            }
 
- .panel-body{
+            .panel-body{
             padding:1px;
-        }
+            }
     `],
     directives: [DataTable, Column, Header, Button],
     providers: []

@@ -3,11 +3,8 @@ import { ROUTER_DIRECTIVES, provideRouter, RouterConfig, Router } from '@angular
 import { APP_BASE_HREF } from '@angular/common';
 import { HTTP_PROVIDERS } from '@angular/http';
 import { Subscription } from 'rxjs/Subscription';
-
 import { Dialog, Header, Footer, Button, Growl, Message } from 'primeng/primeng';
-
 import { MessageService } from '../shared/message.service';
-
 import { GlobalMessage } from '../shared/global-message';
 
 @Component({
@@ -56,9 +53,6 @@ export class AppComponent {
         this.subscriptionConfirm.unsubscribe();
         this.subscriptionInform.unsubscribe();
     }
-
-
-
-    
+       
     
 }

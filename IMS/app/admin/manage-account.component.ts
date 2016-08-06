@@ -1,4 +1,6 @@
-﻿import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+﻿//List the current registered users. Can reset password, lock or release a selected account.
+
+import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute }    from '@angular/router';
 import { DataTable, Column, Header, Button} from 'primeng/primeng';
 import { Subscription } from 'rxjs/Subscription';

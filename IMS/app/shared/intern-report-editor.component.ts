@@ -1,4 +1,6 @@
-﻿import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+﻿//Description: Editor for an task report.
+
+import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { Button, Editor, Header } from 'primeng/primeng';
 
 import { InternService } from '../shared/intern.service';

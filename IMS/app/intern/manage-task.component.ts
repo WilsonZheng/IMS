@@ -1,4 +1,5 @@
-﻿import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+﻿//List the assigned tasks for the intern.
+import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute }    from '@angular/router';
 import { DataTable, Column, Header, Button, Spinner } from 'primeng/primeng';
 import { Subscription } from 'rxjs/Subscription';

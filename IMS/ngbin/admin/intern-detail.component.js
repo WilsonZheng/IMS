@@ -1,3 +1,5 @@
+//Description : Display the detail of a selected intern.  at the moment, only display the internship period
+//and the function to adjust the expiry date.
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;

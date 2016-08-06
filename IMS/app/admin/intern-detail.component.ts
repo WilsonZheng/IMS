@@ -1,4 +1,7 @@
-﻿import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+﻿//Description : Display the detail of a selected intern.  at the moment, only display the internship period
+//and the function to adjust the expiry date.
+
+import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute }    from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { MessageService } from '../shared/message.service';

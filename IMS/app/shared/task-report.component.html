@@ -1,4 +1,4 @@
-﻿<div class="panel panel-default ims-body-container">
+﻿<div class="panel panel-default ims-body-container" *ngIf="isValid">
     <div class="panel-heading">
         <h3 class="panel-title ims-panel-title">Report</h3>
         <div class="ims-control-container" *ngIf="isValid" [hidden]="handleEditor || handleViewer">

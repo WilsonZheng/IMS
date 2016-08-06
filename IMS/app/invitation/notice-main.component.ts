@@ -1,4 +1,6 @@
-﻿/// <reference path="../../node_modules/rxjs/add/operator/toPromise.d.ts" />
+﻿//Description: List the created notices with the current progression information.
+
+/// <reference path="../../node_modules/rxjs/add/operator/toPromise.d.ts" />
 import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
 import {ROUTER_DIRECTIVES, Router, ActivatedRoute }    from '@angular/router';
 import { DataTable, Column, Header, Button, Menu, MenuItem, Tooltip, DataList } from 'primeng/primeng';
@@ -21,7 +23,7 @@ import { Invitation } from './invitation';
 //Custom Component
 import { NoticeEditorComponent } from  './notice-editor.component';
 import { InvitationEditorComponent } from './invitation-editor.component';
-import { RecruitProgressComponent } from './recruit-progress.component';
+//import { RecruitProgressComponent } from './recruit-progress.component';
 
 @Component({
     selector: 'inv-notice-main',
@@ -63,7 +65,7 @@ import { RecruitProgressComponent } from './recruit-progress.component';
                  }
             `],
     directives: [DataTable, Column, Button, Header, Menu, NoticeEditorComponent
-        , InvitationEditorComponent, RecruitProgressComponent, Tooltip, DataList, ROUTER_DIRECTIVES],
+        , InvitationEditorComponent, Tooltip, DataList, ROUTER_DIRECTIVES],
     providers: [TemplateService,InvitationService]
 })
 export class NoticeMainComponent implements OnInit {

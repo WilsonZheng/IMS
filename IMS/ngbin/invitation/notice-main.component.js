@@ -1,3 +1,4 @@
+//Description: List the created notices with the current progression information.
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -21,7 +22,7 @@ var recruit_status_code_1 = require('../shared/recruit-status-code');
 //Custom Component
 var notice_editor_component_1 = require('./notice-editor.component');
 var invitation_editor_component_1 = require('./invitation-editor.component');
-var recruit_progress_component_1 = require('./recruit-progress.component');
+//import { RecruitProgressComponent } from './recruit-progress.component';
 var NoticeMainComponent = (function () {
     function NoticeMainComponent(templateService, messageService, invitationService, router, route) {
         this.templateService = templateService;
@@ -226,7 +227,7 @@ var NoticeMainComponent = (function () {
             templateUrl: '/app/invitation/notice-main.component.html',
             styles: ["\n                div[class*=\"col-\"] {\n                    padding:1px;\n                    margin:0px;\n                }\n\n                .recruit-status-stat .label-container{\n                    font-weight:400;\n                    border-radius:8px;\n                    border:1px solid #9cada0;\n                } \n\n                .ims-header-container{\n                    line-height:26px;\n                    height:26px;\n                    text-align:left;\n                }\n\n                .label-container{\n                    display:inline-block;\n                    width:100%;\n                    text-align:center;\n                }\n\n                .ims-iterator{\n                    border-radius:8px;\n                    background-color:#f5f5f5;\n                    margin:4px 0;\n                    padding:5px;\n                }\n\n                .badge.imsselected{\n                    color: red;\n                    background-color:yellow;\n                 }\n            "],
             directives: [primeng_1.DataTable, primeng_1.Column, primeng_1.Button, primeng_1.Header, primeng_1.Menu, notice_editor_component_1.NoticeEditorComponent,
-                invitation_editor_component_1.InvitationEditorComponent, recruit_progress_component_1.RecruitProgressComponent, primeng_1.Tooltip, primeng_1.DataList, router_1.ROUTER_DIRECTIVES],
+                invitation_editor_component_1.InvitationEditorComponent, primeng_1.Tooltip, primeng_1.DataList, router_1.ROUTER_DIRECTIVES],
             providers: [template_service_1.TemplateService, invitation_service_1.InvitationService]
         }), 
         __metadata('design:paramtypes', [template_service_1.TemplateService, message_service_1.MessageService, invitation_service_1.InvitationService, router_1.Router, router_1.ActivatedRoute])

@@ -1,4 +1,6 @@
-﻿import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+﻿//Description: Editor for an notice.
+
+import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { Button, Editor, Header } from 'primeng/primeng';
 
 import {TemplateService} from './shared/template.service';

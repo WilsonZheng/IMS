@@ -1,4 +1,5 @@
-﻿import { Component, Input, Output, EventEmitter} from '@angular/core';
+﻿//Description: Display the intern's task report.
+import { Component, Input, Output, EventEmitter} from '@angular/core';
 import { Button,Header } from 'primeng/primeng';
 import { TaskReport } from '../shared/task-report';
 

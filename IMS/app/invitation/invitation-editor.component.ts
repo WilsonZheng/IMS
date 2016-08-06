@@ -1,4 +1,6 @@
-﻿import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+﻿//Description: Editor for an invitation email.
+
+import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 
 import { Button, Editor, Header, Dialog } from 'primeng/primeng';
 

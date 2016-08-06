@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+//Description: Display the intern's task report.
 var core_1 = require('@angular/core');
 var primeng_1 = require('primeng/primeng');
 var task_report_1 = require('../shared/task-report');
