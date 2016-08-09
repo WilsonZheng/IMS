@@ -12,6 +12,7 @@ using System.Data.Entity;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
+using System.Text.RegularExpressions;
 
 namespace IMS.Controllers
 {
@@ -119,15 +120,22 @@ namespace IMS.Controllers
                     var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
                     var applicant = db.Applicants.Where(x => x.Email == email && x.TemplateId == templateId).Include(x=>x.Invitation).Single();
                     User user = userManager.FindByEmail(email);
+
+                    //check if the user account already exist
                     if (user == null)
                     {
-                        
-                        
-                        string role;
-                        var password = System.Web.Security.Membership.GeneratePassword(6, 0);
-                        role = "intern";
-                        
 
+                        role = "intern";
+                        string role;
+
+
+                        //generate random password
+                        var password = System.Web.Security.Membership.GeneratePassword(6, 0);
+                        Random rnd = new Random();
+                        password = Regex.Replace(password, @"[^a-zA-Z0-9]", m => rnd.Next(0, 10).ToString());
+                        
+                        
+                        // use identity to create new user
                         userManager.Create(new User
                         {
                             UserName = email,
@@ -136,8 +144,13 @@ namespace IMS.Controllers
                             FirstName = applicant.Firstname,
                             LastName = applicant.Lastname
                         }, password);
+
+                        //get the created user
                         user = userManager.FindByName(email);
+                        //add role(intern) to the user above
                         userManager.AddToRole(user.Id, role);
+
+                        //add new internship related to the new user
                         var userId = user.Id;
                         var commenceAt = DateTime.UtcNow;
                         var expiryAt = DateTime.UtcNow.AddDays(90);
@@ -169,13 +182,14 @@ namespace IMS.Controllers
                         String content = "Your login user name: " + email +"."+ "\r\n" + "Your password: " + password +"."+ "\r\n" + "You can change your password after you logged in IMS. Thank you.";
                         EmailProvider.Send(subject, email, content, IMSEnvProperties.GmailAccount, IMSEnvProperties.GmailAppPassword);
 
-
+                        //result message  shown in the front end
                         ViewBag.msg = "Create account successful and notification sent to the applicant.";
                         return PartialView();
                     }
                     else
                     {
                         
+                        //update the old account with new info
                         user.FirstName = applicant.Firstname;
                         user.LastName = applicant.Lastname;
                         user.OrgId = IMSUserUtil.OrgId;
@@ -183,16 +197,19 @@ namespace IMS.Controllers
                         var internship = db.Internships.Where(x => x.Id == user.Id).Single();
                         internship.CommenceAt = DateTime.UtcNow;
                         internship.ExpiryAt = DateTime.UtcNow.AddDays(90);
+
+
                         //update the applicant status to approved
                         var statusApproved = db.RecruitStatusType.Where(x => x.Code == (int)RecruitStatusCode.Approved).Single();
-
                         var invitation = db.Invitations.Where(x => x.InvitationCode == applicant.Invitation.InvitationCode && x.RecruitStatusType.Code == (int)RecruitStatusCode.ContractReceived).Single();
                         invitation.RecruitStatusType = statusApproved;
-                        ViewBag.msg = "Account existed before and updated now.";
+                        
 
                         //save all changes to database
                         db.SaveChanges();
 
+                        //result message  shown in the front end
+                        ViewBag.msg = "Account existed before and updated now.";
                         return PartialView();
                     }
                     
