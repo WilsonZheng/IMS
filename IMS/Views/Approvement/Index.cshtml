@@ -2,9 +2,14 @@
     ViewBag.Title = "Index";
 }
 <head>
-    
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 
-   
+    <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+
+
+
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/r/dt/dt-1.10.9/datatables.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
 </head>
@@ -23,28 +28,93 @@
                 <th>Mobile</th>
                 <th>Visa Status</th>
                 <th>Medical Condition</th>
+                <th>Contract</th>
+                <th>Approve Applicants</th>
             </tr>
         </thead>
 
         <tbody></tbody>
     </table>
+
+
+
+
+    <div id="pdfviewer"></div>
+    <div id="output"></div>
+
     <script>
+        $(function () {
+            $("#pdfviewer").dialog({
+
+                autoOpen: false,
+                width: 1000,
+                height: 800,
+                modal: true
+
+            });
+        });
+        $(function () {
+            $("#output").dialog({
+
+                autoOpen: false,
+                width: 300,
+                height: 300,
+                modal: true
+
+            });
+        });
+    </script>
+    <script>
+
+
+        function buttonaction(val) {
+            var path = '/Approvement/DisplayPDF?path=' + val;
+            $('#pdfviewer').load(path, function () {
+                $("#pdfviewer").dialog("open");
+            });
+
+
+        }
+
+        function approve(email,templateId) {
+            //console.log(email + " " + templateId);
+            var path = '/Approvement/ApproveApplicant?email=' + email+'&templateId='+templateId;
+            $('#pdfviewer').load(path, function () {
+                $("#pdfviewer").dialog("open");
+                $('#list').DataTable().ajax.reload();
+            });
+
+
+        }
         $(document).ready(function () {
+
 
             $('#list').dataTable({
                 "columnDefs": [{
                     "defaultContent": "-",
-                    "targets": "_all"
+                    "targets": "_all",
+                    "className": "dt-center", "targets": "_all"
                 }],
                 "ajax": 'GetList',
                 columns: [
-                                { 'data': 'TemplateId' },
+                                { 'data': 'ProgramName' },
                                 { 'data': 'Firstname' },
                                 { 'data': 'Lastname' },
                                 { 'data': 'Email' },
                                 { 'data': 'Mobile' },
                                 { 'data': 'VisaStatus' },
-                                { 'data': 'MedicalCondition' }
+                                { 'data': 'MedicalCondition' },
+
+                                {
+                                    "render": function (data, type, row) {
+                                        return '<button    type="button" onclick="buttonaction(\'' + row.ContractFileLocation + '\');">View</button>';
+                                    }
+                                },
+                                {
+                                    "render": function (data, type, row) {
+                                        return '<button    type="button" onclick="approve(\'' + row.Email + '\',\'' + row.TemplateId + '\');">Approve</button>';
+                                    }
+                                }
 
                 ]
             });
@@ -53,6 +123,10 @@
         });
 
     </script>
-
+    <style>
+        th.dt-center, td.dt-center {
+            text-align: center;
+        }
+    </style>
 </body>
 

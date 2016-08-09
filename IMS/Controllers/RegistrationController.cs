@@ -136,7 +136,7 @@ namespace IMS.Controllers
 
 
                 //Set where the files stored
-                var storePath = Server.MapPath("~/0files");
+                var storePath = IMSEnvProperties.ContractFileLocation;
                 var contractPath = storePath + "\\"+model.TemplateId+"_"+model.Email+"_Contract.pdf";
                 var signPath = storePath + "\\"+model.TemplateId + "_" + model.Email + "_sign.png";
                 model.SignPath = signPath;// to make template where signature file stored
@@ -215,7 +215,7 @@ namespace IMS.Controllers
         public void MergeTwoPDF(string file1Loc,string file2Loc,ApplicantInfo model)
         {
             String[] source_files = { file1Loc, file2Loc };
-            var storePath = Server.MapPath("~/0files");
+            var storePath = IMSEnvProperties.ContractFileLocation;
             String result = storePath+"\\"+model.TemplateId+"_"+model.Email+"_Contract_Passport.pdf";
             //create Document object
             Document document = new Document();
@@ -279,9 +279,10 @@ namespace IMS.Controllers
 
             if (file != null && file.ContentLength > 0)
             {
+                var storePath = IMSEnvProperties.ContractFileLocation;
                 var temp = Path.GetFileName(file.FileName);
                 var fileName = "" + model.TemplateId + "_" + model.Email + "_" + temp;
-                var path = Path.Combine(Server.MapPath("~/0files"), fileName);
+                var path = Path.Combine(storePath, fileName);
                 try
                 {
                     

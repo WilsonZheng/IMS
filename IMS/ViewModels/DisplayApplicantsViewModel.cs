@@ -15,5 +15,7 @@ namespace IMS.ViewModels
         public string Mobile { get; set; }
         public string VisaStatus { get; set; }
         public string MedicalCondition { get; set; }
+        public string ContractFileLocation { get;  set; }
+        public string ProgramName { get;  set; }
     }
 }
