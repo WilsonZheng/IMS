@@ -79,8 +79,8 @@
         function approve(email,templateId) {
             //console.log(email + " " + templateId);
             var path = '/Approvement/ApproveApplicant?email=' + email+'&templateId='+templateId;
-            $('#pdfviewer').load(path, function () {
-                $("#pdfviewer").dialog("open");
+            $('#output').load(path, function () {
+                $("#output").dialog("open");
                 $('#list').DataTable().ajax.reload();
             });
 
@@ -95,7 +95,7 @@
                     "targets": "_all",
                     "className": "dt-center", "targets": "_all"
                 }],
-                "ajax": 'GetList',
+                "ajax": '../Approvement/GetList',
                 columns: [
                                 { 'data': 'ProgramName' },
                                 { 'data': 'Firstname' },

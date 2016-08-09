@@ -1,3 +1,25 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
+<h2>Welcome to IMS</h2>
+<br />
+<div>
+    @{
+        if (User.IsInRole("admin"))
+        {
+            <p> Your are now logged in as an admin.</p>
+        }
+        else if (User.IsInRole("intern"))
+        {
+            <p> You are now logged in as an intern.</p>
+        }
+        else if (User.IsInRole("staff"))
+        {
+            <p> You are now logged in as an staff.</p>
+        }
+        else
+        {
+           <p> Please Login first.</p>
+        }
+    }
+</div>
