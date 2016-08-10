@@ -5,6 +5,7 @@ namespace IMS.Models
     public class Applicant
     {
         public int TemplateId { get; set; }
+        public Template Program { get; set; }
         public string Email { get; set; }
         public Invitation Invitation { get; set; }
         public string Firstname { get; set; }

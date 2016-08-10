@@ -29,6 +29,13 @@ namespace IMS.Common
             { return _contractEndPoint ?? ""; }
             private set { _contractEndPoint = value; }
         }
+        private static string _contractFileLocation;
+        public static string ContractFileLocation
+        {
+            get
+            { return _contractFileLocation ?? ""; }
+            private set { _contractFileLocation = value; }
+        }
 
         static IMSEnvProperties() {
            
@@ -37,7 +44,7 @@ namespace IMS.Common
                 dynamic result = JsonConvert.DeserializeObject(Convert.ToString(stream.ReadToEnd()));
                 GmailAppPassword    = result.GmailAppPassword;
                 GmailAccount        = result.GmailAccount;
-
+                ContractFileLocation = result.ContractFileLocation;
                 ContractEndPoint    = result.ContractEndPoint;
             }
            

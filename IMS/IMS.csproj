@@ -287,6 +287,7 @@
     <Compile Include="Common\IMSContants.cs" />
     <Compile Include="Common\IMSUserUtil.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ApprovementController.cs" />
     <Compile Include="Controllers\ConfigurationController.cs" />
     <Compile Include="Controllers\ImsAccountController.cs" />
     <Compile Include="Controllers\InternController.cs" />
@@ -335,6 +336,7 @@
     <Compile Include="Common\ImsErrorMessage.cs" />
     <Compile Include="ViewModels\AccountUserViewModel.cs" />
     <Compile Include="ViewModels\AdjustExpiryViewModel.cs" />
+    <Compile Include="ViewModels\DisplayApplicantsViewModel.cs" />
     <Compile Include="ViewModels\InternSearchConditionViewModel.cs" />
     <Compile Include="ViewModels\SupervisingCommentViewModel.cs" />
     <Compile Include="ViewModels\SupervisingRequestViewModel.cs" />
@@ -411,6 +413,7 @@
     <Content Include="Content\bootstrap-3.3.7-dist\js\bootstrap.js" />
     <Content Include="Content\bootstrap-3.3.7-dist\js\bootstrap.min.js" />
     <Content Include="Content\bootstrap-3.3.7-dist\js\npm.js" />
+    <Content Include="Css\signature-pad.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -448,6 +451,7 @@
     <Content Include="Scripts\npm.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\signature_pad.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -500,6 +504,15 @@
     <Content Include="Views\Registration\InvitationCodeNotExist.cshtml" />
     <Content Include="Views\AppMain\Index.cshtml" />
     <Content Include="Views\Home\Registered.cshtml" />
+    <Content Include="Views\Approvement\Index.cshtml" />
+    <Content Include="Views\Registration\AddApplicantSuccess.cshtml" />
+    <Content Include="Views\Registration\GetSign.cshtml" />
+    <Content Include="Views\Registration\InvitationCodeNotExistOrAlreadyUsed.cshtml" />
+    <Content Include="Views\Registration\NullFile.cshtml" />
+    <Content Include="Views\Registration\ShowSampleContract.cshtml" />
+    <Content Include="Views\Home\contractTemplate.cshtml" />
+    <Content Include="Views\Approvement\DisplayPDF.cshtml" />
+    <Content Include="Views\Approvement\ApproveApplicant.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

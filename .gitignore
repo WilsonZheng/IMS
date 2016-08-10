@@ -215,3 +215,8 @@ ModelManifest.xml
 Web.config
 /IMS/typings
 *.pdf
+/IMS/Scripts/kendo.all.min.js
+/bower_components/signature_pad/.bower.json
+/bower_components/signature_pad/bower.json
+/bower_components/signature_pad/CHANGELOG.md
+/bower_components/signature_pad/README.md
