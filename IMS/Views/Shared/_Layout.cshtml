@@ -100,7 +100,13 @@
                         <li>@Html.ActionLink("Approve Applicants","Index", "Approvement")</li>
                        }
                 }
-                    <li>@Html.ActionLink("Main", "Index", "AppMain")</li>
+                    @{
+                        if (User.IsInRole("admin") || User.IsInRole("intern") || User.IsInRole("staff"))
+                        {
+                            <li>@Html.ActionLink("Main", "Index", "AppMain")</li>
+                        }
+                    }
+                    
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

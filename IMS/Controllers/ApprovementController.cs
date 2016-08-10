@@ -152,8 +152,8 @@ namespace IMS.Controllers
 
                         //add new internship related to the new user
                         var userId = user.Id;
-                        var commenceAt = DateTime.UtcNow;
-                        var expiryAt = DateTime.UtcNow.AddDays(90);
+                        var commenceAt = DateTime.UtcNow.Date;
+                        var expiryAt = DateTime.UtcNow.AddDays(90+1).Date;
                         var intern = db.Users.Where(x => x.Id == userId).Single();
                         var internship = new Internship {
                             Id = userId,
