@@ -26,8 +26,8 @@ namespace IMS.Models
         {
             // Set the database intializer which is run once during application start
             // This seeds the database with admin user credentials and admin role
-            Database.SetInitializer<ApplicationDbContext>(null);//to use current db tables(faster)
-            //Database.SetInitializer<ApplicationDbContext>(new ApplicationDbInitializer());//to generate db tables automatically
+            //Database.SetInitializer<ApplicationDbContext>(null);//to use current db tables(faster)
+            Database.SetInitializer<ApplicationDbContext>(new ApplicationDbInitializer());//to generate db tables automatically
         }
 
 
@@ -113,8 +113,8 @@ namespace IMS.Models
                 context.Internships.Add(new Internship
                 {
                     Id = user.Id,
-                    CommenceAt = DateTime.UtcNow,
-                    ExpiryAt = DateTime.UtcNow.AddDays(90)
+                    CommenceAt = DateTime.Now.Date.ToUniversalTime(),
+                    ExpiryAt = DateTime.Now.AddDays(90).Date.ToUniversalTime()
                 });
             }
 

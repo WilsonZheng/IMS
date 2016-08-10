@@ -39,8 +39,8 @@ namespace IMS.Controllers
                 //set to the default if not provided.
                 if (!model.DaysSinceExpiry.HasValue) model.DaysToExpiry = 365;
                 if (!model.DaysSinceExpiry.HasValue) model.DaysSinceExpiry = 0;
-                var toDate = DateTime.UtcNow.Date.AddDays((int)model.DaysToExpiry);
-                var fromDate = DateTime.UtcNow.Date.AddDays((int)model.DaysSinceExpiry * -1);
+                var toDate = DateTime.UtcNow.AddDays((int)model.DaysToExpiry);
+                var fromDate = DateTime.UtcNow.AddDays((int)model.DaysSinceExpiry * -1);
 
                 using (var db = new ApplicationDbContext())
                 {
