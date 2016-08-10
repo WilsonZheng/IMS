@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Data.Entity;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
@@ -108,7 +109,7 @@ namespace IMS.Controllers
             //store ApplicantInfo view model data into Applicant entity
             using (var db = new ApplicationDbContext())
             {
-
+                var orgid = db.Invitations.Include(x => x.EmailTemplate).Where(x => x.TemplateId == model.TemplateId && x.Email == model.Email).Single().EmailTemplate.OrgId;
                 var m = new Applicant
                 {
                     TemplateId = model.TemplateId,
@@ -124,11 +125,9 @@ namespace IMS.Controllers
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
                     ApplicationDt = DateTime.Now,
-                    CreatedById = User.Identity.GetUserId<int>(),
-                    UpdatedById = User.Identity.GetUserId<int>(),
-                    OrgId = 1
-                    //RecruitStatusTypeId = db.RecruitStatusType.Where(x => x.Code == (int)RecruitStatusCode.InvitationCreated).Single().Id
 
+                    OrgId = orgid
+                    
 
                 };
                 var errorMessage = "";
@@ -186,7 +185,7 @@ namespace IMS.Controllers
                     {
                         System.IO.File.Delete(contractPath);
                     }
-                    errorMessage = e.Message;
+                    errorMessage = e.ToString();
                 }
 
                 if (string.IsNullOrEmpty(errorMessage))
@@ -197,7 +196,7 @@ namespace IMS.Controllers
                 else {
                     ViewBag.ErrorMessage = errorMessage;
                     int failRegistered = 0;
-
+                    Console.Write(errorMessage);
                     return Json(new {Result=failRegistered});
                 }
 

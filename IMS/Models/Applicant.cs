@@ -19,11 +19,9 @@ namespace IMS.Models
         public Org Org { get; set; }
         public int OrgId { get; set;}
         public User User { get; set; }
-        public User UpdatedBy { get; set; }
-        public int UpdatedById { get; set; }
+       
         public DateTime UpdatedAt { get; set; }
-        public User CreatedBy { get; set; }
-        public int CreatedById { get; set; }
+       
         public DateTime CreatedAt { get; set; }
         public bool IsActive { get; set; }
     }
