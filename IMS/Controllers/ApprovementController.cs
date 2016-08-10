@@ -124,9 +124,9 @@ namespace IMS.Controllers
                     //check if the user account already exist
                     if (user == null)
                     {
-
-                        role = "intern";
                         string role;
+                        role = "intern";
+                        
 
 
                         //generate random password
