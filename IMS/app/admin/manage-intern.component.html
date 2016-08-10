@@ -3,7 +3,7 @@
         <h3 class="panel-title ims-panel-title">Interns</h3>
         <div class="ims-control-container">
             Since Expiry
-            <p-spinner [(ngModel)]="internSearchCondition.DaysSinceExpiry" [min]="0" [max]="365" [size]="1"></p-spinner>Days /
+            <p-spinner [(ngModel)]="internSearchCondition.DaysSinceExpiry" [min]="0" [max]="3650" [size]="1"></p-spinner>Days /
             To Expiry
             <p-spinner size="30" [(ngModel)]="internSearchCondition.DaysToExpiry" [min]="0" [max]="365" [size]="1"></p-spinner>Days
             <button pButton type="text" (click)="search()" icon="fa fa-refresh"></button>            
