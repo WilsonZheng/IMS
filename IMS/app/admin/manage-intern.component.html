@@ -28,7 +28,7 @@
             <p-column field="CommenceAt">
                 <template let-intern="rowData">
                     <div class="text-center">
-                        <span>{{intern.CommenceAt|bracketDateTransform|date :'dd / MM / yyyy'}}</span>
+                        <span>{{intern.CommenceAt|bracketDateTransform|date :'dd / MM / yyyy HH:mm:ss'}}</span>
                     </div>
                 </template>
             </p-column>
