@@ -110,6 +110,16 @@ namespace IMS.Controllers
             using (var db = new ApplicationDbContext())
             {
                 var orgid = db.Invitations.Include(x => x.EmailTemplate).Where(x => x.TemplateId == model.TemplateId && x.Email == model.Email).Single().EmailTemplate.OrgId;
+                string visaEnd;
+                if(model.VisaStatus.Equals("Working Visa"))
+                {
+                    visaEnd = " Ends at: " + model.VisaEndDay + "/" + model.VisaEndMonth + "/" + model.VisaEndYear+"(dd/mm/yy)";
+                }
+                else
+                {
+                    visaEnd = "";
+                }
+                model.VisaStatusAndEndDate = model.VisaStatus + visaEnd;
                 var m = new Applicant
                 {
                     TemplateId = model.TemplateId,
@@ -120,12 +130,11 @@ namespace IMS.Controllers
                     MedicalCondition = model.MedicalCondition,
                     Address = model.Address + ", " + model.Suburb,
                     Email = model.Email,
-                    VisaStatus = model.VisaStatus,
+                    VisaStatus = model.VisaStatusAndEndDate,
                     IsActive = true,
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
                     ApplicationDt = DateTime.Now,
-
                     OrgId = orgid
                     
 

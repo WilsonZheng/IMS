@@ -31,16 +31,16 @@
 
         </div>
         <div class="form-group">
-                <div class="col-md-5">
-                    <label for="file">Upload your Passport copy(PDF format):*</label>
-                </div>
-                <div class="col-md-5">
-                    <div class="form-group">
-                        <input type="file" id="file_input" name="file">
-                        
-                    </div>
+            <div class="col-md-5">
+                <label for="file">Upload your Passport copy(PDF format):*</label>
+            </div>
+            <div class="col-md-5">
+                <div class="form-group">
+                    <input type="file" id="file_input" name="file" required>
+
                 </div>
             </div>
+        </div>
 
         <div class="form-group">
             <div class="col-md-5">
@@ -48,7 +48,7 @@
             </div>
 
             <div class="col-md-5">
-                <input type="text" class="form-control" id="firstname" name="firstname" value="@Model.Firstname">
+                <input type="text" class="form-control" id="firstname" name="firstname" value="@Model.Firstname" required>
             </div>
         </div>
         <div class="form-group">
@@ -56,28 +56,28 @@
                 <label for="lastname">Last Name:*</label>
             </div>
             <div class="col-md-5">
-                <input type="text" class="form-control" id="lastname" name="lastname" value="@Model.Lastname">
+                <input type="text" class="form-control" id="lastname" name="lastname" value="@Model.Lastname" required>
             </div>
 
         </div>
         <div class="form-group">
-                <div class="col-md-5">
-                    <label for="kiwiname">Kiwi Name:*</label>
-                </div>
-
-                <div class="col-md-5">
-                    <input type="text" class="form-control" id="kiwiname" placeholder="type in first name if you don't have" name="kiwiname" value="@Model.Kiwiname">
-                </div>
-
-
+            <div class="col-md-5">
+                <label for="kiwiname">Kiwi Name:*</label>
             </div>
+
+            <div class="col-md-5">
+                <input type="text" class="form-control" id="kiwiname" placeholder="type in first name if you don't have" name="kiwiname" value="@Model.Kiwiname" required>
+            </div>
+
+
+        </div>
 
         <div class="form-group">
             <div class="col-md-5">
                 <label for="mobile">Mobile Number:*</label>
             </div>
             <div class="col-md-5">
-                <input type="text" class="form-control" id="mobile" name="mobile" value="@Model.Mobile">
+                <input type="text" class="form-control" id="mobile" name="mobile" value="@Model.Mobile" required>
             </div>
 
         </div>
@@ -86,7 +86,7 @@
                 <label for="address">Address:*</label>
             </div>
             <div class="col-md-5">
-                <input type="text" class="form-control" id="address" name="address" value="@Model.Address">
+                <input type="text" class="form-control" id="address" name="address" value="@Model.Address" required>
             </div>
 
         </div>
@@ -95,7 +95,7 @@
                 <label for="suburb">Suburb:*</label>
             </div>
             <div class="col-md-5">
-                <input type="text" class="form-control" id="suburb" name="suburb" value="@Model.Suburb">
+                <input type="text" class="form-control" id="suburb" name="suburb" value="@Model.Suburb" required>
             </div>
 
         </div>
@@ -104,20 +104,55 @@
                 <label for="visa">Visa Status:*</label>
             </div>
             <div class="col-md-5">
-                <h5 style="text-align: left;">@Html.RadioButtonFor(m => m.VisaStatus, "Permanent Resident/Citizen")  Permanent Resident/Citizen</h5>
+                <h5 style="text-align: left;">@Html.RadioButtonFor(m => m.VisaStatus, "Permanent Resident/Citizen", new { id = "PR" })  Permanent Resident/Citizen</h5>
+
                
-                @*<input type="text" class="form-control" id="visa" name="visaStatus" value="@Model.VisaStatus">*@
             </div>
 
         </div>
         <div class="form-group">
             <div class="col-md-5">
-               
+
             </div>
             <div class="col-md-5">
+
+                <h5 style="text-align: left;">@Html.RadioButtonFor(m => m.VisaStatus, "Working Visa", new { id = "WV" })  Working Visa</h5>
+
+
+            </div>
+
+        </div>
+        <div class="form-group">
+            <div class="col-md-5">
+
+            </div>
+            <div class="col-md-5">
+
                 
-                <h5 style="text-align: left;">@Html.RadioButtonFor(m => m.VisaStatus, "Working Visa")  Working Visa</h5>
-                
+                <input style="width:200px" type="text" class="form-control" placeholder="Visa End Year:(E.g. 2016)" id="VisaEndYear" name="VisaEndYear" value="@Model.VisaEndYear">
+
+            </div>
+
+        </div>
+        <div class="form-group">
+            <div class="col-md-5">
+
+            </div>
+            <div class="col-md-5">
+
+                <input style="width:200px" type="text" class="form-control" placeholder="Visa End Month:(E.g. 2)" id="VisaEndMonth" name="VisaEndMonth" value="@Model.VisaEndMonth">
+
+            </div>
+
+        </div>
+        <div class="form-group">
+            <div class="col-md-5">
+
+            </div>
+            <div class="col-md-5">
+
+                <input style="width:200px" type="text" class="form-control" placeholder="Visa End Day:(E.g. 28)" id="VisaEndDay" name="VisaEndDay" value="@Model.VisaEndDay">
+
             </div>
 
         </div>
@@ -127,7 +162,7 @@
             </div>
 
             <div class="col-md-5">
-                <input type="text" class="form-control" id="medicalCondition" placeholder="type in NONE if you don't have any" name="medicalCondition" value="@Model.MedicalCondition">
+                <input type="text" class="form-control" id="medicalCondition" placeholder="type in NONE if you don't have any" name="medicalCondition" value="@Model.MedicalCondition" required>
             </div>
 
         </div>
@@ -138,8 +173,7 @@
             <div class="col-md-5">
                 <div class="form-group">
 
-
-                    <label style="text-align: left;"><input type="checkbox" name="agreeCheckbox" id="agreeCheckbox"><a href="~/Registration/ShowSampleContract">  I have read and agree to The internship agreement/terms and conditions.</a></label>
+                    <label style="text-align: left;"><input type="checkbox" name="agreeCheckbox" id="agreeCheckbox" required><a href="~/Registration/ShowSampleContract">  I have read and agree to The internship agreement/terms and conditions.</a></label>
                 </div>
             </div>
         </div>
@@ -148,87 +182,158 @@
 
         </div>
         <div class="col-md-5" id="submit">
-            <input type="submit" id="submitbtn" value="Submit"  />
-            
+            <input type="submit" id="submitbtn" value="Submit" />
+
 
         </div>
 
     </form>
 
 
-   
+
 
 
     <script>
-      
+
+
+
         //checking all fields in the form
         $(document).ready(function () {
-            $("form").on("submit", function () {
-                //check uploaded file extension is pdf or not:
-                // get the file name, possibly with path (depends on browser)
-                var filename = $("#file_input").val();
-                //define a boolean
-                var validFile;
-                // Use a regular expression to trim everything before final dot
-                var extension = filename.replace(/^.*\./, '');
 
-                // Iff there is no dot anywhere in filename, we would have extension == filename,
-                // so we account for this possibility now
-                if (extension == filename) {
-                    extension = '';
-                } else {
-                    // if there is an extension, we convert to lower case
-                    // (N.B. this conversion will not effect the value of the extension
-                    // on the file upload.)
-                    extension = extension.toLowerCase();
+
+            $("#VisaEndYear").hide();
+            $("#VisaEndMonth").hide();
+            $("#VisaEndDay").hide();
+            $('#WV').click(function () {
+                if (this.checked == true) {
+                    $("#VisaEndYear").show();
+                    $("#VisaEndMonth").show();
+                    $("#VisaEndDay").show();
+                    $("#VisaEndYear").prop('required', true);
+                    $("#VisaEndMonth").prop('required', true);
+                    $("#VisaEndDay").prop('required', true);
+
                 }
+                else {
+                    $("#VisaEndYear").hide();
+                    $("#VisaEndMonth").hide();
+                    $("#VisaEndDay").hide();
+                    $("#VisaEndYear").prop('required', false);
+                    $("#VisaEndMonth").prop('required', false);
+                    $("#VisaEndDay").prop('required', false);
 
-                switch (extension) {
-                    case 'pdf':
-                        validFile= true;
-                        break;
-                        
-                                
 
-                    default:
-                        validFile = false;
                 }
-                
-
-
-                //check checkbox
-                var notChecked;
-                $('input[type=checkbox]').each(function () {
-                    if ($(this).is(':checked')) {
-                        notChecked = false;
-                    } else {
-                        notChecked = true;
-                    }
-                });
-                //check textbox fields
-                var anyFieldIsEmpty = $("form input").filter(function () {
-                    return $.trim(this.value).length === 0;
-                }).length > 0;
-
-                if (anyFieldIsEmpty || notChecked) {
-                    
-
-                    alert("Please fill up all the infomation,upload a file and accept the term.");
-                    return false;
-                } else {
-                    if (validFile) {
-                        return true;
-                    } else {
-                        alert("Please submit a pdf file.");
-                        return false;
-                    }
-                    
-                }
-
-                
             });
-            
-            
+            $('#PR').click(function () {
+                if (this.checked == true) {
+                    $("#VisaEndYear").hide();
+                    $("#VisaEndMonth").hide();
+                    $("#VisaEndDay").hide();
+                    $("#VisaEndYear").prop('required', false);
+                    $("#VisaEndMonth").prop('required', false);
+                    $("#VisaEndDay").prop('required', false);
+                    $("#VisaEndYear").val('');
+                    $("#VisaEndMonth").val('');
+                    $("#VisaEndDay").val('');
+
+                }
+                else {
+                    $("#VisaEndYear").show();
+                    $("#VisaEndMonth").show();
+                    $("#VisaEndDay").show();
+                    $("#VisaEndYear").prop('required', true);
+                    $("#VisaEndMonth").prop('required', true);
+                    $("#VisaEndDay").prop('required', true);
+
+                }
+            });
+
+
+
+
+            $("form").on("submit", function () {
+
+
+
+
+
+
+                //    //check uploaded file extension is pdf or not:
+
+                //    // get the file name, possibly with path (depends on browser)
+
+                //    //var filename = $("#file_input").val();
+
+                //    //define a boolean
+
+                //    //var validFile;
+
+                //    // Use a regular expression to trim everything before final dot
+
+                //    //var extension = filename.replace(/^.*\./, '');
+
+                //    // Iff there is no dot anywhere in filename, we would have extension == filename,
+                //    // so we account for this possibility now
+                //    //if (extension == filename) {
+                //    //    extension = '';
+                //    //} else {
+                //    //    // if there is an extension, we convert to lower case
+                //    //    // (N.B. this conversion will not effect the value of the extension
+                //    //    // on the file upload.)
+                //    //    extension = extension.toLowerCase();
+                //    //}
+
+                //    //switch (extension) {
+                //    //    case 'pdf':
+                //    //        validFile = true;
+                //    //        break;
+
+
+
+                //    //    default:
+                //    //        validFile = false;
+                //    //}
+
+
+
+                //    //check checkbox
+                //    //var notChecked;
+                //    //$('input[type=checkbox]').each(function () {
+                //    //    if ($(this).is(':checked')) {
+                //    //        notChecked = false;
+                //    //    } else {
+                //    //        notChecked = true;
+                //    //    }
+                //    //});
+
+
+
+
+                //    //check textbox fields
+                //    //var anyFieldIsEmpty = $("form input[id]").filter(function () {
+
+                //    //    return $.trim(this.value).length === 0;
+                //    //}).length > 0;
+
+                //    //if (anyFieldIsEmpty || notChecked) {
+
+                //    //        alert("Please fill up all the infomation,upload a file and accept the term.");
+                //    //        return false;
+                //    //} else {
+                //    //    if (validFile) {
+                //    //        return true;
+                //    //    } else {
+                //    //        alert("Please submit a pdf file.");
+                //    //        return false;
+                //    //    }
+
+                //    //}
+
+
+            });
+
+
 
         });
     </script>
@@ -238,8 +343,9 @@
         form {
             text-align: center;
         }
-        label{
-            color:brown;
+
+        label {
+            color: brown;
         }
     </style>
 

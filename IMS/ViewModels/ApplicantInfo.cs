@@ -27,5 +27,10 @@ namespace IMS.ViewModels
         public string InvitationCode { get; set; }
         public string PassportFileLocation { get; set; }
         public string SignPath { get; set; }
+
+        public string VisaEndYear { get; set; }
+        public string VisaEndMonth { get; set; }
+        public string VisaEndDay { get; set; }
+        public string VisaStatusAndEndDate { get; set; }
     }
 }
