@@ -25,7 +25,7 @@ namespace IMS
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap-3.3.7-dist/css/bootstrap.min.css",
-                      "~/Content/site.css"));
+                      "~/Content/bootstrap-theme-Flatly.css"));
 
 
 
